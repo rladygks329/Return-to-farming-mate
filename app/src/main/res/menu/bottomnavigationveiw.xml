@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/homeItem"
+        android:icon="@mipmap/home"
+        android:title="홈"/>
+    <item
+        android:id="@+id/plannerItem"
+        android:icon="@mipmap/notification"
+        android:title="플래너"/>
+    <item
+        android:id="@+id/cartItem"
+        android:icon="@mipmap/cart"
+        android:title="장터"/>
+    <item
+        android:id="@+id/userItem"
+        android:icon="@mipmap/user"
+        android:title="마이페이지"/>
+
+</menu>

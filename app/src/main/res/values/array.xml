@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="지역">
+        <item>가</item>
+        <item>나</item>
+        <item>다</item>
+        <item>라</item>
+        <item>마</item>
+        <item>바</item>
+        <item>사</item>
+    </string-array>
+</resources>

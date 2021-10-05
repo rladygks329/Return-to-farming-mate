@@ -14,3 +14,10 @@
 .cxx
 /res
 google-services.json
+/app/src/main/res/drawable-v24/
+/app/src/main/res/drawable-xxxhdpi/
+/app/src/main/res/drawable-hdpi/
+/app/src/main/res/drawable-xxhdpi/
+/app/src/main/res/drawable-mdpi/
+/app/src/main/res/drawable/
+/app/src/main/res/drawable-xhdpi/

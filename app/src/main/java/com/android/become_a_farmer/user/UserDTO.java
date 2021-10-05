@@ -1,8 +1,5 @@
 package com.android.become_a_farmer.user;
 
-import java.util.HashMap;
-import java.util.Map;
-
 public class UserDTO {
     private String email;
     private String password;

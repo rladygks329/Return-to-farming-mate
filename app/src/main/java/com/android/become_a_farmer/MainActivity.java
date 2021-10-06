@@ -26,23 +26,12 @@ public class MainActivity extends AppCompatActivity {
     private planner_main planner_main;
     private cartMain cartMain;
     private user_main user_main;
-    private Button btn_test_login;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         bottomNavigationView = findViewById(R.id.bottomNavi);
-
-        // 로그인 페이지 테스트
-        btn_test_login = (Button) findViewById(R.id.btn_test_login);
-        btn_test_login.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), Login.class);
-                startActivity(intent);
-            }
-        });
 
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override

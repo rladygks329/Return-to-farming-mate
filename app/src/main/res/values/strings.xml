@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Become_A_Farmer</string>
+    <string name="question">연령대를 선택해주세요</string>
 </resources>

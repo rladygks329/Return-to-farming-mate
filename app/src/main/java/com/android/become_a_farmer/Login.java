@@ -3,9 +3,12 @@ package com.android.become_a_farmer;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -39,6 +42,13 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
 
 
     }
+    // 다른 화면 터치 시 키보드 내림
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(txt_id.getWindowToken(), 0);
+        return true;
+    }
 
     @Override
     public void onClick(View v) {
@@ -52,7 +62,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 if (task.isSuccessful()){ // 로그인 성공
-                                    Intent intent = new Intent(Login.this, home_main.class);
+                                    Intent intent = new Intent(Login.this, cartMain.class);
                                     startActivity(intent);
                                 } else{ // 로그인 실패
                                     Toast.makeText(Login.this, "로그인 실패", Toast.LENGTH_SHORT).show();

@@ -18,14 +18,14 @@ public class home_main extends AppCompatActivity {
         setContentView(R.layout.activity_home_main);
 
         // 로그인 페이지 테스트
-        btn_test_login = (Button) findViewById(R.id.btn_test_login);
-        btn_test_login.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), Login.class);
-                startActivity(intent);
-            }
-        });
+//        btn_test_login = (Button) findViewById(R.id.btn_test_login);
+//        btn_test_login.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(getApplicationContext(), Login.class);
+//                startActivity(intent);
+//            }
+//        });
 
         // 최초 실행 여부를 판단 -> 최초 실행 : 사용자 데이터 수집(나이, 선호 키워드 ...)
         SharedPreferences pref = getSharedPreferences("checkFirst", Activity.MODE_PRIVATE);

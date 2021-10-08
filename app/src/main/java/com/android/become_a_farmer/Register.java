@@ -54,7 +54,7 @@ public class Register extends AppCompatActivity implements View.OnClickListener 
         firebaseAuth = FirebaseAuth.getInstance();
         btn_register.setOnClickListener(this);
     }
-
+    // 다른 화면 터치 시 키보드 내림
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);

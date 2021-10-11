@@ -5,6 +5,9 @@ public class UserDTO {
     private String password;
     private String name;
     private String nickname;
+    private int age;
+    private String planningType;
+    private String preferredType;
 
     public UserDTO() {}
     public UserDTO(String email, String password, String name, String nickname) {
@@ -12,6 +15,7 @@ public class UserDTO {
         this.password = password;
         this.name = name;
         this.nickname = nickname;
+        this.age = 0;
     }
 
     public String getEmail() {
@@ -44,5 +48,29 @@ public class UserDTO {
 
     public void setNickname(String nickname) {
         this.nickname = nickname;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+
+    public String getPlanningType() {
+        return planningType;
+    }
+
+    public void setPlanningType(String planningType) {
+        this.planningType = planningType;
+    }
+
+    public String getPreferredType() {
+        return preferredType;
+    }
+
+    public void setPreferredType(String preferredType) {
+        this.preferredType = preferredType;
     }
 }

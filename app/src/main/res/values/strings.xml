@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">Become_A_Farmer</string>
     <string name="question">연령대를 선택해주세요</string>
+    <string name="questionplan">귀농과 귀촌 중\n 어느 것을 계획하십니까?</string>
 </resources>

@@ -27,21 +27,21 @@ public class home_main extends AppCompatActivity {
 //            }
 //        });
 
-        // 최초 실행 여부를 판단 -> 최초 실행 : 사용자 데이터 수집(나이, 선호 키워드 ...)
-        SharedPreferences pref = getSharedPreferences("checkFirst", Activity.MODE_PRIVATE);
-        boolean checkFirst = pref.getBoolean("checkFirst", false);
-        Log.d("checkFirst: ", String.valueOf(checkFirst));
-        // false일 경우 최초 실행
-        if(!checkFirst){
-            // 앱 최초 실행시 하고 싶은 작업
-            SharedPreferences.Editor editor = pref.edit();
-            editor.putBoolean("checkFirst",true);
-            editor.apply();
-            finish();
-
-            Intent intent = new Intent(home_main.this, ChoiceAge.class);
-            startActivity(intent);
-
-        }
+//        // 최초 실행 여부를 판단 -> 최초 실행 : 사용자 데이터 수집(나이, 선호 키워드 ...)
+//        SharedPreferences pref = getSharedPreferences("checkFirst", Activity.MODE_PRIVATE);
+//        boolean checkFirst = pref.getBoolean("checkFirst", false);
+//        Log.d("checkFirst: ", String.valueOf(checkFirst));
+//        // false일 경우 최초 실행
+//        if(!checkFirst){
+//            // 앱 최초 실행시 하고 싶은 작업
+//            SharedPreferences.Editor editor = pref.edit();
+//            editor.putBoolean("checkFirst",true);
+//            editor.apply();
+//            finish();
+//
+//            Intent intent = new Intent(home_main.this, ChoiceAge.class);
+//            startActivity(intent);
+//
+//        }
     }
 }

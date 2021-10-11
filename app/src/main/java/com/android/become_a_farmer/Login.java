@@ -62,7 +62,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 if (task.isSuccessful()){ // 로그인 성공
-                                    Intent intent = new Intent(Login.this, cartMain.class);
+                                    Intent intent = new Intent(Login.this, MainActivity.class);
                                     startActivity(intent);
                                 } else{ // 로그인 실패
                                     Toast.makeText(Login.this, "로그인 실패", Toast.LENGTH_SHORT).show();

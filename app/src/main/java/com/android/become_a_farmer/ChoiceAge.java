@@ -67,6 +67,8 @@ public class ChoiceAge extends AppCompatActivity {
                                 @Override
                                 public void onSuccess(Void unused) {
                                     Log.d("add user age", "DocumentSnapshot successfully updated!");
+                                    Intent intent = new Intent(ChoiceAge.this, ChoosePlanningType.class);
+                                    startActivity(intent);
                                 }})
                             .addOnFailureListener(new OnFailureListener() {
                                 @Override
@@ -90,8 +92,8 @@ public class ChoiceAge extends AppCompatActivity {
     public String getUserEmail(){
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null){
-            Log.d("user email : " , email);
-            return email;
+            Log.d("user email : " , user.getEmail());
+            return user.getEmail();
         }
         return null;
     }

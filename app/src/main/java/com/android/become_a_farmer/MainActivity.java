@@ -8,6 +8,8 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.app.Activity;
+import android.app.ActivityOptions;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
@@ -38,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
     private planner_main planner_main;
     private cartMain cartMain;
     private user_main user_main;
+    private static Activity activity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
 
         bottomNavigationView = findViewById(R.id.bottomNavi);
 
+        activity = this;
         // 최초 실행 여부를 판단 -> 최초 실행 : 사용자 데이터 수집(나이, 선호 키워드 ...)
         SharedPreferences pref = getSharedPreferences("checkFirst", Activity.MODE_PRIVATE);
         boolean checkFirst = pref.getBoolean("checkFirst", false);
@@ -104,7 +108,6 @@ public class MainActivity extends AppCompatActivity {
 //    }
 
     private void setFrag(int i) {
-
         fm = getSupportFragmentManager();
         ft = fm.beginTransaction();
 
@@ -130,7 +133,6 @@ public class MainActivity extends AppCompatActivity {
                 break;
         }
     }
-
     public static class home_main extends Fragment {
         private android.view.View view;
 
@@ -138,6 +140,26 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
             view = inflater.inflate(R.layout.activity_home_main, container, false);
+
+            // 최초 실행 여부를 판단 -> 최초 실행 : 사용자 데이터 수집(나이, 선호 키워드 ...)
+
+            // 수정 필요!!
+            SharedPreferences pref = this.getActivity().getSharedPreferences("checkFirst", Context.MODE_PRIVATE);
+            boolean checkFirst = pref.getBoolean("checkFirst", false);
+            Log.d("checkFirst: ", String.valueOf(checkFirst));
+            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+            // false일 경우 최초 실행
+            if((!checkFirst) && (user != null)){  // 메인페이지 최초 실행 && 현재 사용자가 로그인 한 상태 -> 데이터 입력 단계로 넘어감
+                // 앱 최초 실행시 하고 싶은 작업
+                SharedPreferences.Editor editor = pref.edit();
+                editor.putBoolean("checkFirst",true);
+                editor.apply();
+                activity.finish();
+
+                Intent intent = new Intent(getActivity(), ChoiceAge.class);
+                startActivity(intent);
+
+            }
 
             return view;
         }
@@ -151,44 +173,6 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
             view = inflater.inflate(R.layout.activity_planner_main, container, false);
-            //Log.d("user_main: ", "CREATE!!");
-//
-//            Button btn_logout = (Button) view.findViewById(R.id.btn_logout);
-//            Button btn_login = (Button) view.findViewById(R.id.btn_login);
-//
-//            // 이전에 사용자의 로그인 기록 있는지 확인
-//            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-//            if (user != null) {
-//                // User is signed in
-//                // go to main page
-//                btn_login.setVisibility(View.INVISIBLE); // 화면에 로그인 버튼 안보이게 한다
-//                btn_logout.setVisibility(View.VISIBLE);
-//            } else {
-//                // No user is signed in
-//                // go to loging page
-//                btn_logout.setVisibility(View.INVISIBLE); // 화면에 로그아웃 버튼 안보이게 한다
-//                btn_login.setVisibility(View.VISIBLE);
-//            }
-//            finish();
-//
-//            btn_logout.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    FirebaseAuth.getInstance().signOut();
-//                    Toast.makeText(MainActivity, "로그아웃 되었습니다", Toast.LENGTH_SHORT).show();
-//                    Intent intent = new Intent(Main.this, MainActivity.class);
-//                    startActivity(intent);
-//                }
-//            });
-//
-//            btn_login.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    Log.d("login click: ", "true");
-//                    Intent intent = new Intent(com.android.become_a_farmer.user_main.this, Login.class);
-//                    startActivity(intent);
-//                }
-//            });
             return view;
         }
 
@@ -209,11 +193,55 @@ public class MainActivity extends AppCompatActivity {
 
     public static class user_main extends Fragment {
         private android.view.View view;
+        private Context context;
+
+        public static user_main newInstance(){
+            return new user_main();
+        }
 
         @Nullable
         @Override
         public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
             view = inflater.inflate(R.layout.activity_user_main, container, false);
+
+            Button btn_logout = (Button) view.findViewById(R.id.btn_logout);
+            Button btn_login = (Button) view.findViewById(R.id.btn_login);
+
+            // 이전에 사용자의 로그인 기록 있는지 확인
+            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+            if (user != null) {
+                // User is signed in
+                // go to main page
+                btn_login.setVisibility(View.INVISIBLE); // 화면에 로그인 버튼 안보이게 한다
+                btn_logout.setVisibility(View.VISIBLE);
+            } else {
+                // No user is signed in
+                // go to loging page
+                btn_logout.setVisibility(View.INVISIBLE); // 화면에 로그아웃 버튼 안보이게 한다
+                btn_login.setVisibility(View.VISIBLE);
+            }
+
+            btn_login.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // user_main 프래그먼트 -> Login 액티비티
+                    Intent intent = new Intent(getActivity(), Login.class);
+                    startActivity(intent);
+                }
+            });
+
+
+            btn_logout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    FirebaseAuth.getInstance().signOut();
+                    Toast.makeText(getActivity(), "로그아웃 되었습니다", Toast.LENGTH_SHORT).show();
+
+                    // 로그아웃 후 앱 다시 시작
+                    activity.finish();
+                }
+            });
+
 
             return view;
         }

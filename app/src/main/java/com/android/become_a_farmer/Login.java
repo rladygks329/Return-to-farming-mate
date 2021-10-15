@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -20,7 +21,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class Login extends AppCompatActivity implements View.OnClickListener {
-    private ImageView btn_login;
+    private ImageView btn_login_page;
     private ImageView btn_register;
     private EditText txt_id;
     private EditText txt_pwd;
@@ -31,13 +32,13 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        btn_login = (ImageView) findViewById(R.id.btn_login);
+        btn_login_page = (ImageView) findViewById(R.id.btn_login_page);
         btn_register = (ImageView) findViewById(R.id.btn_resgister);
         txt_id = (EditText) findViewById(R.id.txt_id);
         txt_pwd = (EditText) findViewById(R.id.txt_pwd);
         firebaseAuth = firebaseAuth.getInstance();
 
-        btn_login.setOnClickListener(this); // 로그인 버튼 클릭
+        btn_login_page.setOnClickListener(this); // 로그인 버튼 클릭
         btn_register.setOnClickListener(this); // 회원가입 버튼 클릭
 
 
@@ -53,7 +54,8 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         switch (v.getId()){
-            case R.id.btn_login:
+            case R.id.btn_login_page:
+                Log.d("login button", "clicked!!");
                 String email = txt_id.getText().toString().trim();
                 String pwd = txt_pwd.getText().toString().trim();
                 // 이메일로 로그인

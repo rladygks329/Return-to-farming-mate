@@ -7,11 +7,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.ImageButton;
-import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -20,55 +17,44 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.ktx.Firebase;
 
-public class ChoiceAge extends AppCompatActivity {
-    private Spinner spinner;
-    private String age;
-    private ImageButton btn_next;
+public class ChoosePrefferdType extends AppCompatActivity {
+    private CheckBox chbox_nature;
+    private CheckBox chbox_culture;
+    private ImageButton btn_next_prefer;
     private FirebaseFirestore db;
-    private String email;
+    private String preferredType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_choice_age);
+        setContentView(R.layout.activity_choose_prefferd_type);
 
-        // spinner 생성
-        spinner = (Spinner) findViewById(R.id.spinner);
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
-                R.array.age_array, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(adapter);
+        chbox_nature = (CheckBox) findViewById(R.id.chbox_nature);
+        chbox_culture = (CheckBox) findViewById(R.id.chbox_culture);
 
-        // spinner item 클릭 처리
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                age = parent.getItemAtPosition(position).toString();
-            }
+        if (chbox_nature.isChecked()){
+            preferredType = "nature";
+        }else if(chbox_culture.isChecked()){
+            preferredType = "culture";
+        }
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-
-        // 나이 선택 후 다음 버튼 클릭 시, 해당 유저의 나이 데이터 업데이트
-        btn_next = (ImageButton) findViewById(R.id.btn_next_spinner);
-        btn_next.setOnClickListener(new View.OnClickListener() {
+        // 계획 선택 후 다음 버튼 클릭 시, 귀농 or 귀촌 중 선택한 데이터 업데이트
+        btn_next_prefer = (ImageButton) findViewById(R.id.btn_next_prefer);
+        btn_next_prefer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // 현재 사용자의 email이 존재할 때
-                email = getUserEmail();
+                String email = getUserEmail();
+
                 if (email != null){
                     db = FirebaseFirestore.getInstance();
                     DocumentReference userRef = db.collection("users").document(email);
-                    userRef.update("age", age)
+                    userRef.update("preferredType", preferredType)
                             .addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
                                 public void onSuccess(Void unused) {
-                                    Intent intent = new Intent(ChoiceAge.this, ChoosePlanningType.class);
+                                    Intent intent = new Intent(ChoosePrefferdType.this, ChooseKeyword.class);
                                     startActivity(intent);
                                 }})
                             .addOnFailureListener(new OnFailureListener() {
@@ -78,16 +64,14 @@ public class ChoiceAge extends AppCompatActivity {
                                 }
                             });
                 }else{
-                    Toast.makeText(ChoiceAge.this, "다시 로그인 해주세요.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ChoosePrefferdType.this, "다시 로그인 해주세요.", Toast.LENGTH_SHORT).show();
 
                 }
 
             }
         });
-
-
     }
-    // 현재 사용자의 이메일 가져오기
+
     public String getUserEmail(){
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null){
@@ -95,5 +79,4 @@ public class ChoiceAge extends AppCompatActivity {
         }
         return null;
     }
-
 }

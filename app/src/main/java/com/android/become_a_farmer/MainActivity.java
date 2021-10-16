@@ -135,31 +135,39 @@ public class MainActivity extends AppCompatActivity {
     }
     public static class home_main extends Fragment {
         private android.view.View view;
-
+        private static int visit_count = 0;
         @Nullable
         @Override
         public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
             view = inflater.inflate(R.layout.activity_home_main, container, false);
 
-            // 최초 실행 여부를 판단 -> 최초 실행 : 사용자 데이터 수집(나이, 선호 키워드 ...)
-
-            // 수정 필요!!
-            SharedPreferences pref = this.getActivity().getSharedPreferences("checkFirst", Context.MODE_PRIVATE);
-            boolean checkFirst = pref.getBoolean("checkFirst", false);
-            Log.d("checkFirst: ", String.valueOf(checkFirst));
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-            // false일 경우 최초 실행
-            if((!checkFirst) && (user != null)){  // 메인페이지 최초 실행 && 현재 사용자가 로그인 한 상태 -> 데이터 입력 단계로 넘어감
-                // 앱 최초 실행시 하고 싶은 작업
-                SharedPreferences.Editor editor = pref.edit();
-                editor.putBoolean("checkFirst",true);
-                editor.apply();
-                activity.finish();
-
+            // 최초 실행 여부를 판단 -> 최초 실행 : 사용자 데이터 수집(나이, 선호 키워드 ...)
+            Log.d("visit", String.valueOf(visit_count));
+            if (visit_count < 1){
+                visit_count++;
+            }
+            else if ((visit_count > 0) && (user != null)){
                 Intent intent = new Intent(getActivity(), ChoiceAge.class);
                 startActivity(intent);
-
             }
+            // 수정 필요!!
+//            SharedPreferences pref = this.getActivity().getSharedPreferences("checkFirst", Context.MODE_PRIVATE);
+//            boolean checkFirst = pref.getBoolean("checkFirst", false);
+//            Log.d("checkFirst: ", String.valueOf(checkFirst));
+//            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+//            // false일 경우 최초 실행
+//            if((!checkFirst) && (user != null)){  // 메인페이지 최초 실행 && 현재 사용자가 로그인 한 상태 -> 데이터 입력 단계로 넘어감
+//                // 앱 최초 실행시 하고 싶은 작업
+//                SharedPreferences.Editor editor = pref.edit();
+//                editor.putBoolean("checkFirst",true);
+//                editor.apply();
+//                activity.finish();
+//
+//                Intent intent = new Intent(getActivity(), ChoiceAge.class);
+//                startActivity(intent);
+
+//            }
 
             return view;
         }

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ChoosePlanningType"
+    tools:context=".ChoosePrefferdType"
     android:orientation="vertical"
     android:gravity="center">
 
@@ -12,7 +12,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="90dp"
-        android:text="@string/questionplan"
+        android:text="@string/questionPreferType"
         android:textColor="#000000"
         android:textSize="25sp"
         android:textStyle="normal"
@@ -26,32 +26,31 @@
         android:layout_marginTop="50dp">
 
         <CheckBox
-            android:id="@+id/chbox_quinong"
+            android:id="@+id/chbox_nature"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:button="@android:color/transparent"
-            android:background="@drawable/quinong"
+            android:background="@drawable/nature"
             android:padding="0dp" />
 
         <CheckBox
-            android:id="@+id/chbox_quichon"
+            android:id="@+id/chbox_culture"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:button="@android:color/transparent"
-            android:background="@drawable/quichon"
+            android:background="@drawable/culture"
             android:padding="0dp"
             android:layout_marginLeft="25dp"/>
 
     </LinearLayout>
 
     <ImageButton
-        android:id="@+id/btn_next_plan"
+        android:id="@+id/btn_next_prefer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="0dp"
         android:src="@drawable/btn_next"
         android:layout_marginTop="200dp"
         />
-
 
 </LinearLayout>

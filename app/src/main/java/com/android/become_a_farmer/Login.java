@@ -55,7 +55,6 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.btn_login_page:
-                Log.d("login button", "clicked!!");
                 String email = txt_id.getText().toString().trim();
                 String pwd = txt_pwd.getText().toString().trim();
                 // 이메일로 로그인

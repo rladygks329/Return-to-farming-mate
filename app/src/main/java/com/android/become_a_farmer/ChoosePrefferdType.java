@@ -18,6 +18,11 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.Socket;
+
 public class ChoosePrefferdType extends AppCompatActivity {
     private CheckBox chbox_nature;
     private CheckBox chbox_culture;
@@ -79,4 +84,6 @@ public class ChoosePrefferdType extends AppCompatActivity {
         }
         return null;
     }
+
+
 }

@@ -6,15 +6,19 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.Activity;
 import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,14 +26,34 @@ import android.view.ViewGroup;
 import android.view.WindowInsets;
 import android.view.WindowInsetsController;
 import android.view.WindowManager;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+import com.squareup.okhttp.OkHttpClient;
 
+import java.io.BufferedReader;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.lang.reflect.Member;
+import java.net.Socket;
+import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -41,6 +65,9 @@ public class MainActivity extends AppCompatActivity {
     private cartMain cartMain;
     private user_main user_main;
     private static Activity activity;
+    private FirebaseUser user;
+    private static int visit_count = 0;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,24 +77,18 @@ public class MainActivity extends AppCompatActivity {
         bottomNavigationView = findViewById(R.id.bottomNavi);
 
         activity = this;
-        // 최초 실행 여부를 판단 -> 최초 실행 : 사용자 데이터 수집(나이, 선호 키워드 ...)
-        SharedPreferences pref = getSharedPreferences("checkFirst", Activity.MODE_PRIVATE);
-        boolean checkFirst = pref.getBoolean("checkFirst", false);
-        Log.d("checkFirst: ", String.valueOf(checkFirst));
 
-//        if(!checkFirst){    // false일 경우 최초 실행
-//            if(getUserAge() != 0){  // 사용자로부터 입력 받았을 때 최초 실행 true로 바꿈
-//                SharedPreferences.Editor editor = pref.edit();
-//                editor.putBoolean("checkFirst",true);
-//                editor.apply();
-//                finish();
-//            }
-//
-//            // 앱 최초 실행시 하고 싶은 작업
-//            Intent intent = new Intent(MainActivity.this, ChoiceAge.class);
-//            startActivity(intent);
-//
-//        }
+        // 최초 실행 여부를 판단 -> 최초 실행 : 사용자 데이터 수집(나이, 선호 키워드 ...)
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        Log.d("visit", String.valueOf(visit_count));
+        if (visit_count < 1){
+            visit_count++;
+        }
+        else if ((visit_count > 0) && (user != null)){
+            Intent intent = new Intent(getApplicationContext(), ChoiceAge.class);
+            startActivity(intent);
+        }
+
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
@@ -94,7 +115,7 @@ public class MainActivity extends AppCompatActivity {
         planner_main = new planner_main();
         cartMain = new cartMain();
         user_main = new user_main();
-        setFrag(0);
+
     }
 
     // 현재 사용자의 나이 가져오기
@@ -135,41 +156,61 @@ public class MainActivity extends AppCompatActivity {
     }
     public static class home_main extends Fragment {
         private android.view.View view;
-        private static int visit_count = 0;
+        private static FirebaseFirestore db;
+        private RecyclerView recyclerView;
+        private RecyclerViewAdapter rAdapter;
+        private ArrayList<RecyclerItem> rList = new ArrayList<>();
+        Button button;
+
         @Nullable
         @Override
         public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
             view = inflater.inflate(R.layout.activity_home_main, container, false);
+            db = FirebaseFirestore.getInstance();
 
-            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-            // 최초 실행 여부를 판단 -> 최초 실행 : 사용자 데이터 수집(나이, 선호 키워드 ...)
-            Log.d("visit", String.valueOf(visit_count));
-            if (visit_count < 1){
-                visit_count++;
-            }
-            else if ((visit_count > 0) && (user != null)){
-                Intent intent = new Intent(getActivity(), ChoiceAge.class);
-                startActivity(intent);
-            }
-            // 수정 필요!!
-//            SharedPreferences pref = this.getActivity().getSharedPreferences("checkFirst", Context.MODE_PRIVATE);
-//            boolean checkFirst = pref.getBoolean("checkFirst", false);
-//            Log.d("checkFirst: ", String.valueOf(checkFirst));
-//            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-//            // false일 경우 최초 실행
-//            if((!checkFirst) && (user != null)){  // 메인페이지 최초 실행 && 현재 사용자가 로그인 한 상태 -> 데이터 입력 단계로 넘어감
-//                // 앱 최초 실행시 하고 싶은 작업
-//                SharedPreferences.Editor editor = pref.edit();
-//                editor.putBoolean("checkFirst",true);
-//                editor.apply();
-//                activity.finish();
-//
-//                Intent intent = new Intent(getActivity(), ChoiceAge.class);
-//                startActivity(intent);
+            button = (Button) view.findViewById(R.id.btn_test_login);
+            recyclerView = (RecyclerView) view.findViewById(R.id.rv_lst);
+            rAdapter = new RecyclerViewAdapter(rList);
+            recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), RecyclerView.HORIZONTAL, false));
 
-//            }
+
+
+            button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(getActivity(), ChooseKeyword.class);
+                    startActivity(intent);
+                }
+            });
+
+            // 회원가입하지 않았을 때 보이는 뷰
+            // 파이어베이스에 저장된 지역데이터 뿌려줌
+            CollectionReference ref = db.collection("regions");
+            ref.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                    if (task.isSuccessful()){
+                        for(QueryDocumentSnapshot doc : task.getResult()){
+                            String title = doc.getId().toString();
+                            addItem(title, "sub");
+                            Log.d("title: ", title);
+                        }
+                        rAdapter.notifyDataSetChanged();
+                    } else {
+                        Log.d("데이터실패", "Error getting documents: ", task.getException());
+                    }
+                }
+            });
+            // 회원가입했을 때 보이는 뷰
 
             return view;
+        }
+
+        private void addItem(String title, String sub){
+            RecyclerItem item = new RecyclerItem();
+            item.setTitle(title);
+            item.setSub(sub);
+            rList.add(item);
         }
 
     }

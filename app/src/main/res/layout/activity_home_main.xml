@@ -4,14 +4,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".home_main">
+    <Button
+        android:id="@+id/btn_test_login"
+        android:text="test_login"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        ></Button>
 
-
-<!--    <Button-->
-<!--        android:id="@+id/btn_test_login"-->
-<!--        android:text="test_login"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        ></Button>-->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_lst"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        ></androidx.recyclerview.widget.RecyclerView>
 
 </LinearLayout>

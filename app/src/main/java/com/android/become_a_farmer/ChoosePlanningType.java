@@ -33,11 +33,19 @@ public class ChoosePlanningType extends AppCompatActivity {
         chbox_quinong = (CheckBox) findViewById(R.id.chbox_quinong);
         chbox_quichon = (CheckBox) findViewById(R.id.chbox_quichon);
 
-        if (chbox_quinong.isChecked()){
-            planningType = "quinong";
-        }else if(chbox_quichon.isChecked()){
-            planningType = "quichon";
-        }
+        chbox_quinong.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                planningType = "quinong";
+            }
+        });
+
+        chbox_quichon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                planningType = "quichon";
+            }
+        });
 
         // 계획 선택 후 다음 버튼 클릭 시, 귀농 or 귀촌 중 선택한 데이터 업데이트
         btn_next_plan = (ImageButton) findViewById(R.id.btn_next_plan);

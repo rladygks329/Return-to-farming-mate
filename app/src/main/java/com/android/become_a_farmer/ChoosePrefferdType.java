@@ -38,11 +38,19 @@ public class ChoosePrefferdType extends AppCompatActivity {
         chbox_nature = (CheckBox) findViewById(R.id.chbox_nature);
         chbox_culture = (CheckBox) findViewById(R.id.chbox_culture);
 
-        if (chbox_nature.isChecked()){
-            preferredType = "nature";
-        }else if(chbox_culture.isChecked()){
-            preferredType = "culture";
-        }
+        chbox_nature.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                preferredType = "nature";
+            }
+        });
+
+        chbox_culture.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                preferredType = "culture";
+            }
+        });
 
         // 계획 선택 후 다음 버튼 클릭 시, 귀농 or 귀촌 중 선택한 데이터 업데이트
         btn_next_prefer = (ImageButton) findViewById(R.id.btn_next_prefer);

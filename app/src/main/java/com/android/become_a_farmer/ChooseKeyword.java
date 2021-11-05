@@ -42,7 +42,6 @@ public class ChooseKeyword extends AppCompatActivity {
     private LinearLayout ll;
     private ImageButton btn_next_keyword;
     private FirebaseFirestore db;
-    private List<String> checkedKeywords = new ArrayList<String>();
     private String str_checkedKeywords;
     private DataInputStream dis;
     private DataOutputStream dos;
@@ -72,23 +71,23 @@ public class ChooseKeyword extends AppCompatActivity {
 
         // 키워드 선택 후 다음 버튼 클릭 시, 선택한 데이터 업데이트
         btn_next_keyword = (ImageButton) findViewById(R.id.btn_next_keyword);
-        for(String s : checkedKeywords){
-            str_checkedKeywords += s + ",";
-        }
-        if (checkedKeywords.size() > 0){
-            Log.d("checkedKeywords", str_checkedKeywords);
-        }
+
+
+
+        // 키둬으 선택 후 다음 버튼 클릭 시, 선택한 키워드 업데이트
         btn_next_keyword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // 사용자
+                // 선택한 키워드에서 맨 마지막 , 지움
+                str_checkedKeywords = str_checkedKeywords.substring(0, str_checkedKeywords.length() - 1);
+
                 // 현재 사용자의 email이 존재할 때
                 String email = getUserEmail();
 
                 if (email != null){
                     db = FirebaseFirestore.getInstance();
                     DocumentReference userRef = db.collection("users").document(email);
-                    userRef.update("prefferdKeywords", checkedKeywords)
+                    userRef.update("prefferdKeywords", str_checkedKeywords)
                             .addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
                                 public void onSuccess(Void unused) {
@@ -122,10 +121,7 @@ public class ChooseKeyword extends AppCompatActivity {
 
                 int idx = i + 1;
                 CheckBox ch2 = new CheckBox(this);
-//                ch2.setText(s[idx]);
-
-                ch1.setId(i);
-//                ch2.setId(idx);
+                ch2.setText(s[idx]);
 
                 LinearLayout addll = new LinearLayout(this);
                 addll.setOrientation(LinearLayout.HORIZONTAL);
@@ -146,7 +142,7 @@ public class ChooseKeyword extends AppCompatActivity {
     View.OnClickListener getOnClickSomething(final Button button){
         return new View.OnClickListener(){
             public void onClick(View v){
-                checkedKeywords.add(button.getText().toString());
+                str_checkedKeywords += button.getText().toString() + ",";
             }
         };
     }

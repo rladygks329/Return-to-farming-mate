@@ -81,10 +81,9 @@ public class MainActivity extends AppCompatActivity {
         // 최초 실행 여부를 판단 -> 최초 실행 : 사용자 데이터 수집(나이, 선호 키워드 ...)
         user = FirebaseAuth.getInstance().getCurrentUser();
         Log.d("visit", String.valueOf(visit_count));
-        if (visit_count < 1){
+
+        if ((visit_count < 1) && (user != null)){
             visit_count++;
-        }
-        else if ((visit_count > 0) && (user != null)){
             Intent intent = new Intent(getApplicationContext(), ChoiceAge.class);
             startActivity(intent);
         }

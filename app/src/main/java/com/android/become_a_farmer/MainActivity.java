@@ -78,7 +78,8 @@ public class MainActivity extends AppCompatActivity {
 
         activity = this;
 
-        // 최초 실행 여부를 판단 -> 최초 실행 : 사용자 데이터 수집(나이, 선호 키워드 ...)
+        // 최초 실행 여부를 판단
+        // -> 최초 실행 : 사용자 데이터 수집(나이, 선호 키워드 ...)
         user = FirebaseAuth.getInstance().getCurrentUser();
         Log.d("visit", String.valueOf(visit_count));
 

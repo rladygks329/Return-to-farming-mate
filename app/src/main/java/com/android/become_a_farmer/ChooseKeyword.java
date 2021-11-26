@@ -42,21 +42,22 @@ public class ChooseKeyword extends AppCompatActivity {
     private LinearLayout ll;
     private ImageButton btn_next_keyword;
     private FirebaseFirestore db;
-    private String str_checkedKeywords;
+    private String str_checkedKeywords = "";
     private DataInputStream dis;
     private DataOutputStream dos;
-
+    private ArrayList<String> checkedKeywords;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_choose_keyword);
-
+        checkedKeywords = new ArrayList<>();
         OkHttpClient okHttpClientclient = new OkHttpClient();
         okHttpClientclient.setConnectTimeout(30, TimeUnit.SECONDS); // connect timeout
         okHttpClientclient.setReadTimeout(30, TimeUnit.SECONDS);    // socket timeout
         connect();  // 농촌,공동체,체험,행복,전통,꽃,미래, 세계
 
+        // ui 업데이트 위한 스레드
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -78,8 +79,8 @@ public class ChooseKeyword extends AppCompatActivity {
         btn_next_keyword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // 선택한 키워드에서 맨 마지막 , 지움
-                str_checkedKeywords = str_checkedKeywords.substring(0, str_checkedKeywords.length() - 1);
+                // 키워드 리스트 -> 스트링
+                str_checkedKeywords = listToString(checkedKeywords);
 
                 // 현재 사용자의 email이 존재할 때
                 String email = getUserEmail();
@@ -109,19 +110,21 @@ public class ChooseKeyword extends AppCompatActivity {
 
     }
 
+    // 서버에서 받아온 keywords split해서 ui에 키워드 체크박스 추가함
     void setUI(){
         ll = (LinearLayout) findViewById(R.id.main_ll);
-        Log.d("setui", "ui돌아가고 있음ㅁㅁㅁ");
+//        Log.d("setui", "ui돌아가고 있음ㅁㅁㅁ");
         if(keywords!= null){
             String[] s = keywords.split(",");
             for (int i=0; i<s.length; i+=2) {
                 CheckBox ch1 = new CheckBox(this);
                 ch1.setText(s[i]);
-
+                ch1.setId(i);
 
                 int idx = i + 1;
                 CheckBox ch2 = new CheckBox(this);
                 ch2.setText(s[idx]);
+                ch2.setId(idx);
 
                 LinearLayout addll = new LinearLayout(this);
                 addll.setOrientation(LinearLayout.HORIZONTAL);
@@ -141,8 +144,13 @@ public class ChooseKeyword extends AppCompatActivity {
     }
     View.OnClickListener getOnClickSomething(final Button button){
         return new View.OnClickListener(){
-            public void onClick(View v){
-                str_checkedKeywords += button.getText().toString() + ",";
+            // ※ 체크박스 클릭했다가 클릭 취소하는 경우 처리
+            public void onClick(View v){    // 클릭했을 때 리스트에 없는 경우만 리스트에 추가
+                if (!checkedKeywords.contains(button.getText().toString())){
+                    checkedKeywords.add(button.getText().toString());
+                } else { // 체크한 키워드가 이미 리스트에 있는 경우 리스트에서 삭제
+                    checkedKeywords.remove(button.getText().toString());
+                }
             }
         };
     }
@@ -179,6 +187,17 @@ public class ChooseKeyword extends AppCompatActivity {
             return user.getEmail();
         }
         return null;
+    }
+
+    // arraylist -> string
+    public String listToString(ArrayList<String> arr) {
+        String res = "";
+        for (String s : arr) {
+            res += s + ",";
+        }
+        // 맨 마지막 , 지움
+        res = res.substring(0, res.length() - 1);
+        return res;
     }
 
 

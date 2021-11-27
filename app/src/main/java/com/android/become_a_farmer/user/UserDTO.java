@@ -1,5 +1,7 @@
 package com.android.become_a_farmer.user;
 
+import java.util.ArrayList;
+
 public class UserDTO {
     private String email;
     private String password;
@@ -8,6 +10,7 @@ public class UserDTO {
     private int age;
     private String planningType;
     private String preferredType;
+    private ArrayList<String> keywords;
 
     public UserDTO() {}
     public UserDTO(String email, String password, String name, String nickname) {
@@ -72,5 +75,13 @@ public class UserDTO {
 
     public void setPreferredType(String preferredType) {
         this.preferredType = preferredType;
+    }
+
+    public ArrayList<String> getKeywords() {
+        return keywords;
+    }
+
+    public void setKeywords(ArrayList<String> keywords) {
+        this.keywords = keywords;
     }
 }

@@ -118,14 +118,17 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    // 현재 사용자의 나이 가져오기
-//    public int getUserAge(){
+    // 현재 사용자가 키워드 선택했는지 확인하는 메서드
+    // @return : true => 사용자가 키워드 선택
+    // @return : false => 사용자가 키워드 선택 X
+
+//    public boolean checkKeyword(){
 //        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-//        if (user != null){
-//            Log.d("user email : " , user.get());
-//            return user.getAge();
+//        if (user != null){  // 현재 로그아웃 된 상태
+//            return false;
+//        } else {    // 로그인했지만, 키워드 선택안한 상태
+//            if ()
 //        }
-//        return null;
 //    }
 
     private void setFrag(int i) {

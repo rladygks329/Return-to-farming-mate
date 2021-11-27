@@ -27,6 +27,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
@@ -105,6 +106,9 @@ public class ChooseKeyword extends AppCompatActivity {
                     Toast.makeText(ChooseKeyword.this, "다시 로그인 해주세요.", Toast.LENGTH_SHORT).show();
 
                 }
+
+                // 사용자가 선택한 키워드를 서버에 전송함
+                connect2();
             }
         });
 
@@ -166,17 +170,31 @@ public class ChooseKeyword extends AppCompatActivity {
                     keywords = new String(byteArr, 0, readByteCount, "UTF-8");
                     is.close();
                     client.close();
-//                    Log.d("keywords", keywords);
-//                    if (keywords != null){
-//                        Intent intent = new Intent(getApplicationContext(), ChooseKeyword.class);
-//                        intent.putExtra("keywords", keywords);
-//                    }
+
                 } catch (IOException e){
                     e.printStackTrace();
                 }
             }
         };
         getKeywords.start();
+    }
+
+    void connect2(){
+        Thread sendKeywords = new Thread(){
+            public void run(){
+                try{    // 서버 접속
+                    client = new Socket(SERVER_IP, PORT);
+                    DataOutputStream dos = new DataOutputStream(client.getOutputStream());
+                    dos.writeUTF(str_checkedKeywords);
+                    dos.close();
+                    client.close();
+
+                } catch (IOException e){
+                    e.printStackTrace();
+                }
+            }
+        };
+        sendKeywords.start();
     }
 
 

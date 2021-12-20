@@ -11,12 +11,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
-public class home_main extends AppCompatActivity {
-    Button btn_test_login;
+public class home_main extends Fragment {
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home_main);
-    }
+
 }

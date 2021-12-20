@@ -34,12 +34,15 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.become_a_farmer.user.UserDTO;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -49,6 +52,7 @@ import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.Member;
 import java.net.Socket;
@@ -67,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
     private static Activity activity;
     private FirebaseUser user;
     private static int visit_count = 0;
-
+    private FirebaseFirestore db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,12 +86,13 @@ public class MainActivity extends AppCompatActivity {
         // -> 최초 실행 : 사용자 데이터 수집(나이, 선호 키워드 ...)
         user = FirebaseAuth.getInstance().getCurrentUser();
         Log.d("visit", String.valueOf(visit_count));
+        checkKeyword();
 
-        if ((visit_count < 1) && (user != null)){
-            visit_count++;
-            Intent intent = new Intent(getApplicationContext(), ChoiceAge.class);
-            startActivity(intent);
-        }
+//        if ((visit_count < 1) && (user != null)){
+//            visit_count++;
+//            Intent intent = new Intent(getApplicationContext(), ChoiceAge.class);
+//            startActivity(intent);
+//        }
 
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -121,15 +126,23 @@ public class MainActivity extends AppCompatActivity {
     // 현재 사용자가 키워드 선택했는지 확인하는 메서드
     // @return : true => 사용자가 키워드 선택
     // @return : false => 사용자가 키워드 선택 X
+    public boolean checkKeyword(){
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null){  // 현재 로그아웃 된 상태
+            return false;
+        } else {    // 로그인했지만, 키워드 선택안한 상태
+            DocumentReference docRef = db.collection("users").document(user.getEmail());
+            Task<DocumentSnapshot> userInfo = docRef.get();
+            DocumentSnapshot document = userInfo.getResult();
+            UserDTO userDTO = null;
+            if (document.exists()) {
+                userDTO = document.toObject(userDTO.getClass());
+                Log.d("userChooseKeyword", userDTO.getKeywords().get(0));
+            }
 
-//    public boolean checkKeyword(){
-//        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-//        if (user != null){  // 현재 로그아웃 된 상태
-//            return false;
-//        } else {    // 로그인했지만, 키워드 선택안한 상태
-//            if ()
-//        }
-//    }
+        }
+        return true;
+    }
 
     private void setFrag(int i) {
         fm = getSupportFragmentManager();
@@ -163,6 +176,12 @@ public class MainActivity extends AppCompatActivity {
         private RecyclerView recyclerView;
         private RecyclerViewAdapter rAdapter;
         private ArrayList<RecyclerItem> rList = new ArrayList<>();
+        private Socket client;
+        private String SERVER_IP = BuildConfig.SERVER_IP;
+        private int PORT = 8080;
+        private String checkedKeywords;
+        private String recommendRegions;
+        private InputStream is;
         Button button;
 
         @Nullable
@@ -176,8 +195,7 @@ public class MainActivity extends AppCompatActivity {
             rAdapter = new RecyclerViewAdapter(rList);
             recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), RecyclerView.HORIZONTAL, false));
 
-
-
+//            checkedKeywords = getArguments().getString("checkedKeywords");
             button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -185,7 +203,7 @@ public class MainActivity extends AppCompatActivity {
                     startActivity(intent);
                 }
             });
-
+//            connect();
             // 회원가입하지 않았을 때 보이는 뷰
             // 파이어베이스에 저장된 지역데이터 뿌려줌
             CollectionReference ref = db.collection("regions");
@@ -216,6 +234,32 @@ public class MainActivity extends AppCompatActivity {
             rList.add(item);
         }
 
+//        void connect(){
+//            Thread getRecommendRegions = new Thread(){
+//                public void run(){
+//                    try{    // 서버 접속
+//                        client = new Socket(SERVER_IP, PORT);
+//                        DataOutputStream dos = new DataOutputStream(client.getOutputStream());
+//                        dos.writeUTF(checkedKeywords);
+//                        dos.close();
+//
+//                        byte[] byteArr = new byte[1024];    // 추천 지역명 서버에서 받아오기
+//                        is = client.getInputStream();
+//                        int readByteCount = is.read(byteArr);
+//                        recommendRegions = new String(byteArr, 0, readByteCount, "UTF-8");
+//                        Log.d("regions", recommendRegions);
+//                        is.close();
+//                        client.close();
+//
+//                    } catch (IOException e){
+//                        e.printStackTrace();
+//                        Log.e("connect2", e.getMessage());
+//                    }
+//                }
+//            };
+//            getRecommendRegions.start();
+//        }
+
     }
 
     public static class planner_main extends Fragment {
@@ -230,18 +274,18 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public static class cartMain extends Fragment {
-        private android.view.View view;
-
-        @Nullable
-        @Override
-        public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-            view = inflater.inflate(R.layout.activity_cart_main, container, false);
-
-            return view;
-        }
-
-    }
+//    public static class cartMain extends Fragment {
+//        private android.view.View view;
+//
+//        @Nullable
+//        @Override
+//        public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+//            view = inflater.inflate(R.layout.activity_cart_main, container, false);
+//
+//            return view;
+//        }
+//
+//    }
 
     public static class user_main extends Fragment {
         private android.view.View view;

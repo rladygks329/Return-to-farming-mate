@@ -11,6 +11,7 @@ public class UserDTO {
     private String planningType;
     private String preferredType;
     private ArrayList<String> keywords;
+    private ArrayList<String> recommendRegions;
 
     public UserDTO() {}
     public UserDTO(String email, String password, String name, String nickname) {
@@ -83,5 +84,13 @@ public class UserDTO {
 
     public void setKeywords(ArrayList<String> keywords) {
         this.keywords = keywords;
+    }
+
+    public ArrayList<String> getRecommendRegions() {
+        return recommendRegions;
+    }
+
+    public void setRecommendRegions(ArrayList<String> recommendRegions) {
+        this.recommendRegions = recommendRegions;
     }
 }

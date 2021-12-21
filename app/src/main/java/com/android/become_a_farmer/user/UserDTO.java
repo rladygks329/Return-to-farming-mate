@@ -10,8 +10,8 @@ public class UserDTO {
     private int age;
     private String planningType;
     private String preferredType;
-    private ArrayList<String> keywords;
-    private ArrayList<String> recommendRegions;
+    private String keywords;
+    private String recommendRegions;
 
     public UserDTO() {}
     public UserDTO(String email, String password, String name, String nickname) {
@@ -78,19 +78,19 @@ public class UserDTO {
         this.preferredType = preferredType;
     }
 
-    public ArrayList<String> getKeywords() {
+    public String getKeywords() {
         return keywords;
     }
 
-    public void setKeywords(ArrayList<String> keywords) {
+    public void setKeywords(String keywords) {
         this.keywords = keywords;
     }
 
-    public ArrayList<String> getRecommendRegions() {
+    public String getRecommendRegions() {
         return recommendRegions;
     }
 
-    public void setRecommendRegions(ArrayList<String> recommendRegions) {
+    public void setRecommendRegions(String recommendRegions) {
         this.recommendRegions = recommendRegions;
     }
 }

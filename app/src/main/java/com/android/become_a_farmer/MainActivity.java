@@ -9,6 +9,7 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ActivityOptions;
 import android.content.Context;
@@ -44,6 +45,7 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.squareup.okhttp.OkHttpClient;
@@ -54,9 +56,11 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.lang.reflect.Array;
 import java.lang.reflect.Member;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends AppCompatActivity {
@@ -137,7 +141,7 @@ public class MainActivity extends AppCompatActivity {
             UserDTO userDTO = null;
             if (document.exists()) {
                 userDTO = document.toObject(userDTO.getClass());
-                Log.d("userChooseKeyword", userDTO.getKeywords().get(0));
+//                Log.d("userChooseKeyword", userDTO.getKeywords().get(0));
             }
 
         }
@@ -175,12 +179,12 @@ public class MainActivity extends AppCompatActivity {
         private static FirebaseFirestore db;
         private RecyclerView recyclerView;
         private RecyclerViewAdapter rAdapter;
-        private ArrayList<RecyclerItem> rList = new ArrayList<>();
+//        private ArrayList<RecyclerItem> rList = new ArrayList<>();
         private Socket client;
         private String SERVER_IP = BuildConfig.SERVER_IP;
         private int PORT = 8080;
-        private String checkedKeywords;
         private String recommendRegions;
+        private ArrayList<String> regionList;
         private InputStream is;
         Button button;
 
@@ -190,77 +194,102 @@ public class MainActivity extends AppCompatActivity {
             view = inflater.inflate(R.layout.activity_home_main, container, false);
             db = FirebaseFirestore.getInstance();
 
-            button = (Button) view.findViewById(R.id.btn_test_login);
             recyclerView = (RecyclerView) view.findViewById(R.id.rv_lst);
-            rAdapter = new RecyclerViewAdapter(rList);
-            recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), RecyclerView.HORIZONTAL, false));
+            rAdapter = new RecyclerViewAdapter();
+            recyclerView.setAdapter(rAdapter);
+            recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false));
 
-//            checkedKeywords = getArguments().getString("checkedKeywords");
-            button.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(getActivity(), ChooseKeyword.class);
-                    startActivity(intent);
-                }
-            });
-//            connect();
-            // 회원가입하지 않았을 때 보이는 뷰
-            // 파이어베이스에 저장된 지역데이터 뿌려줌
-            CollectionReference ref = db.collection("regions");
-            ref.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                @Override
-                public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                    if (task.isSuccessful()){
-                        for(QueryDocumentSnapshot doc : task.getResult()){
-                            String title = doc.getId().toString();
-                            addItem(title, "sub");
-                            Log.d("title: ", title);
+            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+            if (user != null){      // 회원가입했을 때 보이는 뷰
+                String email = user.getEmail();
+                getRecommendRegionName(email);
+
+            } else {    // 회원가입하지 않았을 때 보이는 뷰 -> 파이어베이스에 저장된 지역데이터 뿌려줌
+                CollectionReference ref = db.collection("regions");
+                ref.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @SuppressLint("NotifyDataSetChanged")
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()){
+                            for(QueryDocumentSnapshot doc : task.getResult()){
+                                String title = doc.getId().toString();
+                                rAdapter.addItem(title, "sub");
+                            }
+                            rAdapter.notifyDataSetChanged();
+                        } else {
+//                            Log.d("데이터실패", "Error getting documents: ", task.getException());
                         }
-                        rAdapter.notifyDataSetChanged();
-                    } else {
-                        Log.d("데이터실패", "Error getting documents: ", task.getException());
                     }
-                }
-            });
-            // 회원가입했을 때 보이는 뷰
+                });
+            }
 
             return view;
         }
 
-        private void addItem(String title, String sub){
-            RecyclerItem item = new RecyclerItem();
-            item.setTitle(title);
-            item.setSub(sub);
-            rList.add(item);
+
+
+        // string -> arraylist 변환
+        private ArrayList<String> toArrayList(String regions){
+            String[] arr = regions.split(",");
+            ArrayList<String> strRegions = new ArrayList<String>(Arrays.asList(arr));
+            return strRegions;
         }
 
-//        void connect(){
-//            Thread getRecommendRegions = new Thread(){
-//                public void run(){
-//                    try{    // 서버 접속
-//                        client = new Socket(SERVER_IP, PORT);
-//                        DataOutputStream dos = new DataOutputStream(client.getOutputStream());
-//                        dos.writeUTF(checkedKeywords);
-//                        dos.close();
-//
-//                        byte[] byteArr = new byte[1024];    // 추천 지역명 서버에서 받아오기
-//                        is = client.getInputStream();
-//                        int readByteCount = is.read(byteArr);
-//                        recommendRegions = new String(byteArr, 0, readByteCount, "UTF-8");
-//                        Log.d("regions", recommendRegions);
-//                        is.close();
-//                        client.close();
-//
-//                    } catch (IOException e){
-//                        e.printStackTrace();
-//                        Log.e("connect2", e.getMessage());
-//                    }
-//                }
-//            };
-//            getRecommendRegions.start();
-//        }
+        // 사용자의 추천 지역명 db에서 가져오고 추천 지역명의 데이터 getRegionDataByName 호출하여 가져옴
+        private void getRecommendRegionName(String email){
+            DocumentReference docRef = db.collection("users").document(email);
+            docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    if (task.isSuccessful()) {
+                        DocumentSnapshot document = task.getResult();
+                        recommendRegions = document.getData().get("recommendRegions").toString();
 
+                        // 사용자의 추천 지역명 데이터가 있는 경우
+                        if (recommendRegions != null) {
+                            regionList = toArrayList(recommendRegions.toString());
+                            // 추천 지역 데이터 db에서 가져와서 뿌려줌
+                            for(int i=0; i<regionList.size(); i++){
+                                getRegionDataByName(db, regionList.get(i));
+                            }
+                        } else{ // 사용자의 추천 지역명 데이터가 없는 경우 -> 파이어베이스에 저장된 지역데이터 뿌려줌
+
+                        }
+
+                    } else{
+                        Log.d("fail", "Error getting documents:", task.getException());
+                    }
+                }
+            });
+        }
+
+        // 추천 지역명으로 db에서 데이터 가져오는 쿼리
+        private void getRegionDataByName(FirebaseFirestore db, String regionName){
+            db.collection("regions")
+                    .whereEqualTo("do", regionName)
+                    .get()
+                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            if (task.isSuccessful()) {
+                                for (QueryDocumentSnapshot document : task.getResult()){
+                                    // 리사이클뷰에 지역명 추가 -> 화면에 뿌림
+                                    rAdapter.addItem(document.getId(), " ");
+                                    rAdapter.notifyDataSetChanged();
+//                                    Log.d("introduction", document.get("introduction").toString());
+                                }
+                            } else{
+
+                            }
+                        }
+                    });
+
+//        return regionData;
+        }
     }
+
+
+
 
     public static class planner_main extends Fragment {
         private android.view.View view;

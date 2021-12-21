@@ -12,21 +12,25 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
-    ArrayList<RecyclerItem> list = null;
+    ArrayList<RecyclerItem> list;
 
-    RecyclerViewAdapter(ArrayList<RecyclerItem> list){
+    public RecyclerViewAdapter() {
+        list = new ArrayList<>();
+    }
+
+    public RecyclerViewAdapter(ArrayList<RecyclerItem> list){
         this.list = list;
     }
 
 
     @NonNull
     @Override
-    public RecyclerViewAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         Context context = parent.getContext();
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View view = inflater.inflate(R.layout.item_recycler, parent, false);
-        RecyclerViewAdapter.ViewHolder vh = new RecyclerViewAdapter.ViewHolder(view);
-        return vh;
+        ViewHolder viewHolder = new ViewHolder(view);
+        return viewHolder;
     }
 
     @Override
@@ -39,6 +43,13 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     @Override
     public int getItemCount() {
         return list.size();
+    }
+
+    public void addItem(String title, String sub){
+        RecyclerItem item = new RecyclerItem();
+        item.setTitle(title);
+        item.setSub(sub);
+        list.add(item);
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{

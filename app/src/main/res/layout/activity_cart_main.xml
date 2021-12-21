@@ -8,12 +8,21 @@
     android:padding="5dp"
     tools:context=".MainActivity">
 
+
     <RelativeLayout
         android:id="@+id/relativelayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="10dp"
         app:layout_constraintTop_toTopOf="parent">
+
+        <Button
+            android:id="@+id/button1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Button"
+            tools:layout_editor_absoluteX="108dp"
+            tools:layout_editor_absoluteY="34dp" />
 
         <Spinner
             android:id="@+id/cspinner"
@@ -363,5 +372,6 @@
 
         </TableLayout>
     </ScrollView>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

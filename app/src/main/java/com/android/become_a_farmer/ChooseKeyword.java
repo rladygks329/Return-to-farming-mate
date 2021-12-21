@@ -82,12 +82,6 @@ public class ChooseKeyword extends AppCompatActivity {
         btn_next_keyword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // 키워드 데이터 main으로 보냄
-//                home_main home_main = new home_main();
-//                Bundle bundle = new Bundle();
-//                bundle.putString("checkedKeywords", str_checkedKeywords);
-//                home_main.setArguments(bundle);
-
                 // 키워드 리스트 -> 스트링
                 str_checkedKeywords = listToString(checkedKeywords);
 
@@ -171,37 +165,14 @@ public class ChooseKeyword extends AppCompatActivity {
             public void run(){
                 try{    // 서버 접속
                     client = new Socket(SERVER_IP, PORT);
-
                     byte[] byteArr = new byte[1024];    // 키워드 서버에서 받아오기
                     is = client.getInputStream();
                     int readByteCount = is.read(byteArr);
                     keywords = new String(byteArr, 0, readByteCount, "UTF-8");
-//                    Log.d("keywords", keywords);
-//                    is.close();
-//                    client.close();
-
                 } catch (IOException e){
                     e.printStackTrace();
                 }
 
-//                try{
-//                        DataOutputStream dos = new DataOutputStream(client.getOutputStream());
-//                        dos.writeUTF(str_checkedKeywords);
-//
-//                        byte[] byteArr = new byte[1024];    // 추천 지역명 서버에서 받아오기
-////                        is = client.getInputStream();
-//                        int readByteCount = is.read(byteArr);
-//                        recommendRegions = new String(byteArr, 0, readByteCount, "UTF-8");
-//                        Log.d("regions", recommendRegions);
-//
-//                        dos.close();
-//                        is.close();
-//                        client.close();
-//
-//                } catch (IOException e){
-//                    e.printStackTrace();
-//                    Log.e("connect2", e.getMessage());
-//                }
             }
         };
         getKeywords.start();
@@ -211,19 +182,19 @@ public class ChooseKeyword extends AppCompatActivity {
         Thread sendKeywords = new Thread(){
             public void run(){
                 try{    // 서버 접속
-//                    client = new Socket(SERVER_IP, PORT);
                     DataOutputStream dos = new DataOutputStream(client.getOutputStream());
                     dos.writeUTF(str_checkedKeywords);
 
                     byte[] byteArr = new byte[1024];    // 추천 지역명 서버에서 받아오기
-                        is = client.getInputStream();
-                        int readByteCount = is.read(byteArr);
-                        recommendRegions = new String(byteArr, 0, readByteCount, "UTF-8");
+                    is = client.getInputStream();
+                    int readByteCount = is.read(byteArr);
+                    recommendRegions = new String(byteArr, 0, readByteCount, "UTF-8");
 //                        Log.d("regions", recommendRegions);
-
-                        dos.close();
-                        is.close();
-                        client.close();
+                    // 사용자 정보 업데이트(추천 지역명 필드에 추가)
+                    updateUserDataRegions();
+                    dos.close();
+                    is.close();
+                    client.close();
 
                 } catch (IOException e){
                     e.printStackTrace();
@@ -252,6 +223,30 @@ public class ChooseKeyword extends AppCompatActivity {
         // 맨 마지막 , 지움
         res = res.substring(0, res.length() - 1);
         return res;
+    }
+
+    // db users 필드(추천 지역) 추가
+    public void updateUserDataRegions(){
+
+        // 현재 사용자의 email이 존재할 때
+        String email = getUserEmail();
+        if (email != null){
+            DocumentReference userRef = db.collection("users").document(email);
+            userRef.update("recommendRegions", recommendRegions)
+                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void unused) {
+                        }})
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Log.w("error add user age", e);
+                        }
+                    });
+        }else{
+            Toast.makeText(ChooseKeyword.this, "다시 로그인 해주세요.", Toast.LENGTH_SHORT).show();
+
+        }
     }
 
 

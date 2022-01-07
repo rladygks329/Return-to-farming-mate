@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ModifyUserInfo"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="귀농과 귀촌 중 어느 것을 계획하십니까?" />
+
+    <LinearLayout
+        android:id="@+id/ll1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <CheckBox
+            android:id="@+id/chbox_quinong"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="귀농"/>
+
+        <CheckBox
+            android:id="@+id/chbox_quichon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="귀촌"/>
+
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="자연과 문화 중 어느 것을 선호하십니까?" />
+
+    <LinearLayout
+        android:id="@+id/ll2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <CheckBox
+            android:id="@+id/chbox_nature"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="자연"/>
+
+        <CheckBox
+            android:id="@+id/chbox_culture"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="문화"/>
+
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="관심있는 키워드를 선택해주세요 (3개 이상)" />
+
+    <LinearLayout
+        android:id="@+id/ll3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btn_ok"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="완료">
+    </Button>
+
+</LinearLayout>

@@ -18,12 +18,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.Socket;
-
-public class ChoosePrefferdType extends AppCompatActivity {
+public class ChoosePreferredType extends AppCompatActivity {
     private CheckBox chbox_nature;
     private CheckBox chbox_culture;
     private ImageButton btn_next_prefer;
@@ -67,7 +62,7 @@ public class ChoosePrefferdType extends AppCompatActivity {
                             .addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
                                 public void onSuccess(Void unused) {
-                                    Intent intent = new Intent(ChoosePrefferdType.this, ChooseKeyword.class);
+                                    Intent intent = new Intent(ChoosePreferredType.this, ChooseKeyword.class);
                                     startActivity(intent);
                                 }})
                             .addOnFailureListener(new OnFailureListener() {
@@ -77,7 +72,7 @@ public class ChoosePrefferdType extends AppCompatActivity {
                                 }
                             });
                 }else{
-                    Toast.makeText(ChoosePrefferdType.this, "다시 로그인 해주세요.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ChoosePreferredType.this, "다시 로그인 해주세요.", Toast.LENGTH_SHORT).show();
 
                 }
 

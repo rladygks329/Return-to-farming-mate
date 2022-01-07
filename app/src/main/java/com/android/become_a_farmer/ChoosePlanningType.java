@@ -62,7 +62,7 @@ public class ChoosePlanningType extends AppCompatActivity {
                             .addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
                                 public void onSuccess(Void unused) {
-                                    Intent intent = new Intent(ChoosePlanningType.this, ChoosePrefferdType.class);
+                                    Intent intent = new Intent(ChoosePlanningType.this, ChoosePreferredType.class);
                                     startActivity(intent);
                                 }})
                             .addOnFailureListener(new OnFailureListener() {

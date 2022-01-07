@@ -30,7 +30,9 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 public class ChooseKeyword extends AppCompatActivity {
@@ -78,13 +80,12 @@ public class ChooseKeyword extends AppCompatActivity {
 
 
 
-        // 키둬으 선택 후 다음 버튼 클릭 시, 선택한 키워드 업데이트
+        // 키워드 선택 후 다음 버튼 클릭 시, 선택한 키워드 업데이트
         btn_next_keyword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // 키워드 리스트 -> 스트링
                 str_checkedKeywords = listToString(checkedKeywords);
-
                 // 현재 사용자의 email이 존재할 때
                 String email = getUserEmail();
 
@@ -121,6 +122,8 @@ public class ChooseKeyword extends AppCompatActivity {
         ll = (LinearLayout) findViewById(R.id.main_ll);
 //        Log.d("setui", "ui돌아가고 있음ㅁㅁㅁ");
         if(keywords!= null){
+            Log.d("keywords", keywords);
+            storeKeyword(db, keywords);
             String[] s = keywords.split(",");
             for (int i=0; i<s.length; i+=2) {
                 CheckBox ch1 = new CheckBox(this);
@@ -249,5 +252,25 @@ public class ChooseKeyword extends AppCompatActivity {
         }
     }
 
-
+    // 서버에서 받은 키워드 SharedPreference에 저장해두기
+    public void storeKeyword(FirebaseFirestore db, String keywords){
+        PreferenceManager.setString(this, "keywords", keywords);
+//        firestore에 저장
+//        Map<String, Object> obj = new HashMap<>();
+//        obj.put("one", keywords);
+//        db.collection("keywords").document("keywords")
+//                .set(obj)
+//                .addOnSuccessListener(new OnSuccessListener<Void>() {
+//                    @Override
+//                    public void onSuccess(Void unused) {
+//
+//                    }
+//                })
+//                .addOnFailureListener(new OnFailureListener() {
+//                    @Override
+//                    public void onFailure(@NonNull Exception e) {
+//                        Log.d("error!", e.getMessage());
+//                    }
+//                });
+    }
 }

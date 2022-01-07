@@ -1,17 +1,17 @@
-package com.android.become_a_farmer.user;
+package com.android.become_a_farmer;
 
 import java.util.ArrayList;
 
 public class UserDTO {
-    private String email;
-    private String password;
-    private String name;
-    private String nickname;
-    private int age;
-    private String planningType;
-    private String preferredType;
-    private String keywords;
-    private String recommendRegions;
+    private String email = "";
+    private String password = "";
+    private String name = "";
+    private String nickname = "";
+    private int age = 0;
+    private String planningType = "";
+    private String preferredType = "";
+    private String keywords = "";
+    private String recommendRegions = "";
 
     public UserDTO() {}
     public UserDTO(String email, String password, String name, String nickname) {

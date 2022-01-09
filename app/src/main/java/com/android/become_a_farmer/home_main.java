@@ -56,18 +56,20 @@ public class home_main extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         txt_name = (TextView) view.findViewById(R.id.txt_name);
-
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if (user != null){      // 회원가입한 경우
-            email = user.getEmail();
-            setUserName(email, txt_name);   // 이름 화면에 표시
-            getRecommendRegionName(email);
-        } else {    // 회원가입하지 않았을 때 보이는 뷰 -> 파이어베이스에 저장된 지역데이터 뿌려줌
-            getAllRegion();
-        }
+//
+//        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+//        if (user != null){      // 회원가입한 경우
+//            email = user.getEmail();
+//            setUserName(email, txt_name);   // 이름 화면에 표시
+//            getRecommendRegionName(email);
+//        } else {    // 회원가입하지 않았을 때 보이는 뷰 -> 파이어베이스에 저장된 지역데이터 뿌려줌
+//            getAllRegion();
+//        }
 
         sendRatingsData = new SendRatingsData(db, email);
-        sendRatingsData.getRatingFromDB();
+        String ratingFromDB = sendRatingsData.getRatingFromDB();
+
+        Log.d("json", ratingFromDB);
         return view;
     }
 

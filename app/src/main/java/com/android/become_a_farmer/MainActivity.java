@@ -166,18 +166,18 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public static class cartMain extends Fragment {
-        private android.view.View view;
-
-        @Nullable
-        @Override
-        public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-            view = inflater.inflate(R.layout.activity_cart_main, container, false);
-
-            return view;
-        }
-
-    }
+//    public static class cartMain extends Fragment {
+//        private android.view.View view;
+//
+//        @Nullable
+//        @Override
+//        public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+//            view = inflater.inflate(R.layout.activity_cart_main, container, false);
+//
+//            return view;
+//        }
+//
+//    }
 
 
 }

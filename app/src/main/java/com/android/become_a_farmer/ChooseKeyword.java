@@ -18,6 +18,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.squareup.okhttp.OkHttpClient;
 
@@ -46,11 +47,11 @@ public class ChooseKeyword extends AppCompatActivity {
     private ImageButton btn_next_keyword;
     private FirebaseFirestore db;
     private String str_checkedKeywords = "";
-    private DataInputStream dis;
-    private DataOutputStream dos;
     private ArrayList<String> checkedKeywords;
     private String recommendRegions;
     private InputStream is;
+    private DataOutputStream dos;
+    private int gubun;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,7 +61,8 @@ public class ChooseKeyword extends AppCompatActivity {
         OkHttpClient okHttpClientclient = new OkHttpClient();
         okHttpClientclient.setConnectTimeout(30, TimeUnit.SECONDS); // connect timeout
         okHttpClientclient.setReadTimeout(30, TimeUnit.SECONDS);    // socket timeout
-        connect();  // 농촌,공동체,체험,행복,전통,꽃,미래, 세계
+        keywords = "농촌,공동체,체험,행복,전통,꽃,미래, 세계";
+//        connect();  // 농촌,공동체,체험,행복,전통,꽃,미래, 세계
 
         // ui 업데이트 위한 스레드
         new Thread(new Runnable() {
@@ -163,43 +165,54 @@ public class ChooseKeyword extends AppCompatActivity {
             }
         };
     }
-    void connect(){
-        Thread getKeywords = new Thread(){
-            public void run(){
-                try{    // 서버 접속
-                    client = new Socket(SERVER_IP, PORT);
-                    byte[] byteArr = new byte[1024];    // 키워드 서버에서 받아오기
-                    is = client.getInputStream();
-                    int readByteCount = is.read(byteArr);
-                    keywords = new String(byteArr, 0, readByteCount, "UTF-8");
-                } catch (IOException e){
-                    e.printStackTrace();
-                }
-
-            }
-        };
-        getKeywords.start();
-    }
+//    void connect(){
+//        Thread getKeywords = new Thread(){
+//            public void run(){
+//                try{    // 서버 접속
+//                    client = new Socket(SERVER_IP, PORT);
+//                    dos = new DataOutputStream(client.getOutputStream());
+//                    gubun = 0;
+//                    Log.d("gubun", Integer.toString(gubun));
+//                    dos.writeUTF(Integer.toString(gubun));
+//                    byte[] byteArr = new byte[1024];    // 키워드 서버에서 받아오기
+//                    is = client.getInputStream();
+//                    int readByteCount = is.read(byteArr);
+//                    keywords = new String(byteArr, 0, readByteCount, "UTF-8");
+//                } catch (IOException e){
+//                    e.printStackTrace();
+//                }
+//
+//            }
+//        };
+//        getKeywords.start();
+//    }
 
     void connect2(){
         Thread sendKeywords = new Thread(){
             public void run(){
                 try{    // 서버 접속
-                    DataOutputStream dos = new DataOutputStream(client.getOutputStream());
-                    dos.writeUTF(str_checkedKeywords);
+                    client = new Socket(SERVER_IP, PORT);
+                    gubun = 1;
+//                    Log.d("gubun", Integer.toString(gubun));
+                    dos = new DataOutputStream(client.getOutputStream());
+                    dos.writeUTF(Integer.toString(gubun));
+//                    dos.flush();
 
+                    dos.writeUTF(str_checkedKeywords);  // 사용자가 선택한 키워드 서버로 보내기
+//                    dos.flush();
                     byte[] byteArr = new byte[1024];    // 추천 지역명 서버에서 받아오기
                     is = client.getInputStream();
                     int readByteCount = is.read(byteArr);
+                    Thread.sleep(2000);
                     recommendRegions = new String(byteArr, 0, readByteCount, "UTF-8");
-//                        Log.d("regions", recommendRegions);
+                    Log.d("regions", recommendRegions);
                     // 사용자 정보 업데이트(추천 지역명 필드에 추가)
                     updateUserDataRegions();
                     dos.close();
                     is.close();
                     client.close();
 
-                } catch (IOException e){
+                } catch (IOException | InterruptedException e){
                     e.printStackTrace();
                 }
             }
@@ -235,17 +248,14 @@ public class ChooseKeyword extends AppCompatActivity {
         String email = getUserEmail();
         if (email != null){
             DocumentReference userRef = db.collection("users").document(email);
-            userRef.update("recommendRegions", recommendRegions)
-                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void unused) {
-                        }})
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Log.w("error add user age", e);
-                        }
-                    });
+            String[] recommendRegionsArray = recommendRegions.split(",");
+
+            if (0 < recommendRegionsArray.length){
+                for (int i=0; i<recommendRegionsArray.length; i++) {
+                    userRef.update("recommendRegions", FieldValue.arrayUnion(recommendRegionsArray[i]));
+                }
+            }
+
         }else{
             Toast.makeText(ChooseKeyword.this, "다시 로그인 해주세요.", Toast.LENGTH_SHORT).show();
 
@@ -273,4 +283,32 @@ public class ChooseKeyword extends AppCompatActivity {
 //                    }
 //                });
     }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        try {
+            dos.close();
+            is.close();
+            client.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        try {
+            dos.close();
+            is.close();
+            client.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+
 }

@@ -54,6 +54,7 @@ public class ModifyPlan extends AppCompatActivity {
     private String SERVER_IP = BuildConfig.SERVER_IP;
     private int PORT = 9090;
     private InputStream is;
+    private DataOutputStream dos;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -264,8 +265,9 @@ public class ModifyPlan extends AppCompatActivity {
             public void run(){
                 try{    // 서버 접속
                     client = new Socket(SERVER_IP, PORT);
-                    DataOutputStream dos = new DataOutputStream(client.getOutputStream());
+                    dos = new DataOutputStream(client.getOutputStream());
                     dos.writeUTF(str_checkedKeywords);
+                    dos.flush();
 
                     byte[] byteArr = new byte[1024];    // 추천 지역명 서버에서 받아오기
                     is = client.getInputStream();
@@ -323,6 +325,32 @@ public class ModifyPlan extends AppCompatActivity {
         // 맨 마지막 , 지움
         res = res.substring(0, res.length() - 1);
         return res;
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        try {
+            dos.close();
+            is.close();
+            client.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        try {
+            dos.close();
+            is.close();
+            client.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
 }

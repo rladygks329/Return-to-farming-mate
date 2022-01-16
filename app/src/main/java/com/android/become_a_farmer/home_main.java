@@ -30,6 +30,10 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -41,8 +45,14 @@ public class home_main extends Fragment {
     private ArrayList<String> regionList;
     private TextView txt_name;
     private UserDTO userDTO;
+    private Button test;
     private SendRatingsData sendRatingsData;
     private String email;
+    private Socket client;
+    private String SERVER_IP = BuildConfig.SERVER_IP;
+    private int PORT = 9090;
+    private InputStream is;
+    private DataOutputStream dos;
 
     @Nullable
     @Override
@@ -65,11 +75,23 @@ public class home_main extends Fragment {
 //        } else {    // 회원가입하지 않았을 때 보이는 뷰 -> 파이어베이스에 저장된 지역데이터 뿌려줌
 //            getAllRegion();
 //        }
+        email = getUserEmail();
+        if (email != null){
+            try {
+                client = new Socket(SERVER_IP, PORT);
+                dos = new DataOutputStream(client.getOutputStream());
+                is = client.getInputStream();
 
-        sendRatingsData = new SendRatingsData(db, email);
-        String ratingFromDB = sendRatingsData.getRatingFromDB();
+                sendRatingsData = new SendRatingsData(db, email, client, is, dos);
+                sendRatingsData.getRatingFromDB();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
 
-        Log.d("json", ratingFromDB);
+//        String ratingFromDB = sendRatingsData.getRatingFromDB();
+
+//        Log.d("json", ratingFromDB);
         return view;
     }
 
@@ -176,4 +198,38 @@ public class home_main extends Fragment {
                 });
     }
 
+    // 현재 사용자의 이메일 가져오기
+    public String getUserEmail(){
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null){
+            return user.getEmail();
+        }
+        return null;
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        try {
+            dos.close();
+            is.close();
+            client.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        try {
+            dos.close();
+            is.close();
+            client.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
 }

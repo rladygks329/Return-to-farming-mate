@@ -170,7 +170,7 @@ public class SendRatingsData {
         String[] regionsList = regions.split(",");
         if (0 < regionsList.length){
             for (int i=0; i<regionsList.length; i++) {
-                docRef.update("recommendRegions", FieldValue.arrayUnion(regionsList[i]));
+                docRef.update("recommendRegionsBasedUser", FieldValue.arrayUnion(regionsList[i]));
             }
         }
 

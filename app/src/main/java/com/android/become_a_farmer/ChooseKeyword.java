@@ -52,6 +52,8 @@ public class ChooseKeyword extends AppCompatActivity {
     private InputStream is;
     private DataOutputStream dos;
     private int gubun;
+    private boolean isOpen = false;
+    private boolean threadCondition = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,18 +66,20 @@ public class ChooseKeyword extends AppCompatActivity {
         keywords = "농촌,공동체,체험,행복,전통,꽃,미래, 세계";
 //        connect();  // 농촌,공동체,체험,행복,전통,꽃,미래, 세계
 
+
         // ui 업데이트 위한 스레드
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        setUI();
-                    }
-                });
-            }
-        }).start();
+
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            setUI();
+                        }
+                    });
+                }
+            }).start();
 
         // 키워드 선택 후 다음 버튼 클릭 시, 선택한 데이터 업데이트
         btn_next_keyword = (ImageButton) findViewById(R.id.btn_next_keyword);
@@ -124,7 +128,6 @@ public class ChooseKeyword extends AppCompatActivity {
         ll = (LinearLayout) findViewById(R.id.main_ll);
 //        Log.d("setui", "ui돌아가고 있음ㅁㅁㅁ");
         if(keywords!= null){
-            Log.d("keywords", keywords);
             storeKeyword(db, keywords);
             String[] s = keywords.split(",");
             for (int i=0; i<s.length; i+=2) {
@@ -192,28 +195,32 @@ public class ChooseKeyword extends AppCompatActivity {
             public void run(){
                 try{    // 서버 접속
                     client = new Socket(SERVER_IP, PORT);
+                    isOpen = true;
                     gubun = 1;
 //                    Log.d("gubun", Integer.toString(gubun));
                     dos = new DataOutputStream(client.getOutputStream());
                     dos.writeUTF(Integer.toString(gubun));
-//                    dos.flush();
+                    dos.flush();
 
                     dos.writeUTF(str_checkedKeywords);  // 사용자가 선택한 키워드 서버로 보내기
 //                    dos.flush();
                     byte[] byteArr = new byte[1024];    // 추천 지역명 서버에서 받아오기
                     is = client.getInputStream();
                     int readByteCount = is.read(byteArr);
-                    Thread.sleep(2000);
+
                     recommendRegions = new String(byteArr, 0, readByteCount, "UTF-8");
-                    Log.d("regions", recommendRegions);
+//                    Log.d("regions", recommendRegions);
                     // 사용자 정보 업데이트(추천 지역명 필드에 추가)
                     updateUserDataRegions();
                     dos.close();
                     is.close();
                     client.close();
 
-                } catch (IOException | InterruptedException e){
+//                    Log.d("soketColsed", "!!!");
+
+                } catch (IOException e){
                     e.printStackTrace();
+                    Log.d("error", e.getMessage().toString());
                 }
             }
         };
@@ -243,7 +250,6 @@ public class ChooseKeyword extends AppCompatActivity {
 
     // db users 필드(추천 지역) 추가
     public void updateUserDataRegions(){
-
         // 현재 사용자의 email이 존재할 때
         String email = getUserEmail();
         if (email != null){
@@ -284,31 +290,54 @@ public class ChooseKeyword extends AppCompatActivity {
 //                });
     }
 
-    @Override
-    public void onPause() {
-        super.onPause();
-        try {
-            dos.close();
-            is.close();
-            client.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//    @Override
+//    public void onPause() {
+//        super.onPause();
+//        if (isOpen) {
+//            try {
+//                dos.close();
+//                is.close();
+//                client.close();
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//        }
+//
+//        threadCondition = false;
+//
+//    }
+//
+//    @Override
+//    public void onStop() {
+//        super.onStop();
+//        if (isOpen) {
+//            try {
+//                dos.close();
+//                is.close();
+//                client.close();
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//        }
+//
+//        threadCondition = false;
+//
+//    }
 
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        try {
-            dos.close();
-            is.close();
-            client.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-    }
-
-
+//    @Override
+//    protected void onDestroy() {
+//        super.onDestroy();
+//
+//        if (isOpen) {
+//            try {
+//                dos.close();
+//                is.close();
+//                client.close();
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//        }
+//
+//        threadCondition = false;
+//    }
 }

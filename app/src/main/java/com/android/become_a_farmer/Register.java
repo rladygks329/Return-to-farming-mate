@@ -98,7 +98,7 @@ public class Register extends AppCompatActivity implements View.OnClickListener 
                                     finish();
                                 }
                                 else{
-                                    Toast.makeText(Register.this, "등록 에러: task.getException().toString()", Toast.LENGTH_LONG).show();
+                                    Toast.makeText(Register.this, task.getException().toString(), Toast.LENGTH_LONG).show();
                                     return;
                                 }
                             }

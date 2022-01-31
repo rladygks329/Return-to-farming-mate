@@ -1,6 +1,8 @@
 package com.android.become_a_farmer;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -54,6 +56,7 @@ public class ChooseKeyword extends AppCompatActivity {
     private int gubun;
     private boolean isOpen = false;
     private boolean threadCondition = true;
+    private SharedPreferences pref;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,23 +66,14 @@ public class ChooseKeyword extends AppCompatActivity {
         OkHttpClient okHttpClientclient = new OkHttpClient();
         okHttpClientclient.setConnectTimeout(30, TimeUnit.SECONDS); // connect timeout
         okHttpClientclient.setReadTimeout(30, TimeUnit.SECONDS);    // socket timeout
+
+        pref = getSharedPreferences("pref", Activity.MODE_PRIVATE);
         keywords = "농촌,공동체,체험,행복,전통,꽃,미래, 세계";
 //        connect();  // 농촌,공동체,체험,행복,전통,꽃,미래, 세계
 
 
         // ui 업데이트 위한 스레드
-
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            setUI();
-                        }
-                    });
-                }
-            }).start();
+        setUI();
 
         // 키워드 선택 후 다음 버튼 클릭 시, 선택한 데이터 업데이트
         btn_next_keyword = (ImageButton) findViewById(R.id.btn_next_keyword);
@@ -115,9 +109,9 @@ public class ChooseKeyword extends AppCompatActivity {
                     Toast.makeText(ChooseKeyword.this, "다시 로그인 해주세요.", Toast.LENGTH_SHORT).show();
 
                 }
-
                 // 사용자가 선택한 키워드를 서버에 전송함
                 connect2();
+
             }
         });
 
@@ -128,7 +122,7 @@ public class ChooseKeyword extends AppCompatActivity {
         ll = (LinearLayout) findViewById(R.id.main_ll);
 //        Log.d("setui", "ui돌아가고 있음ㅁㅁㅁ");
         if(keywords!= null){
-            storeKeyword(db, keywords);
+            storeKeyword(keywords);
             String[] s = keywords.split(",");
             for (int i=0; i<s.length; i+=2) {
                 CheckBox ch1 = new CheckBox(this);
@@ -269,75 +263,10 @@ public class ChooseKeyword extends AppCompatActivity {
     }
 
     // 서버에서 받은 키워드 SharedPreference에 저장해두기
-    public void storeKeyword(FirebaseFirestore db, String keywords){
-        PreferenceManager.setString(this, "keywords", keywords);
-//        firestore에 저장
-//        Map<String, Object> obj = new HashMap<>();
-//        obj.put("one", keywords);
-//        db.collection("keywords").document("keywords")
-//                .set(obj)
-//                .addOnSuccessListener(new OnSuccessListener<Void>() {
-//                    @Override
-//                    public void onSuccess(Void unused) {
-//
-//                    }
-//                })
-//                .addOnFailureListener(new OnFailureListener() {
-//                    @Override
-//                    public void onFailure(@NonNull Exception e) {
-//                        Log.d("error!", e.getMessage());
-//                    }
-//                });
+    public void storeKeyword(String keywords){
+        SharedPreferences.Editor editor = pref.edit();
+
+        editor.putString("keywords", keywords);
+        editor.commit();
     }
-
-//    @Override
-//    public void onPause() {
-//        super.onPause();
-//        if (isOpen) {
-//            try {
-//                dos.close();
-//                is.close();
-//                client.close();
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-//        }
-//
-//        threadCondition = false;
-//
-//    }
-//
-//    @Override
-//    public void onStop() {
-//        super.onStop();
-//        if (isOpen) {
-//            try {
-//                dos.close();
-//                is.close();
-//                client.close();
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-//        }
-//
-//        threadCondition = false;
-//
-//    }
-
-//    @Override
-//    protected void onDestroy() {
-//        super.onDestroy();
-//
-//        if (isOpen) {
-//            try {
-//                dos.close();
-//                is.close();
-//                client.close();
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-//        }
-//
-//        threadCondition = false;
-//    }
 }

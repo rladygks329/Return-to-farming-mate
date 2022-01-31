@@ -11,8 +11,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -51,9 +54,7 @@ public class MainActivity extends AppCompatActivity {
     private cartMain cartMain;
     private user_main user_main;
     private static Activity activity;
-    private FirebaseUser user;
-    private static int visit_count = 0;
-    private FirebaseFirestore db;
+    private String email;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,16 +66,40 @@ public class MainActivity extends AppCompatActivity {
         activity = this;
 
         // 최초 실행 여부를 판단
-        // -> 최초 실행 : 사용자 데이터 수집(나이, 선호 키워드 ...)
-        user = FirebaseAuth.getInstance().getCurrentUser();
-        Log.d("visit", String.valueOf(visit_count));
-        checkKeyword();
+        email = getUserEmail();
+        SharedPreferences pref = getSharedPreferences("pref", Activity.MODE_PRIVATE);
+        boolean first = pref.getBoolean("isFirst", true);
 
-//        if ((visit_count < 1) && (user != null)){
-//            visit_count++;
-//            Intent intent = new Intent(getApplicationContext(), ChoiceAge.class);
-//            startActivity(intent);
-//        }
+        // 로그인 -> 취향 분석 ok 클릭 -> 취향 분석 화면으로 넘어감
+        Log.d("checkFirstRun", String.valueOf(first));
+
+        if ((first) && (email != null)){ // 최초 실행 && 로그인 한 경우
+            // 취향 분석 화면으로 넘어가기 위해 사용자에게 다이얼로그 띄움
+            // 확인 -> 취향 분석 화면으로 넘어감
+            // 다음에 -> 그대로
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setMessage("취향 분석을 위한 화면으로 이동하시겠습니까?");
+
+            builder.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    SharedPreferences.Editor editor = pref.edit();
+                    editor.putBoolean("isFirst", false);
+                    editor.commit();
+
+                    Intent intent = new Intent(getApplicationContext(), ChoiceAge.class);
+                    startActivity(intent);
+                }
+            });
+
+            builder.setNegativeButton("다음에 할게요", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+                }
+            });
+        }
+
 
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -103,27 +128,6 @@ public class MainActivity extends AppCompatActivity {
         cartMain = new cartMain();
         user_main = new user_main();
 
-    }
-
-    // 현재 사용자가 키워드 선택했는지 확인하는 메서드
-    // @return : true => 사용자가 키워드 선택
-    // @return : false => 사용자가 키워드 선택 X
-    public boolean checkKeyword(){
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if (user != null){  // 현재 로그아웃 된 상태
-            return false;
-        } else {    // 로그인했지만, 키워드 선택안한 상태
-            DocumentReference docRef = db.collection("users").document(user.getEmail());
-            Task<DocumentSnapshot> userInfo = docRef.get();
-            DocumentSnapshot document = userInfo.getResult();
-            UserDTO userDTO = null;
-            if (document.exists()) {
-                userDTO = document.toObject(userDTO.getClass());
-//                Log.d("userChooseKeyword", userDTO.getKeywords().get(0));
-            }
-
-        }
-        return true;
     }
 
     private void setFrag(int i) {
@@ -166,18 +170,12 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-//    public static class cartMain extends Fragment {
-//        private android.view.View view;
-//
-//        @Nullable
-//        @Override
-//        public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-//            view = inflater.inflate(R.layout.activity_cart_main, container, false);
-//
-//            return view;
-//        }
-//
-//    }
-
-
+    // 현재 사용자의 이메일 가져오기
+    public String getUserEmail(){
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null){
+            return user.getEmail();
+        }
+        return null;
+    }
 }

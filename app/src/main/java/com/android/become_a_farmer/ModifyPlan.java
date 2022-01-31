@@ -3,9 +3,13 @@ package com.android.become_a_farmer;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -25,6 +29,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -55,6 +60,9 @@ public class ModifyPlan extends AppCompatActivity {
     private int PORT = 9090;
     private InputStream is;
     private DataOutputStream dos;
+    private int gubun;
+    private FragmentManager fm;
+    private FragmentTransaction ft;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -72,18 +80,8 @@ public class ModifyPlan extends AppCompatActivity {
 
         // db에 저장된 키워드 가져와서 화면에 뿌림
         // ui 업데이트 위한 스레드
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        String keywords = getKeyword();
-                        setKeywordCheckboxUI(keywords);
-                    }
-                });
-            }
-        }).start();
+        String keywords = getKeyword();
+        setKeywordCheckboxUI(keywords);
 
         chbox_quinong.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -124,33 +122,24 @@ public class ModifyPlan extends AppCompatActivity {
                 updateUserCheckedKeywords();
                 connect();  // 추천 지역도 업데이트
 
+                // user_main 페이지로 돌아감(activity -> fragment 전환)
+                fm = getSupportFragmentManager();
+                ft = fm.beginTransaction();
+
+                ft.replace(R.id.frameLayout, new user_main());
+                ft.commit();
+
+
             }
         });
 
 
     }
-//    firestore에서 키워드 가져오기
-//    public void getKeyword(FirebaseFirestore db){
-//        CollectionReference ref = db.collection("keywords");
-//        ref.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-//            @SuppressLint("NotifyDataSetChanged")
-//            @Override
-//            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-//                if (!task.isSuccessful()) {
-//
-//                } else {
-//                    for(QueryDocumentSnapshot doc : task.getResult()){
-////                        String title = doc.get("").toString();
-//
-//                    }
-//                }
-//            }
-//        });
-//    }
 
     // SharedPreference에 저장된 keyword 가져오기
     public String getKeyword(){
-        return PreferenceManager.getString(this, "keywords");
+        SharedPreferences pref = getSharedPreferences("pref", Activity.MODE_PRIVATE);
+        return pref.getString("keywords", null);
     }
 
     public void setKeywordCheckboxUI(String keywords){
@@ -225,6 +214,7 @@ public class ModifyPlan extends AppCompatActivity {
                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void unused) {
+                            Log.d("update", "Dddddd");
                         }})
                     .addOnFailureListener(new OnFailureListener() {
                         @Override
@@ -266,9 +256,23 @@ public class ModifyPlan extends AppCompatActivity {
                 try{    // 서버 접속
                     client = new Socket(SERVER_IP, PORT);
                     dos = new DataOutputStream(client.getOutputStream());
-                    dos.writeUTF(str_checkedKeywords);
+
+                    gubun = 1;
+                    dos.writeUTF(Integer.toString(gubun));
                     dos.flush();
 
+                } catch (IOException e){
+                    e.printStackTrace();
+                }
+
+                try{
+                    dos.writeUTF(str_checkedKeywords);
+                    dos.flush();
+                } catch (Exception e) {
+
+                }
+
+                try{
                     byte[] byteArr = new byte[1024];    // 추천 지역명 서버에서 받아오기
                     is = client.getInputStream();
                     int readByteCount = is.read(byteArr);
@@ -279,9 +283,8 @@ public class ModifyPlan extends AppCompatActivity {
                     dos.close();
                     is.close();
                     client.close();
+                } catch (Exception e) {
 
-                } catch (IOException e){
-                    e.printStackTrace();
                 }
             }
         };
@@ -290,17 +293,13 @@ public class ModifyPlan extends AppCompatActivity {
     public void updateUserDataRegions(){
         if (email != null){
             DocumentReference userRef = db.collection("users").document(email);
-            userRef.update("recommendRegions", recommendRegions)
-                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void unused) {
-                        }})
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Log.w("error add user age", e);
-                        }
-                    });
+            String[] recommendRegionsArray = recommendRegions.split(",");
+
+            if (0 < recommendRegionsArray.length){
+                for (int i=0; i<recommendRegionsArray.length; i++) {
+                    userRef.update("recommendRegions", FieldValue.arrayUnion(recommendRegionsArray[i]));
+                }
+            }
         }else{
             Toast.makeText(ModifyPlan.this, "다시 로그인 해주세요.", Toast.LENGTH_SHORT).show();
 
@@ -326,31 +325,4 @@ public class ModifyPlan extends AppCompatActivity {
         res = res.substring(0, res.length() - 1);
         return res;
     }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        try {
-            dos.close();
-            is.close();
-            client.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        try {
-            dos.close();
-            is.close();
-            client.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-    }
-
 }

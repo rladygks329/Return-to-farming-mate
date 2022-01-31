@@ -48,11 +48,9 @@ public class home_main extends Fragment {
     private Button test;
     private SendRatingsData sendRatingsData;
     private String email;
-    private Socket client;
-    private String SERVER_IP = BuildConfig.SERVER_IP;
-    private int PORT = 9090;
-    private InputStream is;
-    private DataOutputStream dos;
+    private TextView textView;
+    private TextView txt_preference;
+
 
     @Nullable
     @Override
@@ -66,10 +64,14 @@ public class home_main extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         txt_name = (TextView) view.findViewById(R.id.txt_name);
+        textView = (TextView) view.findViewById(R.id.textView);
+        txt_preference = (TextView) view.findViewById(R.id.txt_preference);
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null){      // 회원가입한 경우
             email = user.getEmail();
+            textView.setVisibility(View.VISIBLE);
+            txt_preference.setVisibility(View.VISIBLE);
             setUserName(email, txt_name);   // 이름 화면에 표시
             getRecommendRegionName(email);
         } else {    // 회원가입하지 않았을 때 보이는 뷰 -> 파이어베이스에 저장된 지역데이터 뿌려줌
@@ -77,36 +79,29 @@ public class home_main extends Fragment {
         }
         email = getUserEmail();
 
-        // 사용자 기반 추천 시스템 돌아감
+        // 사용자 기반 추천 시스템 실행
         if (email != null){
-            connect();
+            findUserBasedRecommendRegions();
         }
+
+        // 취향 분석 화면으로 넘어가기
+        txt_preference.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (txt_preference.getVisibility() == View.VISIBLE){
+                    Intent intent = new Intent(getActivity(), ChoiceAge.class);
+                    startActivity(intent);
+                }
+            }
+        });
+
         return view;
     }
 
-    void connect(){
-        Thread runUserBasedRecommend = new Thread(){
-            public void run(){
-                try{    // 서버 접속
-                    client = new Socket(SERVER_IP, PORT);
-                    dos = new DataOutputStream(client.getOutputStream());
-                    is = client.getInputStream();
-
-                    // 사용자 기반 추천 시스템 돌아감
-                    sendRatingsData = new SendRatingsData(db, email, client, is, dos);
-                    sendRatingsData.getRatingFromDB();
-
-                    dos.close();
-                    is.close();
-                    client.close();
-
-                } catch (IOException e){
-                    e.printStackTrace();
-                    Log.d("home_main.class", e.getMessage().toString());
-                }
-            }
-        };
-        runUserBasedRecommend.start();
+    void findUserBasedRecommendRegions(){
+        // 사용자 기반 추천 시스템 돌아감
+        sendRatingsData = new SendRatingsData(db, email);
+        sendRatingsData.getRatingFromDB();
     }
 
     // 사용자 이름 ui에 표시
@@ -163,8 +158,22 @@ public class home_main extends Fragment {
                 if (task.isSuccessful()) {
                     DocumentSnapshot document = task.getResult();
 
+                    List<String> recommendRegions;
                     // 1. 키워드 바탕으로 추천
-                    List<String> recommendRegions = (List<String>) document.getData().get("recommendRegions");
+                    try{
+                        recommendRegions = (List<String>) document.getData().get("recommendRegions");
+                    } catch (Exception e) {
+                        recommendRegions = null;
+                    }
+
+                    // 2. 사용자 기반 추천
+                    List<String> recommendRegionsBasedUser;
+                    try{
+                        recommendRegionsBasedUser = (List<String>) document.getData()
+                                .get("recommendRegionsBasedUser");
+                    } catch (Exception e){
+                        recommendRegionsBasedUser = null;
+                    }
 
                     // 사용자의 추천 지역명 데이터가 있는 경우
                     if (recommendRegions != null) {
@@ -172,20 +181,18 @@ public class home_main extends Fragment {
                         for (int i = 0; i < recommendRegions.size(); i++) {
                             getRegionDataFromKeyword(db, recommendRegions.get(i));
                         }
-                    } else { // 사용자의 추천 지역명 데이터가 없는 경우 -> 파이어베이스에 저장된 지역데이터 뿌려줌
-
                     }
 
-                    // 2. 사용자 기반 추천
-                    List<String> recommendRegionsBasedUser = (List<String>) document.getData()
-                                                                .get("recommendRegionsBasedUser");
                     if (recommendRegionsBasedUser != null) {
                         // 추천 지역 데이터 db에서 가져와서 뿌려줌
                         for (int i = 0; i < recommendRegionsBasedUser.size(); i++) {
                             getRegionDataFromUser(db, recommendRegionsBasedUser.get(i));
                         }
-                    } else { // 사용자의 추천 지역명 데이터가 없는 경우 -> 파이어베이스에 저장된 지역데이터 뿌려줌
+                    }
 
+                    // 추천 지역명이 없는 경우 모든 지역 뿌려줌
+                    if ((recommendRegions == null) && (recommendRegionsBasedUser == null)) {
+                        getAllRegion();
                     }
 
 

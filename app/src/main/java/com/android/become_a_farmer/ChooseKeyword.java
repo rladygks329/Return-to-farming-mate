@@ -54,7 +54,6 @@ public class ChooseKeyword extends AppCompatActivity {
     private InputStream is;
     private DataOutputStream dos;
     private int gubun;
-    private boolean isOpen = false;
     private boolean threadCondition = true;
     private SharedPreferences pref;
 
@@ -63,9 +62,9 @@ public class ChooseKeyword extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_choose_keyword);
         checkedKeywords = new ArrayList<>();
-        OkHttpClient okHttpClientclient = new OkHttpClient();
-        okHttpClientclient.setConnectTimeout(30, TimeUnit.SECONDS); // connect timeout
-        okHttpClientclient.setReadTimeout(30, TimeUnit.SECONDS);    // socket timeout
+//        OkHttpClient okHttpClientclient = new OkHttpClient();
+//        okHttpClientclient.setConnectTimeout(30, TimeUnit.SECONDS); // connect timeout
+//        okHttpClientclient.setReadTimeout(30, TimeUnit.SECONDS);    // socket timeout
 
         pref = getSharedPreferences("pref", Activity.MODE_PRIVATE);
         keywords = "농촌,공동체,체험,행복,전통,꽃,미래, 세계";
@@ -162,60 +161,49 @@ public class ChooseKeyword extends AppCompatActivity {
             }
         };
     }
-//    void connect(){
-//        Thread getKeywords = new Thread(){
-//            public void run(){
-//                try{    // 서버 접속
-//                    client = new Socket(SERVER_IP, PORT);
-//                    dos = new DataOutputStream(client.getOutputStream());
-//                    gubun = 0;
-//                    Log.d("gubun", Integer.toString(gubun));
-//                    dos.writeUTF(Integer.toString(gubun));
-//                    byte[] byteArr = new byte[1024];    // 키워드 서버에서 받아오기
-//                    is = client.getInputStream();
-//                    int readByteCount = is.read(byteArr);
-//                    keywords = new String(byteArr, 0, readByteCount, "UTF-8");
-//                } catch (IOException e){
-//                    e.printStackTrace();
-//                }
-//
-//            }
-//        };
-//        getKeywords.start();
-//    }
 
     void connect2(){
         Thread sendKeywords = new Thread(){
             public void run(){
                 try{    // 서버 접속
                     client = new Socket(SERVER_IP, PORT);
-                    isOpen = true;
                     gubun = 1;
-//                    Log.d("gubun", Integer.toString(gubun));
                     dos = new DataOutputStream(client.getOutputStream());
                     dos.writeUTF(Integer.toString(gubun));
                     dos.flush();
 
+                } catch (IOException e){
+                    e.printStackTrace();
+                    Log.d(getClass().toString(), e.getMessage());
+                }
+
+                try{
                     dos.writeUTF(str_checkedKeywords);  // 사용자가 선택한 키워드 서버로 보내기
-//                    dos.flush();
+                    dos.flush();
+                } catch (Exception e) {
+                    Log.d(getClass().toString(), e.getMessage());
+                }
+
+                try{
                     byte[] byteArr = new byte[1024];    // 추천 지역명 서버에서 받아오기
                     is = client.getInputStream();
                     int readByteCount = is.read(byteArr);
-
                     recommendRegions = new String(byteArr, 0, readByteCount, "UTF-8");
-//                    Log.d("regions", recommendRegions);
+//                     Log.d("regions", recommendRegions);
+
+                } catch (Exception e){
+                    Log.d(getClass().toString(), e.getMessage());
+                }
+                try{
                     // 사용자 정보 업데이트(추천 지역명 필드에 추가)
                     updateUserDataRegions();
                     dos.close();
                     is.close();
                     client.close();
-
-//                    Log.d("soketColsed", "!!!");
-
-                } catch (IOException e){
-                    e.printStackTrace();
-                    Log.d("error", e.getMessage().toString());
+                } catch (Exception e){
+                    Log.d(getClass().toString(), e.getMessage());
                 }
+
             }
         };
         sendKeywords.start();

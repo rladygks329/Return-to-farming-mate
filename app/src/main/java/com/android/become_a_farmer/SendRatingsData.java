@@ -61,6 +61,7 @@ public class SendRatingsData {
     public void getRatingFromDB(){
         try{
             Log.d("getRating!!!", "called");
+            // firestore에서 rating을 json 형식으로 바꾸기
             db.collection("ratings")
                     .get()
                     .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -83,6 +84,8 @@ public class SendRatingsData {
 
                                 Log.d("json", new JSONObject(hashMap).toString());
                                 String ratingsJson = new JSONObject(hashMap).toString();
+
+                                // 파이썬 서버로 rating 전송
                                 sendRatingAndGetRegions(ratingsJson);
 
                             } else { // 아직 rating 정보가 없는 경우
@@ -133,7 +136,9 @@ public class SendRatingsData {
 
     // 가져온 ratings를 서버로 보내고 추천지역 받아오기
     public void sendRatingAndGetRegions(String ratings){
-        connect(ratings);
+        if (ratings != null) {
+            connect(ratings);
+        }
     }
 
 
@@ -152,23 +157,23 @@ public class SendRatingsData {
                     dos.flush();
 
                 } catch (Exception e){
-                    Log.d(getClass().toString(), "exception Write");
+                    Log.d(getClass().toString(), e.getMessage());
                 }
 
                 try{
-//                    Log.d("ratings", ratings);
+                    Log.d("ratings", ratings);
                     dos.writeUTF(ratings);  // rating 보내기
                     dos.flush();
                 } catch (Exception e) {
-
+                    Log.d(getClass().toString(), e.getMessage());
                 }
 
                 try{
-//                    Log.d("ratings", ratings);
+                    Log.d("email", email);
                     dos.writeUTF(email);    // 이메일 보내기
                     dos.flush();
                 } catch (Exception e) {
-
+                    Log.d(getClass().toString(), e.getMessage());
                 }
 
                 try{
@@ -184,7 +189,7 @@ public class SendRatingsData {
                     client.close();
 
                 } catch (Exception e){
-                    Log.d(getClass().toString(), "exception read");
+                    Log.d(getClass().toString(), e.getMessage());
                 }
             }
         };

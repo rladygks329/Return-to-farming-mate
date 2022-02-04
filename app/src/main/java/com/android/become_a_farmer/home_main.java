@@ -68,20 +68,37 @@ public class home_main extends Fragment {
         txt_preference = (TextView) view.findViewById(R.id.txt_preference);
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        email = user.getEmail();
         if (user != null){      // 회원가입한 경우
-            email = user.getEmail();
-            textView.setVisibility(View.VISIBLE);
-            txt_preference.setVisibility(View.VISIBLE);
-            setUserName(email, txt_name);   // 이름 화면에 표시
-            getRecommendRegionName(email);
+
+//            textView.setVisibility(View.VISIBLE);
+//            txt_preference.setVisibility(View.VISIBLE);
+//            setUserName(email, txt_name);   // 이름 화면에 표시
+//            getRecommendRegionName(email);
         } else {    // 회원가입하지 않았을 때 보이는 뷰 -> 파이어베이스에 저장된 지역데이터 뿌려줌
-            getAllRegion();
+//            getAllRegion();
         }
-        email = getUserEmail();
 
         // 사용자 기반 추천 시스템 실행
+        // -> 만약 사용자가 리뷰를 등록하지 않았다면, 사용자 기반 추천 시스템 실행할 수 없음
         if (email != null){
-            findUserBasedRecommendRegions();
+            DocumentReference docRef = db.collection("ratings").document(email);
+            docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    if (task.isSuccessful()) {
+                        DocumentSnapshot document = task.getResult();
+                        if (document.exists()) {
+                            findUserBasedRecommendRegions();
+                        } else {
+                            Log.d(getClass().toString(), "No ratings document");
+                        }
+                    } else {
+                        Log.d(getClass().toString(), "get failed with ", task.getException());
+                    }
+                }
+            });
+
         }
 
         // 취향 분석 화면으로 넘어가기
@@ -259,30 +276,4 @@ public class home_main extends Fragment {
         }
         return null;
     }
-
-//    @Override
-//    public void onPause() {
-//        super.onPause();
-//        try {
-//            dos.close();
-//            is.close();
-//            client.close();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//
-//    }
-//
-//    @Override
-//    public void onStop() {
-//        super.onStop();
-//        try {
-//            dos.close();
-//            is.close();
-//            client.close();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//
-//    }
 }

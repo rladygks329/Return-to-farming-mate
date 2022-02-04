@@ -68,6 +68,7 @@ public class RegionInfo extends AppCompatActivity {
     public void storeRating(String regionName, float rating){
         String email = getUserEmail();
         db = FirebaseFirestore.getInstance();
+
         DocumentReference ratingsRef = db.collection("ratings").document(email);
         ratingsRef.update(regionName, rating)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {

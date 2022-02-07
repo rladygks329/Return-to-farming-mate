@@ -9,6 +9,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -30,12 +32,6 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.Socket;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class home_main extends Fragment {
@@ -68,20 +64,57 @@ public class home_main extends Fragment {
         txt_preference = (TextView) view.findViewById(R.id.txt_preference);
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        email = user.getEmail();
-        if (user != null){      // 회원가입한 경우
 
-//            textView.setVisibility(View.VISIBLE);
-//            txt_preference.setVisibility(View.VISIBLE);
-//            setUserName(email, txt_name);   // 이름 화면에 표시
-//            getRecommendRegionName(email);
+        // 최초 실행 여부를 판단
+        // isFirst : true => 최초 실행
+        // isFirst : false => 최초 실행 아님
+        email = getUserEmail();
+        SharedPreferences pref = this.getActivity().getSharedPreferences("pref", Activity.MODE_PRIVATE);
+        boolean first = pref.getBoolean("isFirst", true);
+
+        // 로그인 -> 취향 분석 ok 클릭 -> 취향 분석 화면으로 넘어감
+        Log.d("checkFirstRun", String.valueOf(first));
+
+        if ((first) && (email != null)){ // 최초 실행 && 로그인 한 경우
+            // 취향 분석 화면으로 넘어가기 위해 사용자에게 다이얼로그 띄움
+            // 확인 -> 취향 분석 화면으로 넘어감
+            // 다음에 -> 그대로
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            builder.setMessage("취향 분석을 위한 화면으로 이동하시겠습니까?");
+
+            builder.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    SharedPreferences.Editor editor = pref.edit();
+                    editor.putBoolean("isFirst", false);
+                    editor.commit();
+
+                    Intent intent = new Intent(getActivity().getApplicationContext(), ChoiceAge.class);
+                    startActivity(intent);
+                }
+            });
+
+            builder.setNegativeButton("다음에 할게요", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+                }
+            });
+        }
+
+        if (user != null){      // 회원가입한 경우
+            textView.setVisibility(View.VISIBLE);
+            txt_preference.setVisibility(View.VISIBLE);
+            setUserName(email, txt_name);   // 이름 화면에 표시
+            getRecommendRegionName(email);
         } else {    // 회원가입하지 않았을 때 보이는 뷰 -> 파이어베이스에 저장된 지역데이터 뿌려줌
-//            getAllRegion();
+            getAllRegion();
         }
 
         // 사용자 기반 추천 시스템 실행
         // -> 만약 사용자가 리뷰를 등록하지 않았다면, 사용자 기반 추천 시스템 실행할 수 없음
         if (email != null){
+            Log.d("in!!!!", "!!!!!!!!!");
             DocumentReference docRef = db.collection("ratings").document(email);
             docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                 @Override
@@ -89,6 +122,7 @@ public class home_main extends Fragment {
                     if (task.isSuccessful()) {
                         DocumentSnapshot document = task.getResult();
                         if (document.exists()) {
+                            Log.d("wow", "사용자 평점 정보 있음!!!");
                             findUserBasedRecommendRegions();
                         } else {
                             Log.d(getClass().toString(), "No ratings document");

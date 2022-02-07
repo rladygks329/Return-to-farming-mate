@@ -65,40 +65,13 @@ public class MainActivity extends AppCompatActivity {
 
         activity = this;
 
-        // 최초 실행 여부를 판단
-        email = getUserEmail();
-        SharedPreferences pref = getSharedPreferences("pref", Activity.MODE_PRIVATE);
-        boolean first = pref.getBoolean("isFirst", true);
+        // 맨 처음 화면 home_main fragment로 설정
+        home_main = new home_main();
+        planner_main = new planner_main();
+        cartMain = new cartMain();
+        user_main = new user_main();
 
-        // 로그인 -> 취향 분석 ok 클릭 -> 취향 분석 화면으로 넘어감
-        Log.d("checkFirstRun", String.valueOf(first));
-
-        if ((first) && (email != null)){ // 최초 실행 && 로그인 한 경우
-            // 취향 분석 화면으로 넘어가기 위해 사용자에게 다이얼로그 띄움
-            // 확인 -> 취향 분석 화면으로 넘어감
-            // 다음에 -> 그대로
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setMessage("취향 분석을 위한 화면으로 이동하시겠습니까?");
-
-            builder.setPositiveButton("확인", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    SharedPreferences.Editor editor = pref.edit();
-                    editor.putBoolean("isFirst", false);
-                    editor.commit();
-
-                    Intent intent = new Intent(getApplicationContext(), ChoiceAge.class);
-                    startActivity(intent);
-                }
-            });
-
-            builder.setNegativeButton("다음에 할게요", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-
-                }
-            });
-        }
+        bottomNavigationView.setSelectedItemId(R.id.homeItem);
 
 
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -122,11 +95,6 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
-
-        home_main = new home_main();
-        planner_main = new planner_main();
-        cartMain = new cartMain();
-        user_main = new user_main();
 
     }
 
@@ -178,4 +146,6 @@ public class MainActivity extends AppCompatActivity {
         }
         return null;
     }
+
+
 }

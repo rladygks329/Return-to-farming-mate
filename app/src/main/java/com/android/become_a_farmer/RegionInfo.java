@@ -58,7 +58,6 @@ public class RegionInfo extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-
         if (changed){
             storeRating(regionName, regionRating);
         }

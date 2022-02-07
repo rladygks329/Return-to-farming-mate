@@ -180,10 +180,12 @@ public class SendRatingsData {
                     byte[] byteArr = new byte[1024];    // 추천 지역명 서버에서 받아오기(user-user collaborate)
                     int readByteCount = is.read(byteArr);
                     recommendRegionsUserUser = new String(byteArr, 0, readByteCount, "UTF-8");
-//                    Log.d("regions", recommendRegionsUserUser);
+                    Log.d("regions", recommendRegionsUserUser);
 
                     // 사용자 정보 업데이트(추천 지역명 필드에 추가)
-                    updateUserDataRegions(email, recommendRegionsUserUser);
+                    if (recommendRegionsUserUser.length() > 0) {
+                        updateUserDataRegions(email, recommendRegionsUserUser);
+                    }
                     dos.close();
                     is.close();
                     client.close();

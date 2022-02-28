@@ -23,8 +23,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="님의 추천지역"
-            android:layout_marginLeft="5dp"
-            android:visibility="invisible">
+            android:layout_marginLeft="99.3dp"
+            android:fontFamily="@font/notosanskr_bold"
+            android:textSize="18sp"
+            android:textColor="#3a3a3a"
+            android:lineSpacingExtra="3.6sp"
+            android:visibility="invisible"
+            android:layout_marginTop="144dp"
+            >
         </TextView>
 
         <TextView

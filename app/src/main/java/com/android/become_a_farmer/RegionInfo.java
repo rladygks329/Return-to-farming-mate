@@ -1,11 +1,20 @@
 package com.android.become_a_farmer;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.View;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
@@ -29,6 +38,10 @@ public class RegionInfo extends AppCompatActivity {
     private String regionName;
     private float regionRating;
     private boolean changed = false;
+    private TextView title_region;
+
+    Intent intent = getIntent();
+    RecyclerItem item = (RecyclerItem) intent.getSerializableExtra("item");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,9 +51,21 @@ public class RegionInfo extends AppCompatActivity {
         txt_region_name = (TextView) findViewById(R.id.txt_region_name);
         txt_region_info = (TextView) findViewById(R.id.txt_region_info);
         ratingBar = (RatingBar) findViewById(R.id.ratingbar);
+        title_region = (TextView) findViewById(R.id.title_region);
 
-        Intent intent = getIntent();
-        RecyclerItem item = (RecyclerItem) intent.getSerializableExtra("item");
+        // 텍스트 색 변경
+        String content = title_region.getText().toString();
+        SpannableString spannableString = new SpannableString(content);
+
+        String word ="지역";
+        int start = content.indexOf(word);
+        int end = start + word.length();
+
+        spannableString.setSpan(new ForegroundColorSpan(Color.parseColor("#23cd87")),
+                start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+        title_region.setText(spannableString);
+
 
         regionName = item.getTitle();
         txt_region_name.setText(regionName);
@@ -54,6 +79,31 @@ public class RegionInfo extends AppCompatActivity {
             }
         });
     }
+
+    // 액션바 커스텀
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        ActionBar actionBar = getSupportActionBar();
+
+        actionBar.setDisplayShowCustomEnabled(true);
+        actionBar.setDisplayHomeAsUpEnabled(false);
+        actionBar.setDisplayShowTitleEnabled(true);
+        actionBar.setDisplayShowHomeEnabled(false);
+
+        actionBar.setTitle(item.getTitle());
+        LayoutInflater inflater = (LayoutInflater)getSystemService(LAYOUT_INFLATER_SERVICE);
+        View actionbar = inflater.inflate(R.layout.custom_actionbar, null);
+
+        actionBar.setCustomView(actionbar);
+
+        //액션바 양쪽 공백 없애기
+        Toolbar parent = (Toolbar)actionbar.getParent();
+        parent.setContentInsetsAbsolute(0,0);
+
+        return true;
+    }
+
+
 
     @Override
     protected void onPause() {

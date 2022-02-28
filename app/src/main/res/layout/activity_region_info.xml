@@ -5,12 +5,20 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".RegionInfo"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    >
 
     <TextView
         android:id="@+id/txt_region_name"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/notosanskr_bold"
+        android:textStyle="bold"
+        android:textSize="24.6sp"
+        android:textColor="#23cd87"
+        android:layout_marginTop="106dp"
+        android:layout_marginLeft="18dp"
+        android:lineSpacingExtra="4.9sp">
 
     </TextView>
 
@@ -23,9 +31,27 @@
         />
 
     <TextView
+        android:id="@+id/title_region"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/notosanskr_bold"
+        android:textStyle="bold"
+        android:textSize="19sp"
+        android:textColor="#000000"
+        android:lineSpacingExtra="-4.6sp"
+        android:layout_gravity="center"
+        tools:text="지역 소개"/>
+
+    <TextView
         android:id="@+id/txt_region_info"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/notosanskr_medium"
+        android:textStyle="normal"
+        android:textSize="12sp"
+        android:textColor="#3a3a3a"
+        android:layout_gravity="center"
+        android:lineSpacingExtra="5.4sp"
         ></TextView>
 
 </LinearLayout>

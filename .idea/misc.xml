@@ -3,11 +3,25 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/jungminji/StudioProjects/Return-to-farming-mate/app/src/main/res/drawable/ch_guinong.xml" value="0.1953125" />
+        <entry key="..\:/Users/jungminji/StudioProjects/Return-to-farming-mate/app/src/main/res/drawable/spinner_background.xml" value="0.1953125" />
+        <entry key="..\:/Users/jungminji/StudioProjects/Return-to-farming-mate/app/src/main/res/font/font.xml" value="0.209375" />
         <entry key="..\:/Users/jungminji/StudioProjects/Return-to-farming-mate/app/src/main/res/layout/activity_cart_main.xml" value="0.13072916666666667" />
-        <entry key="..\:/Users/jungminji/StudioProjects/Return-to-farming-mate/app/src/main/res/layout/activity_home_main.xml" value="0.11354166666666667" />
-        <entry key="..\:/Users/jungminji/StudioProjects/Return-to-farming-mate/app/src/main/res/layout/activity_login.xml" value="0.1" />
+        <entry key="..\:/Users/jungminji/StudioProjects/Return-to-farming-mate/app/src/main/res/layout/activity_choice_age.xml" value="0.13333333333333333" />
+        <entry key="..\:/Users/jungminji/StudioProjects/Return-to-farming-mate/app/src/main/res/layout/activity_choose_keyword.xml" value="0.13043478260869565" />
+        <entry key="..\:/Users/jungminji/StudioProjects/Return-to-farming-mate/app/src/main/res/layout/activity_home_main.xml" value="0.14666666666666667" />
+        <entry key="..\:/Users/jungminji/StudioProjects/Return-to-farming-mate/app/src/main/res/layout/activity_login.xml" value="0.22" />
         <entry key="..\:/Users/jungminji/StudioProjects/Return-to-farming-mate/app/src/main/res/layout/activity_main.xml" value="0.15443840579710144" />
+        <entry key="..\:/Users/jungminji/StudioProjects/Return-to-farming-mate/app/src/main/res/layout/activity_planner_main.xml" value="0.12771739130434784" />
+        <entry key="..\:/Users/jungminji/StudioProjects/Return-to-farming-mate/app/src/main/res/layout/activity_region_info.xml" value="0.1213768115942029" />
         <entry key="..\:/Users/jungminji/StudioProjects/Return-to-farming-mate/app/src/main/res/layout/activity_register.xml" value="0.16666666666666666" />
+        <entry key="..\:/Users/jungminji/StudioProjects/Return-to-farming-mate/app/src/main/res/layout/activity_select_education.xml" value="0.16077898550724637" />
+        <entry key="..\:/Users/jungminji/StudioProjects/Return-to-farming-mate/app/src/main/res/layout/activity_select_land.xml" value="0.14764492753623187" />
+        <entry key="..\:/Users/jungminji/StudioProjects/Return-to-farming-mate/app/src/main/res/layout/activity_select_register.xml" value="0.15625" />
+        <entry key="..\:/Users/jungminji/StudioProjects/Return-to-farming-mate/app/src/main/res/layout/custom_actionbar.xml" value="0.16077898550724637" />
+        <entry key="..\:/Users/jungminji/StudioProjects/Return-to-farming-mate/app/src/main/res/layout/select_house.xml" value="0.1431159420289855" />
+        <entry key="..\:/Users/jungminji/StudioProjects/Return-to-farming-mate/app/src/main/res/layout/spinner_background.xml" value="0.1598731884057971" />
+        <entry key="..\:/Users/jungminji/StudioProjects/Return-to-farming-mate/app/src/main/res/menu/bottomnavigationveiw.xml" value="0.17916666666666667" />
       </map>
     </option>
   </component>

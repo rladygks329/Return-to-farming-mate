@@ -22,6 +22,18 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="n">
         <activity
+            android:name=".SelectRegister"
+            android:exported="true" />
+        <activity
+            android:name=".SelectEducation"
+            android:exported="true" />
+        <activity
+            android:name=".SelectHouse"
+            android:exported="true" />
+        <activity
+            android:name=".SelectLand"
+            android:exported="true" />
+        <activity
             android:name=".ModifyPlan"
             android:exported="true" />
         <activity

@@ -4,7 +4,11 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -12,6 +16,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -22,17 +27,34 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.ktx.Firebase;
 
+import org.w3c.dom.Text;
+
 public class ChoiceAge extends AppCompatActivity {
     private Spinner spinner;
     private String age;
     private ImageButton btn_next;
     private FirebaseFirestore db;
     private String email;
+    private TextView text_age;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_choice_age);
+        text_age = (TextView) findViewById(R.id.text_age);
+
+        // 텍스트 색 바꾸기
+        String content = text_age.getText().toString();
+        SpannableString spannableString = new SpannableString(content);
+
+        String word ="연령대";
+        int start = content.indexOf(word);
+        int end = start + word.length();
+
+        spannableString.setSpan(new ForegroundColorSpan(Color.parseColor("#23cd87")),
+                start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+        text_age.setText(spannableString);
 
         // spinner 생성
         spinner = (Spinner) findViewById(R.id.spinner);

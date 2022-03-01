@@ -65,11 +65,14 @@ public class MainActivity extends AppCompatActivity {
 
         activity = this;
 
-        // 맨 처음 화면 home_main fragment로 설정
         home_main = new home_main();
         planner_main = new planner_main();
         cartMain = new cartMain();
         user_main = new user_main();
+
+        // 맨 처음 화면 home_main fragment로 설정
+        getSupportFragmentManager().beginTransaction().add(R.id.frameLayout, home_main).commit(); //FrameLayout에 fragment.xml 띄우기
+
 
         bottomNavigationView.setSelectedItemId(R.id.homeItem);
 

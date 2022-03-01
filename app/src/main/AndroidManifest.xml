@@ -22,6 +22,12 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="n">
         <activity
+            android:name=".SelectCrop"
+            android:exported="true" />
+        <activity
+            android:name=".SelectRegion"
+            android:exported="true" />
+        <activity
             android:name=".SelectRegister"
             android:exported="true" />
         <activity

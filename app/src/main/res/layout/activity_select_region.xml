@@ -4,13 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SelectRegister"
+    tools:context=".SelectRegion"
     android:orientation="vertical">
-
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/sixth_step"
+        android:background="@drawable/first_step"
         android:layout_gravity="center"
         android:layout_marginTop="50.8dp"/>
 
@@ -18,46 +17,29 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_marginTop="15.8dp"
+        android:layout_marginTop="62.2dp"
         android:layout_gravity="center">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/notosanskr_bold"
-            android:textSize="8sp"
-            android:textColor="#3a3a3a"
-            android:lineSpacingExtra="2sp"
-            android:gravity="center_horizontal"
-            android:layout_marginLeft="15dp"
-            android:text="혜택"/>
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
-
             <ImageButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/register2"
-                android:layout_gravity="center"
+                android:src="@drawable/house1"
+                android:background="@android:color/transparent"
+                />
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/house2"
+                android:layout_marginLeft="9.3dp"
                 android:background="@android:color/transparent"
                 />
 
-        </LinearLayout>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/notosanskr_bold"
-            android:textSize="10sp"
-            android:textColor="#3a3a3a"
-            android:lineSpacingExtra="2sp"
-            android:gravity="center_horizontal"
-            android:layout_marginTop="6dp"
-            android:layout_marginLeft="15dp"
-            tools:text="인터넷 신청"/>
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -68,8 +50,14 @@
             <ImageButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/register3"
-                android:layout_gravity="center"
+                android:src="@drawable/house3"
+                android:background="@android:color/transparent"
+                />
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/house4"
+                android:layout_marginLeft="9.3dp"
                 android:background="@android:color/transparent"
                 />
 
@@ -78,11 +66,12 @@
     </LinearLayout>
 
     <ImageButton
+        android:id="@+id/btn_next"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginTop="15dp"
+        android:src="@drawable/select_btn_next"
         android:background="@android:color/transparent"
-        android:src="@drawable/select_btn_next" />
+        android:layout_gravity="center"
+        android:layout_marginTop="325.5dp"/>
 
 </LinearLayout>

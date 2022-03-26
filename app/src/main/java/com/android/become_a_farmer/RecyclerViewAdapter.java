@@ -2,6 +2,7 @@ package com.android.become_a_farmer;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -66,20 +67,20 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             txt_sub = itemView.findViewById(R.id.rcy_item_sub);
 
             // 아이템 클릭 이벤트(title 클릭)
-            txt_title.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    int pos = getAdapterPosition();
-                    if (pos != RecyclerView.NO_POSITION){
-                        RecyclerItem item = list.get(pos);
-                        // item 객체 보내기
-                        Intent intent = new Intent(v.getContext(), RegionInfo.class);
-                        intent.putExtra("item", item);
-                        mContext.startActivity(intent);
-                    }
-
-                }
-            });
+//            txt_title.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    int pos = getAdapterPosition();
+//                    if (pos != RecyclerView.NO_POSITION){
+//                        RecyclerItem item = list.get(pos);
+//                        // item 객체 보내기
+//                        Intent intent = new Intent(v.getContext(), RegionInfo.class);
+//                        intent.putExtra("item", item);
+//                        mContext.startActivity(intent);
+//                    }
+//
+//                }
+//            });
         }
     }
 }

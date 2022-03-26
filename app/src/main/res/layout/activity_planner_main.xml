@@ -9,18 +9,19 @@
     android:gravity="center">
 
     <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/bg_planner"
+        android:layout_width="260dp"
+        android:layout_height="466dp"
         android:layout_marginTop="36dp"
-        />
+        android:background="@drawable/bg_planner" />
 
-    <ImageButton
+
+    <ImageView
         android:id="@+id/btn_start_planner"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/btn_start_planner"
         android:background="@android:color/transparent"
+        android:layout_marginTop="3dp"
         />
 
 </LinearLayout>

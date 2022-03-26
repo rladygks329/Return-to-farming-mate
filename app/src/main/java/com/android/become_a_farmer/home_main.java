@@ -4,16 +4,24 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Application;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Parcelable;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,6 +40,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 public class home_main extends Fragment {
@@ -46,21 +56,23 @@ public class home_main extends Fragment {
     private String email;
     private TextView textView;
     private TextView txt_preference;
+    private List<String> sendRegions = new ArrayList<>();
+    public static Context context_main;
 
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.activity_home_main, container, false);
+        context_main = getContext();
         db = FirebaseFirestore.getInstance();
 
         recyclerView = (RecyclerView) view.findViewById(R.id.rv_lst);
         rAdapter = new RecyclerViewAdapter(getContext());
         recyclerView.setAdapter(rAdapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
 
         txt_name = (TextView) view.findViewById(R.id.txt_name);
-        textView = (TextView) view.findViewById(R.id.textView);
         txt_preference = (TextView) view.findViewById(R.id.txt_preference);
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
@@ -103,7 +115,6 @@ public class home_main extends Fragment {
         }
 
         if (user != null){      // 회원가입한 경우
-            textView.setVisibility(View.VISIBLE);
             txt_preference.setVisibility(View.VISIBLE);
             setUserName(email, txt_name);   // 이름 화면에 표시
             getRecommendRegionName(email);
@@ -114,7 +125,7 @@ public class home_main extends Fragment {
         // 사용자 기반 추천 시스템 실행
         // -> 만약 사용자가 리뷰를 등록하지 않았다면, 사용자 기반 추천 시스템 실행할 수 없음
         if (email != null){
-            Log.d("in!!!!", "!!!!!!!!!");
+//            Log.d("in!!!!", "!!!!!!!!!");
             DocumentReference docRef = db.collection("ratings").document(email);
             docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                 @Override
@@ -122,13 +133,10 @@ public class home_main extends Fragment {
                     if (task.isSuccessful()) {
                         DocumentSnapshot document = task.getResult();
                         if (document.exists()) {
-                            Log.d("wow", "사용자 평점 정보 있음!!!");
                             findUserBasedRecommendRegions();
                         } else {
-                            Log.d(getClass().toString(), "No ratings document");
                         }
                     } else {
-                        Log.d(getClass().toString(), "get failed with ", task.getException());
                     }
                 }
             });
@@ -164,15 +172,14 @@ public class home_main extends Fragment {
                 if (task.isSuccessful()) {
                     DocumentSnapshot document = task.getResult();
                     String name = document.getData().get("name").toString();
+                    // 텍스트 색 바꾸기
+
                     if (name != null) {
                         txt_name.setText(name);
                     }
-                    else{   // 사용자의 이름이 없는 경우
-                        txt_name.setText("");
-                    }
 
                 } else{
-                    Log.d("fail", "Error getting documents:", task.getException());
+//                    Log.d("fail", "Error getting documents:", task.getException());
                 }
             }
         });
@@ -188,9 +195,18 @@ public class home_main extends Fragment {
                 if (task.isSuccessful()){
                     for(QueryDocumentSnapshot doc : task.getResult()){
                         String title = doc.getId().toString();
+                        sendRegions.add(title);
+                        String content;
                         // 지역 리스트에 저장하고, 화면에 뿌림
+                        if (doc.get("introduction").toString() == null){
+                            content = "";
+                        }else{
+                            content = doc.get("introduction").toString();
+                        }
+
                         rAdapter.addItem(title, " ",
-                                doc.get("introduction").toString());
+                                content);
+                        sendRegions.add(title);
                         rAdapter.notifyDataSetChanged();
                     }
                     rAdapter.notifyDataSetChanged();
@@ -231,6 +247,8 @@ public class home_main extends Fragment {
                         // 추천 지역 데이터 db에서 가져와서 뿌려줌
                         for (int i = 0; i < recommendRegions.size(); i++) {
                             getRegionDataFromKeyword(db, recommendRegions.get(i));
+
+
                         }
                     }
 
@@ -268,11 +286,19 @@ public class home_main extends Fragment {
                                 rAdapter.addItem(document.getId(), " ",
                                         document.get("introduction").toString());
                                 rAdapter.notifyDataSetChanged();
+                                sendRegions.add(document.getId());
+                                try{
+
+                                } catch (Exception e){
+                                }
+
 //                                    Log.d("introduction", document.get("introduction").toString());
                             }
                         } else{
 
                         }
+                    Log.d("last;", sendRegions.get(0));
+
                     }
                 });
     }
@@ -292,7 +318,7 @@ public class home_main extends Fragment {
                                 rAdapter.addItem(document.getId(), " ",
                                         document.get("introduction").toString());
                                 rAdapter.notifyDataSetChanged();
-//                                    Log.d("introduction", document.get("introduction").toString());
+                                sendRegions.add(document.getId());
                             }
                         } else{
 
@@ -309,5 +335,13 @@ public class home_main extends Fragment {
             return user.getEmail();
         }
         return null;
+    }
+
+    public List<String> getSendRegions() {
+        return sendRegions;
+    }
+
+    public void setSendRegions(List<String> sendRegions) {
+        this.sendRegions = sendRegions;
     }
 }

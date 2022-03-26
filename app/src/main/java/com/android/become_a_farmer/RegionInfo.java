@@ -39,9 +39,7 @@ public class RegionInfo extends AppCompatActivity {
     private float regionRating;
     private boolean changed = false;
     private TextView title_region;
-
-    Intent intent = getIntent();
-    RecyclerItem item = (RecyclerItem) intent.getSerializableExtra("item");
+    private RecyclerItem item;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,12 +51,16 @@ public class RegionInfo extends AppCompatActivity {
         ratingBar = (RatingBar) findViewById(R.id.ratingbar);
         title_region = (TextView) findViewById(R.id.title_region);
 
+
+        Intent intent = getIntent();
+        item = (RecyclerItem) intent.getSerializableExtra("item");
+
         // 텍스트 색 변경
         String content = title_region.getText().toString();
         SpannableString spannableString = new SpannableString(content);
 
         String word ="지역";
-        int start = content.indexOf(word);
+        int start = 0;
         int end = start + word.length();
 
         spannableString.setSpan(new ForegroundColorSpan(Color.parseColor("#23cd87")),

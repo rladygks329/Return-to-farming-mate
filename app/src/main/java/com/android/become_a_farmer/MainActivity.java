@@ -129,18 +129,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public static class planner_main extends Fragment {
-        private android.view.View view;
-
-        @Nullable
-        @Override
-        public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-            view = inflater.inflate(R.layout.activity_planner_main, container, false);
-            return view;
-        }
-
-    }
-
     // 현재 사용자의 이메일 가져오기
     public String getUserEmail(){
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();

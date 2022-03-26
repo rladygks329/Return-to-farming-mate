@@ -10,21 +10,32 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:layout_marginTop="24dp">
 
         <TextView
             android:id="@+id/txt_name"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:text="익명"
+            android:layout_marginLeft="28dp"
+            android:fontFamily="@font/notosanskr_bold"
+            android:textSize="20dp"
+            android:textColor="#23cd87"
+            android:lineSpacingExtra="3.6sp"
+            >
         </TextView>
 
         <TextView
-            android:id="@+id/textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="님의 추천지역"
-            android:layout_marginLeft="5dp"
-            android:visibility="invisible">
+            android:layout_marginLeft="2dp"
+            android:fontFamily="@font/notosanskr_bold"
+            android:textSize="18dp"
+            android:textColor="#3a3a3a"
+            android:lineSpacingExtra="3.6sp"
+            >
         </TextView>
 
         <TextView
@@ -32,14 +43,18 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="취향 다시 분석하기"
+            android:layout_marginLeft="40dp"
+            android:fontFamily="@font/notosanskr_regular"
+            android:textSize="14dp"
             android:visibility="invisible"
             />
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_lst"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
         ></androidx.recyclerview.widget.RecyclerView>
 
 </LinearLayout>

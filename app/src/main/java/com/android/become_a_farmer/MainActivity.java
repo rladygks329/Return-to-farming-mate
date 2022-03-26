@@ -65,11 +65,14 @@ public class MainActivity extends AppCompatActivity {
 
         activity = this;
 
-        // 맨 처음 화면 home_main fragment로 설정
         home_main = new home_main();
         planner_main = new planner_main();
         cartMain = new cartMain();
         user_main = new user_main();
+
+        // 맨 처음 화면 home_main fragment로 설정
+        getSupportFragmentManager().beginTransaction().add(R.id.frameLayout, home_main).commit(); //FrameLayout에 fragment.xml 띄우기
+
 
         bottomNavigationView.setSelectedItemId(R.id.homeItem);
 
@@ -125,18 +128,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
-    public static class planner_main extends Fragment {
-        private android.view.View view;
-
-        @Nullable
-        @Override
-        public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-            view = inflater.inflate(R.layout.activity_planner_main, container, false);
-            return view;
-        }
-
-    }
 
     // 현재 사용자의 이메일 가져오기
     public String getUserEmail(){

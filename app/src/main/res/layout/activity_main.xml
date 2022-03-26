@@ -23,6 +23,8 @@
         android:background="@android:color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:menu="@menu/bottomnavigationveiw" />
+        app:menu="@menu/bottomnavigationveiw"
+        app:labelVisibilityMode="unlabeled"
+        app:itemIconSize="45dp"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

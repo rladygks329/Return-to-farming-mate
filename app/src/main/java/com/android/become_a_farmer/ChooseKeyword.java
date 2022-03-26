@@ -3,13 +3,18 @@ package com.android.become_a_farmer;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -56,15 +61,28 @@ public class ChooseKeyword extends AppCompatActivity {
     private int gubun;
     private boolean threadCondition = true;
     private SharedPreferences pref;
+    private TextView title_keyword;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_choose_keyword);
         checkedKeywords = new ArrayList<>();
-//        OkHttpClient okHttpClientclient = new OkHttpClient();
-//        okHttpClientclient.setConnectTimeout(30, TimeUnit.SECONDS); // connect timeout
-//        okHttpClientclient.setReadTimeout(30, TimeUnit.SECONDS);    // socket timeout
+
+        title_keyword = (TextView) findViewById(R.id.title_keyword);
+
+        // 텍스트 색 변경
+        String content = title_keyword.getText().toString();
+        SpannableString spannableString = new SpannableString(content);
+
+        String word ="관심있는 키워드";
+        int start = content.indexOf(word);
+        int end = start + word.length();
+
+        spannableString.setSpan(new ForegroundColorSpan(Color.parseColor("#23cd87")),
+                start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+        title_keyword.setText(spannableString);
 
         pref = getSharedPreferences("pref", Activity.MODE_PRIVATE);
         keywords = "농촌,공동체,체험,행복,전통,꽃,미래, 세계";

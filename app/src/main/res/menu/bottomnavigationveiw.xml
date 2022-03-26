@@ -4,10 +4,11 @@
     <item
         android:id="@+id/homeItem"
         android:icon="@mipmap/home"
-        android:title="홈"/>
+        android:title="홈"
+        />
     <item
         android:id="@+id/plannerItem"
-        android:icon="@mipmap/notification"
+        android:icon="@mipmap/planner"
         android:title="플래너"/>
     <item
         android:id="@+id/cartItem"

@@ -14,15 +14,17 @@
        android:gravity="center">
 
        <TextView
+           android:id="@+id/title_keyword"
            android:layout_width="wrap_content"
            android:layout_height="wrap_content"
-           android:layout_marginTop="30dp"
+           android:layout_marginTop="82dp"
            android:text="@string/questionKeyword"
            android:textColor="#000000"
            android:textSize="25sp"
            android:textStyle="normal"
            android:textAlignment="center"
-           android:gravity="center_horizontal" />
+           android:gravity="center_horizontal"
+           android:fontFamily="@font/notosanskr_bold"/>
 
             <LinearLayout
                 android:id="@+id/main_ll"
@@ -36,8 +38,9 @@
            android:layout_width="wrap_content"
            android:layout_height="wrap_content"
            android:padding="0dp"
-           android:src="@drawable/btn_next"
+           android:src="@drawable/btn_next_age"
            android:layout_marginTop="200dp"
+           android:background="@android:color/transparent"
            />
    </LinearLayout>
 

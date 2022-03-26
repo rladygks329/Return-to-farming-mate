@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ThirdPlanner"
+    android:orientation="vertical">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/third_step"
+        android:layout_gravity="center"
+        android:layout_marginTop="50.8dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="53dp"
+        android:layout_marginLeft="28dp"
+        android:fontFamily="@font/notosanskr_bold"
+        android:gravity="center_horizontal"
+        android:lineSpacingExtra="-3sp"
+        android:text="토지 선정"
+        android:textColor="#23cd87"
+        android:textSize="25sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/notosanskr_medium"
+        android:textStyle="normal"
+        android:textSize="15sp"
+        android:textColor="#3a3a3a"
+        android:lineSpacingExtra="3sp"
+        android:gravity="center_horizontal"
+        android:layout_marginLeft="26dp"
+        android:text="원하시는 토지를 선택하세요"/>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="62.2dp"
+        android:layout_gravity="center">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <ImageButton
+                android:id="@+id/btn1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/land1"
+                android:background="@android:color/transparent"
+                />
+
+            <ImageButton
+                android:id="@+id/btn2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/land2"
+                android:background="@android:color/transparent"
+                android:layout_marginLeft="3.9dp"
+                />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <ImageButton
+                android:id="@+id/btn3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/land3"
+                android:background="@android:color/transparent"
+                />
+
+            <ImageButton
+                android:id="@+id/btn4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/land4"
+                android:background="@android:color/transparent"
+                />
+
+
+        </LinearLayout>
+    </LinearLayout>
+
+    <ImageButton
+        android:id="@+id/btn_start_planner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/select_btn_next"
+        android:background="@android:color/transparent"
+        android:layout_gravity="center"
+        android:layout_marginTop="200dp"/>
+
+
+</LinearLayout>

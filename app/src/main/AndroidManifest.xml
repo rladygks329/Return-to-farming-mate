@@ -22,6 +22,27 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="n">
         <activity
+            android:name=".FinishPlanner"
+            android:exported="true" />
+        <activity
+            android:name=".SecondPlanner"
+            android:exported="true" />
+        <activity
+            android:name=".FirstPlanner"
+            android:exported="true" />
+        <activity
+            android:name=".SixthPlanner"
+            android:exported="true" />
+        <activity
+            android:name=".FifthPlanner"
+            android:exported="true" />
+        <activity
+            android:name=".FourthPlanner"
+            android:exported="true" />
+        <activity
+            android:name=".ThirdPlanner"
+            android:exported="true" />
+        <activity
             android:name=".ModifyPlan"
             android:exported="true" />
         <activity

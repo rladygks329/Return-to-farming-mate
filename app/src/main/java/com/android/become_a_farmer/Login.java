@@ -5,7 +5,14 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.RelativeSizeSpan;
+import android.text.style.StyleSpan;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -13,6 +20,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -25,6 +33,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
     private ImageView btn_register;
     private EditText txt_id;
     private EditText txt_pwd;
+    private TextView text;
     FirebaseAuth firebaseAuth;
 
     @Override
@@ -37,10 +46,22 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
         txt_id = (EditText) findViewById(R.id.txt_id);
         txt_pwd = (EditText) findViewById(R.id.txt_pwd);
         firebaseAuth = firebaseAuth.getInstance();
+        text = (TextView) findViewById(R.id.text);
 
         btn_login_page.setOnClickListener(this); // 로그인 버튼 클릭
         btn_register.setOnClickListener(this); // 회원가입 버튼 클릭
 
+        String content = text.getText().toString();
+        SpannableString spannableString = new SpannableString(content);
+
+        String word ="떠나볼까요?";
+        int start = content.indexOf(word);
+        int end = start + word.length();
+
+        spannableString.setSpan(new ForegroundColorSpan(Color.parseColor("#3a3a3a")),
+                start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+        text.setText(spannableString);
 
     }
     // 다른 화면 터치 시 키보드 내림

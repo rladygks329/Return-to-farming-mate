@@ -7,6 +7,13 @@
     android:orientation="vertical"
     tools:context=".home_main">
 
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:layout_gravity="center"
+        android:background="@drawable/search_box"/>
+
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -18,7 +25,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="익명"
-            android:layout_marginLeft="28dp"
+            android:layout_marginLeft="31dp"
             android:fontFamily="@font/notosanskr_bold"
             android:textSize="20dp"
             android:textColor="#23cd87"
@@ -55,6 +62,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:scrollbars="vertical"
+        android:scrollbarFadeDuration="0"
         ></androidx.recyclerview.widget.RecyclerView>
 
 </LinearLayout>

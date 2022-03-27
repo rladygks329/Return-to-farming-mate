@@ -88,9 +88,9 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.plannerItem:
                         setFrag(1);
                         break;
-                    case R.id.cartItem:
-                        setFrag(2);
-                        break;
+//                    case R.id.cartItem:
+//                        setFrag(2);
+//                        break;
                     case R.id.userItem:
                         setFrag(3);
                         break;

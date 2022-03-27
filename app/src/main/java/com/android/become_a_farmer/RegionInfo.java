@@ -33,6 +33,9 @@ import java.util.Map;
 public class RegionInfo extends AppCompatActivity {
     private TextView txt_region_name;
     private TextView txt_region_info;
+    private TextView txt_crop_info;
+    private TextView title_ex;
+    private TextView txt_ex_info;
     private RatingBar ratingBar;
     private FirebaseFirestore db;
     private String regionName;
@@ -48,6 +51,9 @@ public class RegionInfo extends AppCompatActivity {
 
         txt_region_name = (TextView) findViewById(R.id.txt_region_name);
         txt_region_info = (TextView) findViewById(R.id.txt_region_info);
+        txt_crop_info = (TextView) findViewById(R.id.txt_crop_info);
+        title_ex = (TextView) findViewById(R.id.title_ex);
+        txt_ex_info = (TextView) findViewById(R.id.txt_ex_info);
         ratingBar = (RatingBar) findViewById(R.id.ratingbar);
         title_region = (TextView) findViewById(R.id.title_region);
 
@@ -72,6 +78,9 @@ public class RegionInfo extends AppCompatActivity {
         regionName = item.getTitle();
         txt_region_name.setText(regionName);
         txt_region_info.setText(item.getIntroduction());
+        txt_crop_info.setText(item.getCrop());
+        title_ex.setText(item.getExperienceTitle());
+        txt_ex_info.setText(item.getExperienceContent());
 
         ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
             @Override

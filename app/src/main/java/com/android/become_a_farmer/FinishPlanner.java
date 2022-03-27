@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -17,7 +18,7 @@ public class FinishPlanner extends AppCompatActivity {
     private TextView crop;
     private TextView land;
     private TextView house;
-    private Button btn;
+    private ImageButton btn;
 
     private SharedPreferences pref;
     @Override
@@ -29,7 +30,7 @@ public class FinishPlanner extends AppCompatActivity {
         crop = (TextView) findViewById(R.id.crop);
         land = (TextView) findViewById(R.id.land);
         house = (TextView) findViewById(R.id.house);
-        btn = (Button) findViewById(R.id.next);
+        btn = (ImageButton) findViewById(R.id.next);
 
         pref = getSharedPreferences("pref", Activity.MODE_PRIVATE);
         region.setText(pref.getString("selectedRegion", ""));

@@ -203,9 +203,12 @@ public class home_main extends Fragment {
                         }else{
                             content = doc.get("introduction").toString();
                         }
+                        String crop = doc.get("crop").toString();
+                        String experienceContent = doc.get("experienceContent").toString();
+                        String experienceTitle = doc.get("experienceTitle").toString();
 
-                        rAdapter.addItem(title, " ",
-                                content);
+                        rAdapter.addItem(title, " ", content, crop, experienceTitle,
+                                experienceContent);
                         sendRegions.add(title);
                         rAdapter.notifyDataSetChanged();
                     }
@@ -281,12 +284,18 @@ public class home_main extends Fragment {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()){
+                            for (QueryDocumentSnapshot doc : task.getResult()){
                                 // 리사이클뷰에 지역명 추가 -> 지역 리스트에 저장하고, 화면에 뿌림
-                                rAdapter.addItem(document.getId(), " ",
-                                        document.get("introduction").toString());
+                                String title = doc.getId();
+                                String content = doc.get("introduction").toString();
+                                String crop = doc.get("crop").toString();
+                                String experienceContent = doc.get("experienceContent").toString();
+                                String experienceTitle = doc.get("experienceTitle").toString();
+
+                                rAdapter.addItem(title, " ", content, crop, experienceTitle,
+                                        experienceContent);
                                 rAdapter.notifyDataSetChanged();
-                                sendRegions.add(document.getId());
+                                sendRegions.add(doc.getId());
                                 try{
 
                                 } catch (Exception e){
@@ -297,8 +306,6 @@ public class home_main extends Fragment {
                         } else{
 
                         }
-                    Log.d("last;", sendRegions.get(0));
-
                     }
                 });
     }
@@ -313,12 +320,18 @@ public class home_main extends Fragment {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()){
+                            for (QueryDocumentSnapshot doc : task.getResult()){
                                 // 리사이클뷰에 지역명 추가 -> 지역 리스트에 저장하고, 화면에 뿌림
-                                rAdapter.addItem(document.getId(), " ",
-                                        document.get("introduction").toString());
+                                String title = doc.getId();
+                                String content = doc.get("introduction").toString();
+                                String crop = doc.get("crop").toString();
+                                String experienceContent = doc.get("experienceContent").toString();
+                                String experienceTitle = doc.get("experienceTitle").toString();
+
+                                rAdapter.addItem(title, " ", content, crop, experienceTitle,
+                                        experienceContent);
                                 rAdapter.notifyDataSetChanged();
-                                sendRegions.add(document.getId());
+                                sendRegions.add(doc.getId());
                             }
                         } else{
 

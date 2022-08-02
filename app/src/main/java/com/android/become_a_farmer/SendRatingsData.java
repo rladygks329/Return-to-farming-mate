@@ -38,7 +38,7 @@ public class SendRatingsData {
     private InputStream is;
     private DataOutputStream dos;
     private String SERVER_IP = BuildConfig.SERVER_IP;
-    private int PORT = 9090;
+    private int PORT = 9000;
     private int gubun;
     private String recommendRegionsUserUser = "";
 
@@ -60,7 +60,6 @@ public class SendRatingsData {
     // 가져온 ratings 서버에 보내기
     public void getRatingFromDB(){
         try{
-            Log.d("getRating!!!", "called");
             // firestore에서 rating을 json 형식으로 바꾸기
             db.collection("ratings")
                     .get()
@@ -82,7 +81,7 @@ public class SendRatingsData {
 //                                    Log.d("ratingData", document.getData().toString());
                                 }
 
-                                Log.d("json", new JSONObject(hashMap).toString());
+//                                Log.d("json", new JSONObject(hashMap).toString());
                                 String ratingsJson = new JSONObject(hashMap).toString();
 
                                 // 파이썬 서버로 rating 전송
@@ -96,7 +95,7 @@ public class SendRatingsData {
                     });
 
         } catch (Exception e){
-            Log.d("error!!!!", e.getMessage());
+            Log.d(getClass().toString(), e.getMessage());
         }
     }
 
@@ -144,24 +143,24 @@ public class SendRatingsData {
 
     // 서버와 연결
     void connect(String ratings){
+
         Thread sendRatings = new Thread(){
             public void run(){
-
+                Log.d("ddd", "ChooseKeyword 돌아감!!!");
                 try{
                     client = new Socket(SERVER_IP, PORT);
                     dos = new DataOutputStream(client.getOutputStream());
                     is = client.getInputStream();
 
-                    gubun = 2;
-                    dos.writeUTF(Integer.toString(gubun));
-                    dos.flush();
+//                    gubun = 2;
+//                    dos.writeUTF(Integer.toString(gubun));
+//                    dos.flush();
 
                 } catch (Exception e){
                     Log.d(getClass().toString(), e.getMessage());
                 }
 
                 try{
-                    Log.d("ratings", ratings);
                     dos.writeUTF(ratings);  // rating 보내기
                     dos.flush();
                 } catch (Exception e) {
@@ -169,7 +168,6 @@ public class SendRatingsData {
                 }
 
                 try{
-                    Log.d("email", email);
                     dos.writeUTF(email);    // 이메일 보내기
                     dos.flush();
                 } catch (Exception e) {
@@ -180,7 +178,7 @@ public class SendRatingsData {
                     byte[] byteArr = new byte[1024];    // 추천 지역명 서버에서 받아오기(user-user collaborate)
                     int readByteCount = is.read(byteArr);
                     recommendRegionsUserUser = new String(byteArr, 0, readByteCount, "UTF-8");
-                    Log.d("regions", recommendRegionsUserUser);
+//                    Log.d("regions", recommendRegionsUserUser);
 
                     // 사용자 정보 업데이트(추천 지역명 필드에 추가)
                     if (recommendRegionsUserUser.length() > 0) {

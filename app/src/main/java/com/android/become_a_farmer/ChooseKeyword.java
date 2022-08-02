@@ -9,6 +9,7 @@ import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -27,21 +28,13 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.squareup.okhttp.OkHttpClient;
 
 import java.io.BufferedReader;
-import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 public class ChooseKeyword extends AppCompatActivity {
     private Socket client;
@@ -137,7 +130,6 @@ public class ChooseKeyword extends AppCompatActivity {
     // 서버에서 받아온 keywords split해서 ui에 키워드 체크박스 추가함
     void setUI(){
         ll = (LinearLayout) findViewById(R.id.main_ll);
-//        Log.d("setui", "ui돌아가고 있음ㅁㅁㅁ");
         if(keywords!= null){
             storeKeyword(keywords);
             String[] s = keywords.split(",");
@@ -145,17 +137,19 @@ public class ChooseKeyword extends AppCompatActivity {
                 CheckBox ch1 = new CheckBox(this);
                 ch1.setText(s[i]);
                 ch1.setId(i);
-
                 int idx = i + 1;
                 CheckBox ch2 = new CheckBox(this);
                 ch2.setText(s[idx]);
                 ch2.setId(idx);
 
+
                 LinearLayout addll = new LinearLayout(this);
                 addll.setOrientation(LinearLayout.HORIZONTAL);
-//                LinearLayout.LayoutParams mParams = new LinearLayout.LayoutParams(
-//                        LinearLayout.LayoutParams.MATCH_PARENT,
-//                        LinearLayout.LayoutParams.WRAP_CONTENT);
+                LinearLayout.LayoutParams mParams = new LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.MATCH_PARENT,
+                        LinearLayout.LayoutParams.WRAP_CONTENT);
+                mParams.setMargins(100, 0, 0, 0);
+                addll.setLayoutParams(mParams);
 
                 addll.addView(ch1);
                 addll.addView(ch2);
@@ -183,12 +177,14 @@ public class ChooseKeyword extends AppCompatActivity {
     void connect2(){
         Thread sendKeywords = new Thread(){
             public void run(){
+                Log.d("ddd", "ChooseKeyword 돌아감!!!");
                 try{    // 서버 접속
                     client = new Socket(SERVER_IP, PORT);
-                    gubun = 1;
-                    dos = new DataOutputStream(client.getOutputStream());
-                    dos.writeUTF(Integer.toString(gubun));
-                    dos.flush();
+                    Log.d("ddd", "success!!");
+//                    gubun = 1;
+//                    dos = new DataOutputStream(client.getOutputStream());
+//                    dos.writeUTF(Integer.toString(gubun));
+//                    dos.flush();
 
                 } catch (IOException e){
                     e.printStackTrace();
@@ -197,6 +193,7 @@ public class ChooseKeyword extends AppCompatActivity {
 
                 try{
                     dos.writeUTF(str_checkedKeywords);  // 사용자가 선택한 키워드 서버로 보내기
+                    Log.d("ddd", str_checkedKeywords);
                     dos.flush();
                 } catch (Exception e) {
                     Log.d(getClass().toString(), e.getMessage());

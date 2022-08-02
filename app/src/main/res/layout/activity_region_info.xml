@@ -24,20 +24,20 @@
                 android:textStyle="bold"
                 android:textSize="26dp"
                 android:textColor="#23cd87"
-                android:layout_marginTop="60dp"
-                android:layout_marginLeft="18dp"
+                android:layout_marginTop="25dp"
+                android:layout_marginLeft="26dp"
                 android:lineSpacingExtra="4.9sp">
 
             </TextView>
 
-            <FrameLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+<!--            <FrameLayout-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content">-->
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/star_box"/>
+<!--                <ImageView-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:src="@drawable/star_box"/>-->
 
                 <RatingBar
                     android:id="@+id/ratingbar"
@@ -47,7 +47,7 @@
                     android:numStars="5"
                     android:progressTint="#FFCC01"
                     android:stepSize="1" />
-            </FrameLayout>
+<!--            </FrameLayout>-->
 
             <TextView
                 android:id="@+id/title_region"
@@ -121,6 +121,15 @@
                 android:textColor="#3a3a3a"
                 android:layout_gravity="center"
                 android:lineSpacingExtra="7dp"
+                android:singleLine="false"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16dp"
+                android:text="\n\n\n\n"
+                android:layout_gravity="center"
                 android:singleLine="false"
                 />
         </LinearLayout>

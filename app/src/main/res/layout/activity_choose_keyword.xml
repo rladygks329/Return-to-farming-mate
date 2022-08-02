@@ -29,8 +29,9 @@
             <LinearLayout
                 android:id="@+id/main_ll"
                 android:layout_width="match_parent"
-                android:layout_height="400dp"
-                android:orientation="vertical">
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center">
             </LinearLayout>
 
        <ImageButton
@@ -39,7 +40,7 @@
            android:layout_height="wrap_content"
            android:padding="0dp"
            android:src="@drawable/btn_next_age"
-           android:layout_marginTop="200dp"
+           android:layout_marginTop="50dp"
            android:background="@android:color/transparent"
            />
    </LinearLayout>

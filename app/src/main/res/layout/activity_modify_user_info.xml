@@ -4,62 +4,81 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ModifyUserInfo"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    >
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:layout_marginTop="60dp"
+        android:layout_marginLeft="40dp"
+        >
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="연령대" />
+            android:text="연령대를 입력하세요"
+            android:fontFamily="@font/notosanskr_bold"/>
 
         <EditText
             android:id="@+id/edt_txt_age"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:hint="50대"
+            android:fontFamily="@font/notosanskr_medium"/>
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:layout_marginLeft="40dp">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="이름" />
+            android:text="이름을 입력하세요"
+            android:fontFamily="@font/notosanskr_bold"/>
 
         <EditText
             android:id="@+id/edt_txt_name"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:hint="이름"
+            android:fontFamily="@font/notosanskr_medium"/>
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:layout_marginLeft="40dp">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="닉네임" />
+            android:text="닉네임을 입력하세요"
+            android:fontFamily="@font/notosanskr_bold"/>
 
         <EditText
             android:id="@+id/edt_txt_nickname"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/notosanskr_medium"
+            android:layout_marginLeft="10dp"
+            android:hint="닉네임"/>
     </LinearLayout>
 
     <Button
         android:id="@+id/btn_ok"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="완료"
+        android:background="@drawable/btn_done"
+        android:layout_marginTop="300dp"
+        android:layout_gravity="center"
         />
-
 
 </LinearLayout>

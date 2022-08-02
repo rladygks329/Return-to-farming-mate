@@ -1,33 +1,26 @@
 package com.android.become_a_farmer;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Application;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Parcelable;
-import android.text.Spannable;
-import android.text.SpannableString;
-import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -40,7 +33,6 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -59,7 +51,6 @@ public class home_main extends Fragment {
     private List<String> sendRegions = new ArrayList<>();
     public static Context context_main;
 
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -76,6 +67,10 @@ public class home_main extends Fragment {
         txt_preference = (TextView) view.findViewById(R.id.txt_preference);
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+//
+//        if (decoration != null) {
+//            recyclerView.removeItemDecoration(decoration);
+//        }
 
         // 최초 실행 여부를 판단
         // isFirst : true => 최초 실행
@@ -85,7 +80,8 @@ public class home_main extends Fragment {
         boolean first = pref.getBoolean("isFirst", true);
 
         // 로그인 -> 취향 분석 ok 클릭 -> 취향 분석 화면으로 넘어감
-        Log.d("checkFirstRun", String.valueOf(first));
+//        Log.d("checkFirstRun", String.valueOf(first));
+
 
         if ((first) && (email != null)){ // 최초 실행 && 로그인 한 경우
             // 취향 분석 화면으로 넘어가기 위해 사용자에게 다이얼로그 띄움
@@ -114,18 +110,17 @@ public class home_main extends Fragment {
             });
         }
 
-        if (user != null){      // 회원가입한 경우
+        if (user != null){      // 로그인한 경우
             txt_preference.setVisibility(View.VISIBLE);
             setUserName(email, txt_name);   // 이름 화면에 표시
             getRecommendRegionName(email);
-        } else {    // 회원가입하지 않았을 때 보이는 뷰 -> 파이어베이스에 저장된 지역데이터 뿌려줌
+        } else {    // 로그인하지 않았을 때 보이는 뷰 -> 파이어베이스에 저장된 지역데이터 뿌려줌
             getAllRegion();
         }
 
         // 사용자 기반 추천 시스템 실행
         // -> 만약 사용자가 리뷰를 등록하지 않았다면, 사용자 기반 추천 시스템 실행할 수 없음
         if (email != null){
-//            Log.d("in!!!!", "!!!!!!!!!");
             DocumentReference docRef = db.collection("ratings").document(email);
             docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                 @Override
@@ -171,15 +166,14 @@ public class home_main extends Fragment {
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if (task.isSuccessful()) {
                     DocumentSnapshot document = task.getResult();
-                    String name = document.getData().get("name").toString();
-                    // 텍스트 색 바꾸기
-
-                    if (name != null) {
+                    String name;
+                    try{
+                        name = document.getData().get("name").toString();
                         txt_name.setText(name);
-                    }
 
-                } else{
-//                    Log.d("fail", "Error getting documents:", task.getException());
+                    } catch (Exception e) {
+
+                    }
                 }
             }
         });

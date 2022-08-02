@@ -74,6 +74,7 @@ public class ModifyPlan extends AppCompatActivity {
         chbox_quichon = (CheckBox) findViewById(R.id.chbox_quichon);
         chbox_nature = (CheckBox) findViewById(R.id.chbox_nature);
         chbox_culture = (CheckBox) findViewById(R.id.chbox_culture);
+        ll = (LinearLayout) findViewById(R.id.ll3);
 
         checkedKeywords = new ArrayList<>();
         email= getUserEmail();
@@ -143,10 +144,9 @@ public class ModifyPlan extends AppCompatActivity {
     }
 
     public void setKeywordCheckboxUI(String keywords){
-        ll = (LinearLayout) findViewById(R.id.ll3);
         if(keywords!= null){
             String[] s = keywords.split(",");
-            for (int i=0; i<s.length; i+=2) {
+            for (int i=0; i<s.length; i+=4) {
                 CheckBox ch1 = new CheckBox(this);
                 ch1.setText(s[i]);
                 ch1.setId(i);
@@ -156,18 +156,28 @@ public class ModifyPlan extends AppCompatActivity {
                 ch2.setText(s[idx]);
                 ch2.setId(idx);
 
-                LinearLayout addll = new LinearLayout(this);
-                addll.setOrientation(LinearLayout.HORIZONTAL);
-//                LinearLayout.LayoutParams mParams = new LinearLayout.LayoutParams(
-//                        LinearLayout.LayoutParams.MATCH_PARENT,
-//                        LinearLayout.LayoutParams.WRAP_CONTENT);
+                idx++;
+                CheckBox ch3 = new CheckBox(this);
+                ch3.setText(s[i]);
+                ch3.setId(i);
 
-                addll.addView(ch1);
-                addll.addView(ch2);
-                ll.addView(addll);
+                idx++;
+                CheckBox ch4 = new CheckBox(this);
+                ch4.setText(s[i]);
+                ch4.setId(i);
 
+                LinearLayout tmpl = new LinearLayout(this);
+                tmpl.setOrientation(LinearLayout.HORIZONTAL);
+
+                tmpl.addView(ch1);
+                tmpl.addView(ch2);
+                tmpl.addView(ch3);
+                tmpl.addView(ch4);
+                ll.addView(tmpl);
                 ch1.setOnClickListener(getOnClickSomething(ch1));
                 ch2.setOnClickListener(getOnClickSomething(ch2));
+                ch3.setOnClickListener(getOnClickSomething(ch3));
+                ch4.setOnClickListener(getOnClickSomething(ch4));
             }
         }
     }
@@ -214,7 +224,6 @@ public class ModifyPlan extends AppCompatActivity {
                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void unused) {
-                            Log.d("update", "Dddddd");
                         }})
                     .addOnFailureListener(new OnFailureListener() {
                         @Override
@@ -257,9 +266,9 @@ public class ModifyPlan extends AppCompatActivity {
                     client = new Socket(SERVER_IP, PORT);
                     dos = new DataOutputStream(client.getOutputStream());
 
-                    gubun = 1;
-                    dos.writeUTF(Integer.toString(gubun));
-                    dos.flush();
+//                    gubun = 1;
+//                    dos.writeUTF(Integer.toString(gubun));
+//                    dos.flush();
 
                 } catch (IOException e){
                     e.printStackTrace();

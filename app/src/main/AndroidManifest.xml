@@ -60,12 +60,9 @@
         <activity
             android:name=".ChoosePlanningType"
             android:exported="true" />
-        <activity
-            android:name=".SplashActivity"
-            android:theme="@style/SplashTheme">
+        <activity android:name=".SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -78,11 +75,13 @@
         <activity
             android:name=".Login"
             android:exported="true" />
+
+        <activity android:name=".MainActivity" />
         <activity android:name=".user_main" />
         <activity android:name=".planner_main" />
         <activity android:name=".home_main" />
         <activity android:name=".cartMain" />
-        <activity android:name=".MainActivity" />
+
     </application>
 
 </manifest>

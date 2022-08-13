@@ -28,7 +28,7 @@ public class Register extends AppCompatActivity implements View.OnClickListener 
     private EditText txt_id, txt_pwd, txt_check_pwd, txt_nickname, txt_name;
     private ImageView btn_register;
     private FirebaseAuth firebaseAuth;
-    private ImageButton btn_prev;
+//    private ImageButton btn_prev;
 
     private FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
     private DatabaseReference databaseReference = firebaseDatabase.getReference();
@@ -46,7 +46,7 @@ public class Register extends AppCompatActivity implements View.OnClickListener 
         txt_nickname = (EditText) findViewById(R.id.txt_nickname);
 
         btn_register = (ImageView) findViewById(R.id.btn_register);
-        btn_prev = (ImageButton) findViewById(R.id.btn_prev);
+//        btn_prev = (ImageButton) findViewById(R.id.btn_prev);
 
         firebaseAuth = FirebaseAuth.getInstance();
         btn_register.setOnClickListener(this);
@@ -114,8 +114,10 @@ public class Register extends AppCompatActivity implements View.OnClickListener 
 
 
 
-            case R.id.btn_prev:
-                finish();
+//            case R.id.btn_prev:
+//                Intent intent = new Intent(Register.this, Login.class);
+//                startActivity(intent);
+//                finish();
         }
     }
 }

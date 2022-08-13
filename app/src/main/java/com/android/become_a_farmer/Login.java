@@ -6,18 +6,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
-import android.text.style.RelativeSizeSpan;
-import android.text.style.StyleSpan;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -40,7 +36,6 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
         btn_login_page = (ImageView) findViewById(R.id.btn_login_page);
         btn_register = (ImageView) findViewById(R.id.btn_resgister);
         txt_id = (EditText) findViewById(R.id.txt_id);
@@ -78,6 +73,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
             case R.id.btn_login_page:
                 String email = txt_id.getText().toString().trim();
                 String pwd = txt_pwd.getText().toString().trim();
+
                 // 이메일로 로그인
                 firebaseAuth.signInWithEmailAndPassword(email, pwd)
                         .addOnCompleteListener(Login.this, new OnCompleteListener<AuthResult>() {
@@ -86,8 +82,9 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
                                 if (task.isSuccessful()){ // 로그인 성공
                                     Intent intent = new Intent(Login.this, MainActivity.class);
                                     startActivity(intent);
+                                    finish();
                                 } else{ // 로그인 실패
-                                    Toast.makeText(Login.this, "로그인 실패", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(Login.this, "로그인 실패", Toast.LENGTH_LONG).show();
                                 }
                             }
                         });
@@ -96,6 +93,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
             case  R.id.btn_resgister:
                 Intent intent = new Intent(Login.this, Register.class);
                 startActivity(intent);
+                finish();
                 break;
 
         }

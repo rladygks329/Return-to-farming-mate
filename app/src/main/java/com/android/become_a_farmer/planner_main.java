@@ -28,6 +28,7 @@ public class planner_main extends Fragment {
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), FirstPlanner.class);
                 startActivity(intent);
+
             }
         });
 

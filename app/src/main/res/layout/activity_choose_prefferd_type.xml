@@ -51,7 +51,7 @@
         android:padding="0dp"
         android:src="@drawable/btn_next_age"
         android:background="@android:color/transparent"
-        android:layout_marginTop="200dp"
+        android:layout_marginTop="50dp"
         />
 
 </LinearLayout>

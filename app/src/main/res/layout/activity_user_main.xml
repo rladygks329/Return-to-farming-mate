@@ -4,46 +4,41 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".user_main"
     android:orientation="vertical">
-
-    <Button
-        android:id="@+id/btn_logout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="logout"
-        tools:layout_editor_absoluteX="213dp"
-        tools:layout_editor_absoluteY="261dp" />
 
     <Button
         android:id="@+id/btn_login"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="login"
-        tools:layout_editor_absoluteX="16dp"
-        tools:layout_editor_absoluteY="261dp" />
+        android:background="@drawable/btn_logint_mypage"
+        android:layout_gravity="center"/>
+
 
     <Button
         android:id="@+id/btn_modify_plan"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="귀농플랜수정"
-        tools:layout_editor_absoluteX="16dp"
-        tools:layout_editor_absoluteY="261dp" />
+        android:background="@drawable/btn_edit_plan"
+        android:layout_marginTop="10dp"
+        android:layout_gravity="center"/>
 
     <Button
         android:id="@+id/btn_modify_user_info"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="개인정보수정"
-        tools:layout_editor_absoluteX="16dp"
-        tools:layout_editor_absoluteY="261dp" />
+        android:background="@drawable/btn_edit_info"
+        android:layout_marginTop="10dp"
+        android:layout_gravity="center"/>
 
     <Button
-        android:id="@+id/test"
+        android:id="@+id/btn_logout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="testKeyword"
-        tools:layout_editor_absoluteX="16dp"
-        tools:layout_editor_absoluteY="261dp" />
+        android:background="@drawable/btn_logout"
+        android:layout_marginTop="10dp"
+        android:layout_gravity="center"
+        />
+
+
+
 </LinearLayout>

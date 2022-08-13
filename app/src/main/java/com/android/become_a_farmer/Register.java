@@ -14,6 +14,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.android.become_a_farmer.service.RegisterService;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -31,7 +32,6 @@ public class Register extends AppCompatActivity implements View.OnClickListener 
 //    private ImageButton btn_prev;
 
     private FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
-    private DatabaseReference databaseReference = firebaseDatabase.getReference();
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     @Override
@@ -82,36 +82,44 @@ public class Register extends AppCompatActivity implements View.OnClickListener 
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.btn_register:
-                final String email = txt_id.getText().toString().trim();
-                final String pwd = txt_pwd.getText().toString().trim();
-                final String check_pwd = txt_check_pwd.getText().toString().trim();
-                final String name = txt_name.getText().toString().trim();
-                final String nickname = txt_nickname.getText().toString().trim();
+                String email = txt_id.getText().toString().trim();
+                String pwd = txt_pwd.getText().toString().trim();
+                String check_pwd = txt_check_pwd.getText().toString().trim();
+                String name = txt_name.getText().toString().trim();
+                String nickname = txt_nickname.getText().toString().trim();
 
-                // 사용자 인증
-                firebaseAuth.createUserWithEmailAndPassword(email, pwd)
-                        .addOnCompleteListener(Register.this, new OnCompleteListener<AuthResult>() {
-                            @Override
-                            public void onComplete(@NonNull Task<AuthResult> task) {
-                                if (task.isSuccessful()){
-                                    addUserData(email, pwd, name, nickname);
-                                    Toast.makeText(Register.this, "회원 가입을 완료했습니다.", Toast.LENGTH_SHORT).show();
-                                    Intent intent = new Intent(Register.this, Login.class);
-                                    startActivity(intent);
-                                    finish();
-                                }
-                                else{
-                                    Toast.makeText(Register.this, task.getException().toString(), Toast.LENGTH_LONG).show();
-                                    return;
-                                }
-                            }
-                        });
+                // 사용자 정보를 모두 입력했는지 확인
+                RegisterService registerService = new RegisterService();
+                boolean checkBlank = registerService.checkBlank(email, pwd, check_pwd, name, nickname,
+                                                         Register.this);
 
+                if (checkBlank) {
+                    // 비밀번호와 확인 비밀번호가 일치하는지 확인
+                    boolean checkPwd = registerService.checkCorrectPwd(pwd, check_pwd, Register.this);
 
-
+                    if (checkPwd){
+                        // 사용자 인증
+                        firebaseAuth.createUserWithEmailAndPassword(email, pwd)
+                                .addOnCompleteListener(Register.this, new OnCompleteListener<AuthResult>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<AuthResult> task) {
+                                        if (task.isSuccessful()){
+                                            addUserData(email, pwd, name, nickname);
+                                            Toast.makeText(Register.this, "회원 가입을 완료했습니다.", Toast.LENGTH_SHORT).show();
+                                            Intent intent = new Intent(Register.this, Login.class);
+                                            startActivity(intent);
+                                            finish();
+                                        }
+                                        else{
+                                            Toast.makeText(Register.this, task.getException().toString(), Toast.LENGTH_LONG).show();
+                                            return;
+                                        }
+                                    }
+                                });
+                    }
+                }
 
                 break;
-
 
 
 //            case R.id.btn_prev:

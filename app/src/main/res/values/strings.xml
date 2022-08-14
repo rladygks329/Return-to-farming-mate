@@ -5,4 +5,22 @@
     <string name="questionPreferType">자연과 문화 중\n 어느 것을 선호하십니까?</string>
     <string name="questionKeyword">관심있는 키워드를 선택해주세요\n(3개 이상)</string>
     <!-- TODO: Remove or change this placeholder text -->
+
+    <string name="Seoul">서울특별시</string>
+    <string name="Busan">부산광역시</string>
+    <string name="Daegu">대구광역시</string>
+    <string name="Incheon">인천광역시</string>
+    <string name="Gwangju">광주광역시</string>
+    <string name="Daejeon">대전광역시</string>
+    <string name="Ulsan">울산광역시</string>
+    <string name="Gyeonggi">경기도</string>
+    <string name="Gangwon">강원도</string>
+    <string name="NorthChungcheong">충청북도</string>
+    <string name="SouthChungcheong">충청남도</string>
+    <string name="NorthJeolla">전라북도</string>
+    <string name="SouthJeolla">전라남도</string>
+    <string name="NorthGyeongsang">경상북도</string>
+    <string name="SouthGyeongsang">경상남도</string>
+    <string name="Jeju">제주도</string>
+    <string name="Sejong">세종특별자치시</string>
 </resources>

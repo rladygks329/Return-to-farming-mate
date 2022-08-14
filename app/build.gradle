@@ -19,6 +19,7 @@ android {
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         buildConfigField("String", "SERVER_IP", properties['server_ip'])
+        vectorDrawables.useSupportLibrary = true
     }
 
     buildTypes {

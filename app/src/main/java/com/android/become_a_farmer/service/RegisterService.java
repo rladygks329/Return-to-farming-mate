@@ -40,7 +40,7 @@ public class RegisterService {
         boolean isCorrect = true;
 
         if (!pwd.equals(check_pwd)) {
-            Toast.makeText(context, "회원 정보를 모두 입력해주세요!", Toast.LENGTH_LONG).show();
+            Toast.makeText(context, "비밀번호를 다시 확인해주세요!", Toast.LENGTH_LONG).show();
             isCorrect = false;
         }
 

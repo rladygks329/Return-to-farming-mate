@@ -21,6 +21,8 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthException;
+import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -93,7 +95,7 @@ public class Register extends AppCompatActivity implements View.OnClickListener 
                 boolean checkBlank = registerService.checkBlank(email, pwd, check_pwd, name, nickname,
                                                          Register.this);
 
-                if (checkBlank) {
+                if (!checkBlank) {
                     // 비밀번호와 확인 비밀번호가 일치하는지 확인
                     boolean checkPwd = registerService.checkCorrectPwd(pwd, check_pwd, Register.this);
 
@@ -110,10 +112,10 @@ public class Register extends AppCompatActivity implements View.OnClickListener 
                                             startActivity(intent);
                                             finish();
                                         }
-                                        else{
-                                            Toast.makeText(Register.this, task.getException().toString(), Toast.LENGTH_LONG).show();
-                                            return;
-                                        }
+                                            else{
+                                                Toast.makeText(Register.this, "중복된 아이디입니다.", Toast.LENGTH_LONG).show();
+                                                Log.e("[Register.java]:회원가입에러", task.getException().toString());
+                                            }
                                     }
                                 });
                     }

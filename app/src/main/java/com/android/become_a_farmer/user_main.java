@@ -51,7 +51,7 @@ public class user_main extends Fragment {
             @Override
             public void onClick(View v) {
                 // user_main 프래그먼트 -> Login 액티비티
-                Intent intent = new Intent(getActivity(), Login.class);
+                Intent intent = new Intent(getActivity(), LoginActivity.class);
                 startActivity(intent);
             }
         });

@@ -3,7 +3,6 @@ package com.android.become_a_farmer;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -33,7 +32,7 @@ public class SplashActivity extends AppCompatActivity {
                     startActivity(intent);
 
                 } else{
-                    Intent intent = new Intent(SplashActivity.this, Login.class);
+                    Intent intent = new Intent(SplashActivity.this, LoginActivity.class);
                     startActivity(intent);
                 }
                 finish();

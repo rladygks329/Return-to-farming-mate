@@ -10,7 +10,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -96,7 +95,7 @@ public class Register extends AppCompatActivity implements View.OnClickListener 
                                 if (task.isSuccessful()){
                                     addUserData(email, pwd, name, nickname);
                                     Toast.makeText(Register.this, "회원 가입을 완료했습니다.", Toast.LENGTH_SHORT).show();
-                                    Intent intent = new Intent(Register.this, Login.class);
+                                    Intent intent = new Intent(Register.this, LoginActivity.class);
                                     startActivity(intent);
                                     finish();
                                 }

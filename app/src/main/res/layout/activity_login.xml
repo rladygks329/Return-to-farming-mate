@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,95 +7,93 @@
     android:orientation="vertical"
     tools:context=".LoginActivity">
 
-
-<!--    <ImageView-->
-<!--        android:layout_width="267dp"-->
-<!--        android:layout_height="236dp"-->
-<!--        android:layout_gravity="center"-->
-<!--        android:src="@drawable/logo"></ImageView>-->
-
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="25dp"
-        android:orientation="vertical">
+        android:layout_marginHorizontal="32dp"
+        android:orientation="vertical"
+        app:layout_constraintVertical_bias="0.4"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <TextView
             android:id="@+id/text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/notosanskr_bold"
-            android:textStyle="bold"
-            android:textSize="24sp"
-            android:textColor="#23cd87"
             android:lineSpacingExtra="8sp"
-            android:layout_marginTop="188dp"
-            android:text="같이,\n떠나볼까요?"/>
-
-
+            android:text="같이,\n떠나볼까요?"
+            android:textColor="@color/lightGreen"
+            android:includeFontPadding="false"
+            android:textSize="24sp"
+            android:textStyle="bold"/>
 
         <EditText
             android:id="@+id/txt_id"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="#3a3a3a"
+            android:layout_marginTop="8dp"
+            android:includeFontPadding="true"
+            android:paddingLeft="8dp"
+            android:paddingVertical="8dp"
+            android:background="@color/blankColor"
+            android:fontFamily="@font/notosanskr_medium"
+            android:hint="아이디"
+            android:textColor="@color/darkGray"
             android:textSize="15sp"
             android:textStyle="normal"
-            android:layout_marginTop="13dp"
-            android:background="@drawable/blank"
-            android:fontFamily="@font/notosanskr_medium"
-            android:hint="   아이디"/>
+            android:inputType="text"
+            android:singleLine = "true"
+            android:lines = "1"/>
 
         <View
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="2dp"
-            android:layout_marginTop="3dp"
-            ></View>
-
+            android:layout_marginTop="3dp"/>
 
         <EditText
             android:id="@+id/txt_pwd"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="#3a3a3a"
+            android:layout_marginTop="3dp"
+            android:includeFontPadding="true"
+            android:paddingLeft="8dp"
+            android:paddingVertical="8dp"
+            android:background="@color/blankColor"
+            android:fontFamily="@font/notosanskr_medium"
+            android:hint="비밀번호"
+            android:textColor="@color/darkGray"
             android:textSize="15sp"
             android:textStyle="normal"
-            android:layout_marginTop="13dp"
-            android:background="@drawable/blank"
-            android:fontFamily="@font/notosanskr_medium"
-            android:hint="  비밀번호"
-            />
+            android:inputType="textPassword"
+            android:singleLine = "true"
+            android:lines = "1"/>
 
         <View
             android:layout_width="wrap_content"
             android:layout_height="2dp"
-            android:layout_marginTop="3dp"></View>
-
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="109dp"
-        android:layout_gravity="center"
-        android:layout_marginTop="40dp"
-        android:orientation="vertical">
-
-        <ImageView
+            android:layout_marginTop="3dp"/>
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_login_page"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:src="@drawable/btn_login">
-
-        </ImageView>
-
-        <ImageView
+            android:layout_marginTop="3dp"
+            app:backgroundTint="@null"
+            android:background="@drawable/bg_radious"
+            app:cornerRadius="16dp"
+            android:fontFamily="@font/notosanskr_black"
+            android:text="로그인"
+            />
+        <TextView
             android:id="@+id/btn_resgister"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
             android:layout_gravity="center"
-            android:src="@drawable/btn_register"></ImageView>
+            android:text="아직 회원이 아니신가요?"
+            android:fontFamily="@font/notosanskr_black"
+            android:textSize="12sp"
+            android:layout_marginTop="20dp"/>
     </LinearLayout>
-
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

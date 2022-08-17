@@ -101,4 +101,22 @@
         <item name="colorSejong">@color/selectedMapColor</item>
     </style>
 
+    <style name="editText" parent="Widget.AppCompat.EditText">
+        <item name="fontFamily">@font/notosanskr_medium</item>
+        <item name="android:includeFontPadding">true</item>
+        <item name="android:padding">8dp</item>
+        <item name="android:background">@color/blankColor</item>
+        <item name="android:textColor">@color/darkGray</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:lines">1</item>
+    </style>
+
+    <style name="materialBtn" parent="AppTheme">
+        <item name="backgroundTint">@null</item>
+        <item name="android:background">@drawable/bg_btn</item>
+        <item name="fontFamily">@font/notosanskr_black</item>
+    </style>
+
 </resources>

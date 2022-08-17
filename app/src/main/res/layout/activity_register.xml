@@ -8,22 +8,17 @@
     tools:context=".Register"
     android:orientation="vertical">
 
-    <LinearLayout
-        android:layout_width="wrap_content"
+    <androidx.appcompat.widget.Toolbar
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="42dp"
-        android:layout_gravity="center"
-        >
-
+        app:contentInsetStart="0dp"
+        android:layout_marginHorizontal="32dp">
         <ImageButton
             android:id="@+id/btn_prev"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/btn_prev"
-            android:background="@android:color/transparent"
-            android:layout_marginTop="30dp"
-            />
+            android:background="@drawable/ic_arrow_back"
+            android:backgroundTint="@color/lightGreen" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -33,28 +28,27 @@
             android:textStyle="bold"
             android:textSize="24sp"
             android:textColor="#23cd87"
+            android:layout_gravity="center"
             android:lineSpacingExtra="8sp"/>
-    </LinearLayout>
+    </androidx.appcompat.widget.Toolbar>
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:layout_marginTop="30dp"
+        android:layout_marginHorizontal="32dp"
         android:layout_gravity="center">
 
 
         <EditText
             android:id="@+id/txt_id"
-            android:layout_width="wrap_content"
+            style="@style/editText"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="#3a3a3a"
-            android:textSize="15sp"
-            android:textStyle="normal"
             android:layout_marginTop="13dp"
-            android:background="@drawable/blank"
-            android:hint="   아이디"
-            android:fontFamily="@font/notosanskr_medium"/>
+            android:inputType="text"
+            android:hint="아이디"/>
 
         <View
             android:layout_width="match_parent"
@@ -62,19 +56,14 @@
             android:layout_marginTop="3dp">
         </View>
 
-
         <EditText
+            style="@style/editText"
             android:id="@+id/txt_pwd"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="#3a3a3a"
-            android:textSize="15sp"
-            android:textStyle="normal"
-            android:layout_marginTop="13dp"
-            android:background="@drawable/blank"
-            android:hint="   비밀번호"
-            android:fontFamily="@font/notosanskr_medium"
-            />
+            android:layout_marginTop="5dp"
+            android:inputType="textPassword"
+            android:hint="비밀번호"/>
 
         <View
             android:layout_width="match_parent"
@@ -83,17 +72,13 @@
 
 
         <EditText
+            style="@style/editText"
             android:id="@+id/txt_check_pwd"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="#3a3a3a"
-            android:textSize="15sp"
-            android:textStyle="normal"
-            android:layout_marginTop="13dp"
-            android:background="@drawable/blank"
-            android:hint="   비밀번호 확인"
-            android:fontFamily="@font/notosanskr_medium"
-            />
+            android:layout_marginTop="5dp"
+            android:inputType="textPassword"
+            android:hint="비밀번호 확인"/>
 
         <View
             android:layout_width="match_parent"
@@ -103,16 +88,13 @@
 
 
         <EditText
+            style="@style/editText"
             android:id="@+id/txt_name"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="#3a3a3a"
-            android:textSize="15sp"
-            android:textStyle="normal"
-            android:layout_marginTop="13dp"
-            android:background="@drawable/blank"
-            android:fontFamily="@font/notosanskr_medium"
-            android:hint="   이름"/>
+            android:layout_marginTop="5dp"
+            android:inputType="text"
+            android:hint="이름"/>
 
         <View
             android:layout_width="match_parent"
@@ -120,17 +102,13 @@
             android:layout_marginTop="3dp"/>
 
         <EditText
+            style="@style/editText"
             android:id="@+id/txt_nickname"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="#3a3a3a"
-            android:textSize="15sp"
-            android:textStyle="normal"
-            android:layout_marginTop="13dp"
-            android:background="@drawable/blank"
-            android:fontFamily="@font/notosanskr_medium"
-
-            android:hint="   닉네임"/>
+            android:layout_marginTop="5dp"
+            android:inputType="text"
+            android:hint="닉네임"/>
 
         <View
             android:layout_width="match_parent"
@@ -138,12 +116,12 @@
             android:layout_marginTop="3dp"/>
     </LinearLayout>
 
-    <ImageView
+    <com.google.android.material.button.MaterialButton
+        style="@style/materialBtn"
         android:id="@+id/btn_register"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginTop="90dp"
-        android:src="@drawable/btn_register_register"></ImageView>
-
+        android:layout_marginTop="16dp"
+        android:layout_marginHorizontal="32dp"
+        android:text="가입하기"/>
 </LinearLayout>

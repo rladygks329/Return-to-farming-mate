@@ -31,22 +31,13 @@
             android:textStyle="bold"/>
 
         <EditText
+            style="@style/editText"
             android:id="@+id/txt_id"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:includeFontPadding="true"
-            android:paddingLeft="8dp"
-            android:paddingVertical="8dp"
-            android:background="@color/blankColor"
-            android:fontFamily="@font/notosanskr_medium"
             android:hint="아이디"
-            android:textColor="@color/darkGray"
-            android:textSize="15sp"
-            android:textStyle="normal"
-            android:inputType="text"
-            android:singleLine = "true"
-            android:lines = "1"/>
+            android:inputType="text"/>
 
         <View
             android:layout_width="match_parent"
@@ -54,38 +45,27 @@
             android:layout_marginTop="3dp"/>
 
         <EditText
+            style="@style/editText"
             android:id="@+id/txt_pwd"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="3dp"
-            android:includeFontPadding="true"
-            android:paddingLeft="8dp"
-            android:paddingVertical="8dp"
-            android:background="@color/blankColor"
-            android:fontFamily="@font/notosanskr_medium"
             android:hint="비밀번호"
-            android:textColor="@color/darkGray"
-            android:textSize="15sp"
-            android:textStyle="normal"
-            android:inputType="textPassword"
-            android:singleLine = "true"
-            android:lines = "1"/>
+            android:inputType="textPassword"/>
 
         <View
             android:layout_width="wrap_content"
             android:layout_height="2dp"
             android:layout_marginTop="3dp"/>
+
         <com.google.android.material.button.MaterialButton
+            style="@style/materialBtn"
             android:id="@+id/btn_login_page"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="3dp"
-            app:backgroundTint="@null"
-            android:background="@drawable/bg_radious"
-            app:cornerRadius="16dp"
-            android:fontFamily="@font/notosanskr_black"
-            android:text="로그인"
-            />
+            android:layout_marginTop="8dp"
+            android:text="로그인"/>
+
         <TextView
             android:id="@+id/btn_resgister"
             android:layout_width="wrap_content"

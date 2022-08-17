@@ -70,7 +70,7 @@
             android:name=".ChoiceAge"
             android:exported="true" />
         <activity
-            android:name=".Register"
+            android:name=".ResisterActivity"
             android:exported="true" />
         <activity
             android:name=".LoginActivity"

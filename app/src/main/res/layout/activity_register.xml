@@ -5,7 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Register"
+    tools:context=".ResisterActivity"
     android:orientation="vertical">
 
     <androidx.appcompat.widget.Toolbar
@@ -42,7 +42,7 @@
 
 
         <EditText
-            android:id="@+id/txt_id"
+            android:id="@+id/resister_txt_id"
             style="@style/editText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -58,7 +58,7 @@
 
         <EditText
             style="@style/editText"
-            android:id="@+id/txt_pwd"
+            android:id="@+id/resister_txt_pwd"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
@@ -73,7 +73,7 @@
 
         <EditText
             style="@style/editText"
-            android:id="@+id/txt_check_pwd"
+            android:id="@+id/resister_txt_check_pwd"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
@@ -89,7 +89,7 @@
 
         <EditText
             style="@style/editText"
-            android:id="@+id/txt_name"
+            android:id="@+id/resister_txt_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"

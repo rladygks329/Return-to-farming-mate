@@ -10,6 +10,10 @@ android {
     compileSdkVersion 30
     buildToolsVersion "30.0.2"
 
+    buildFeatures {
+        viewBinding = true
+    }
+
     defaultConfig {
         applicationId "com.android.become_a_farmer"
         minSdkVersion 16
@@ -19,6 +23,7 @@ android {
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         buildConfigField("String", "SERVER_IP", properties['server_ip'])
+        vectorDrawables.useSupportLibrary = true
     }
 
     buildTypes {

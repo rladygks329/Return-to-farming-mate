@@ -4,7 +4,7 @@ import android.content.Context;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.android.become_a_farmer.Login;
+import com.android.become_a_farmer.LoginActivity;
 
 public class LoginService {
 

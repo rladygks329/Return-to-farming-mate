@@ -1,6 +1,6 @@
 <resources>
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
@@ -15,5 +15,108 @@
 <!--        <item name="windowActionBar">false</item>-->
 <!--    </style>-->
 
+    <!--지도 컬러 변경 Theme-->
+    <style name="DefaultMap">
+        <item name="colorSeoul">@color/mainMapColor</item>
+        <item name="colorBusan">@color/mainMapColor</item>
+        <item name="colorDaegu">@color/mainMapColor</item>
+        <item name="colorIncheon">@color/mainMapColor</item>
+        <item name="colorGwangju">@color/mainMapColor</item>
+        <item name="colorDaejeon">@color/mainMapColor</item>
+        <item name="colorUlsan">@color/mainMapColor</item>
+        <item name="colorGyeonggi">@color/mainMapColor</item>
+        <item name="colorGangwon">@color/mainMapColor</item>
+        <item name="colorNorthChungcheong">@color/mainMapColor</item>
+        <item name="colorSouthChungcheong">@color/mainMapColor</item>
+        <item name="colorNorthJeolla">@color/mainMapColor</item>
+        <item name="colorSouthJeolla">@color/mainMapColor</item>
+        <item name="colorNorthGyeongsang">@color/mainMapColor</item>
+        <item name="colorSouthGyeongsang">@color/mainMapColor</item>
+        <item name="colorJeju">@color/mainMapColor</item>
+        <item name="colorSejong">@color/mainMapColor</item>
+    </style>
+
+    <!--특정 지역 색깔을 바꾼다-->
+    <style name="SeoulMap" parent="DefaultMap">
+        <item name="colorSeoul">@color/selectedMapColor</item>
+    </style>
+
+    <style name="BusanMap" parent="DefaultMap">
+        <item name="colorBusan">@color/selectedMapColor</item>
+    </style>
+
+    <style name="DaeguMap" parent="DefaultMap">
+        <item name="colorDaegu">@color/selectedMapColor</item>
+    </style>
+
+    <style name="IncheonMap" parent="DefaultMap">
+        <item name="colorIncheon">@color/selectedMapColor</item></style>
+
+    <style name="GwangjuMap" parent="DefaultMap">
+        <item name="colorGwangju">@color/selectedMapColor</item></style>
+
+    <style name="DaejeonMap" parent="DefaultMap">
+        <item name="colorDaejeon">@color/selectedMapColor</item></style>
+
+    <style name="UlsanMap" parent="DefaultMap">
+        <item name="colorUlsan">@color/selectedMapColor</item></style>
+
+    <style name="GyeonggiMap" parent="DefaultMap">
+        <item name="colorGyeonggi">@color/selectedMapColor</item>
+    </style>
+
+    <style name="GangwonMap" parent="DefaultMap">
+        <item name="colorGangwon">@color/selectedMapColor</item>
+    </style>
+
+    <style name="NorthChungcheongMap" parent="DefaultMap">
+        <item name="colorNorthChungcheong">@color/selectedMapColor</item>
+    </style>
+
+    <style name="SouthChungcheongMap" parent="DefaultMap">
+        <item name="colorSouthChungcheong">@color/selectedMapColor</item>
+    </style>
+
+    <style name="NorthJeollaMap" parent="DefaultMap">
+        <item name="colorNorthJeolla">@color/selectedMapColor</item>
+    </style>
+
+    <style name="SouthJeollaMap" parent="DefaultMap">
+        <item name="colorSouthJeolla">@color/selectedMapColor</item>
+    </style>
+
+    <style name="NorthGyeongsangMap" parent="DefaultMap">
+        <item name="colorNorthGyeongsang">@color/selectedMapColor</item>
+    </style>
+
+    <style name="SouthGyeongsangMap" parent="DefaultMap">
+        <item name="colorSouthGyeongsang">@color/selectedMapColor</item>
+    </style>
+
+    <style name="JejuMap" parent="DefaultMap">
+        <item name="colorJeju">@color/selectedMapColor</item>
+    </style>
+
+    <style name="SejongMap" parent="DefaultMap">
+        <item name="colorSejong">@color/selectedMapColor</item>
+    </style>
+
+    <style name="editText" parent="Widget.AppCompat.EditText">
+        <item name="fontFamily">@font/notosanskr_medium</item>
+        <item name="android:includeFontPadding">true</item>
+        <item name="android:padding">8dp</item>
+        <item name="android:background">@color/blankColor</item>
+        <item name="android:textColor">@color/darkGray</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:lines">1</item>
+    </style>
+
+    <style name="materialBtn" parent="AppTheme">
+        <item name="backgroundTint">@null</item>
+        <item name="android:background">@drawable/bg_btn</item>
+        <item name="fontFamily">@font/notosanskr_black</item>
+    </style>
 
 </resources>

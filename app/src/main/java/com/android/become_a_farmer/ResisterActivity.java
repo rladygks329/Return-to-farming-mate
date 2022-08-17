@@ -19,9 +19,6 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseAuthException;
-import com.google.firebase.auth.FirebaseAuthUserCollisionException;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -29,8 +26,6 @@ public class ResisterActivity extends AppCompatActivity implements View.OnClickL
 
     private ActivityRegisterBinding binding;
     private FirebaseAuth firebaseAuth;
-//    private ImageButton btn_prev;
-
     private FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
@@ -43,6 +38,7 @@ public class ResisterActivity extends AppCompatActivity implements View.OnClickL
 
         firebaseAuth = FirebaseAuth.getInstance();
         binding.btnRegister.setOnClickListener(this);
+        binding.btnPrev.setOnClickListener(this);
     }
     // 다른 화면 터치 시 키보드 내림
     @Override
@@ -85,27 +81,27 @@ public class ResisterActivity extends AppCompatActivity implements View.OnClickL
                 // 사용자 정보를 모두 입력했는지 확인
                 RegisterService registerService = new RegisterService();
                 boolean checkBlank = registerService.checkBlank(email, pwd, check_pwd, name, nickname,
-                                                         Register.this);
+                                                         ResisterActivity.this);
 
                 if (!checkBlank) {
                     // 비밀번호와 확인 비밀번호가 일치하는지 확인
-                    boolean checkPwd = registerService.checkCorrectPwd(pwd, check_pwd, Register.this);
+                    boolean checkPwd = registerService.checkCorrectPwd(pwd, check_pwd, ResisterActivity.this);
 
                     if (checkPwd){
                         // 사용자 인증
                         firebaseAuth.createUserWithEmailAndPassword(email, pwd)
-                                .addOnCompleteListener(Register.this, new OnCompleteListener<AuthResult>() {
+                                .addOnCompleteListener(ResisterActivity.this, new OnCompleteListener<AuthResult>() {
                                     @Override
                                     public void onComplete(@NonNull Task<AuthResult> task) {
                                         if (task.isSuccessful()){
                                             addUserData(email, pwd, name, nickname);
-                                            Toast.makeText(Register.this, "회원 가입을 완료했습니다.", Toast.LENGTH_SHORT).show();
-                                            Intent intent = new Intent(Register.this, Login.class);
+                                            Toast.makeText(ResisterActivity.this, "회원 가입을 완료했습니다.", Toast.LENGTH_SHORT).show();
+                                            Intent intent = new Intent(ResisterActivity.this, LoginActivity.class);
                                             startActivity(intent);
                                             finish();
                                         }
                                             else{
-                                                Toast.makeText(Register.this, "중복된 아이디입니다.", Toast.LENGTH_LONG).show();
+                                                Toast.makeText(ResisterActivity.this, "중복된 아이디입니다.", Toast.LENGTH_LONG).show();
                                                 Log.e("[Register.java]:회원가입에러", task.getException().toString());
                                             }
                                     }
@@ -115,11 +111,10 @@ public class ResisterActivity extends AppCompatActivity implements View.OnClickL
 
                 break;
 
-
-//            case R.id.btn_prev:
-//                Intent intent = new Intent(Register.this, Login.class);
-//                startActivity(intent);
-//                finish();
+                case R.id.btn_prev:
+                    Intent intent = new Intent(ResisterActivity.this, LoginActivity.class);
+                    startActivity(intent);
+                    finish();
         }
     }
 }

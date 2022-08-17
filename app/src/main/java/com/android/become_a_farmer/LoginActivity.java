@@ -64,24 +64,24 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         switch (v.getId()){
             case R.id.btn_login_page:
 
-              String email = binding.txtId.getText().toString().trim();
-              String pwd = binding.txtPwd.getText().toString().trim();
+                String email = binding.txtId.getText().toString().trim();
+                String pwd = binding.txtPwd.getText().toString().trim();
                 LoginService loginService = new LoginService();
                 // 빈 입력값 확인
-                boolean checkBlank = loginService.checkBlank(email, pwd, Login.this);
+                boolean checkBlank = loginService.checkBlank(email, pwd, LoginActivity.this);
 
                 // 이메일로 로그인
                 if (!checkBlank){
                     firebaseAuth.signInWithEmailAndPassword(email, pwd)
-                            .addOnCompleteListener(Login.this, new OnCompleteListener<AuthResult>() {
+                            .addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
                                 @Override
                                 public void onComplete(@NonNull Task<AuthResult> task) {
                                     if (task.isSuccessful()){ // 로그인 성공
-                                        Intent intent = new Intent(Login.this, MainActivity.class);
+                                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                                         startActivity(intent);
                                         finish();
                                     } else{ // 로그인 실패
-                                        Toast.makeText(Login.this, "로그인 실패", Toast.LENGTH_LONG).show();
+                                        Toast.makeText(LoginActivity.this, "로그인 실패", Toast.LENGTH_LONG).show();
                                     }
                                 }
                             });

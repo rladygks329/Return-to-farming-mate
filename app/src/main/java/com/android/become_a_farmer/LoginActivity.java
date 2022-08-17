@@ -15,6 +15,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
 import com.android.become_a_farmer.databinding.ActivityLoginBinding;
+import com.android.become_a_farmer.service.LoginService;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -62,22 +63,29 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.btn_login_page:
-                String email = binding.txtId.getText().toString().trim();
-                String pwd = binding.txtPwd.getText().toString().trim();
+
+              String email = binding.txtId.getText().toString().trim();
+              String pwd = binding.txtPwd.getText().toString().trim();
+                LoginService loginService = new LoginService();
+                // 빈 입력값 확인
+                boolean checkBlank = loginService.checkBlank(email, pwd, Login.this);
+
                 // 이메일로 로그인
-                firebaseAuth.signInWithEmailAndPassword(email, pwd)
-                        .addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
-                            @Override
-                            public void onComplete(@NonNull Task<AuthResult> task) {
-                                if (task.isSuccessful()){ // 로그인 성공
-                                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                                    startActivity(intent);
-                                    finish();
-                                } else{ // 로그인 실패
-                                    Toast.makeText(LoginActivity.this, "로그인 실패", Toast.LENGTH_LONG).show();
+                if (!checkBlank){
+                    firebaseAuth.signInWithEmailAndPassword(email, pwd)
+                            .addOnCompleteListener(Login.this, new OnCompleteListener<AuthResult>() {
+                                @Override
+                                public void onComplete(@NonNull Task<AuthResult> task) {
+                                    if (task.isSuccessful()){ // 로그인 성공
+                                        Intent intent = new Intent(Login.this, MainActivity.class);
+                                        startActivity(intent);
+                                        finish();
+                                    } else{ // 로그인 실패
+                                        Toast.makeText(Login.this, "로그인 실패", Toast.LENGTH_LONG).show();
+                                    }
                                 }
-                            }
-                        });
+                            });
+                }
                 break;
 
             case  R.id.btn_resgister:

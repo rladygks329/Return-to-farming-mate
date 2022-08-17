@@ -11,6 +11,7 @@ import com.google.firebase.auth.FirebaseUser;
 
 public class SplashActivity extends AppCompatActivity {
     FirebaseUser user;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -22,11 +23,16 @@ public class SplashActivity extends AppCompatActivity {
 
     }
 
+
+    /**
+     * 상태에 따라 진입 경로 다르게 설정하는 함수
+     * @param sec splash 화면이 노출되는 시간
+     */
     public void movePage(int sec){
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                if (user != null) {
+                if (user != null) {     // 이전에 로그인 한 기록이 있다면, 메인 화면으로 전환
                     Intent intent = new Intent(SplashActivity.this, MainActivity.class);
                     startActivity(intent);
 

@@ -12,12 +12,15 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
 import com.android.become_a_farmer.databinding.ActivityRegisterBinding;
+import com.android.become_a_farmer.service.RegisterService;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthException;
+import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -29,7 +32,6 @@ public class ResisterActivity extends AppCompatActivity implements View.OnClickL
 //    private ImageButton btn_prev;
 
     private FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
-    private DatabaseReference databaseReference = firebaseDatabase.getReference();
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     @Override
@@ -73,37 +75,51 @@ public class ResisterActivity extends AppCompatActivity implements View.OnClickL
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.btn_register:
-                final String email = binding.resisterTxtId.getText().toString().trim();
-                final String pwd = binding.resisterTxtPwd.getText().toString().trim();
-                final String check_pwd = binding.resisterTxtCheckPwd.getText().toString().trim();
-                final String name = binding.resisterTxtName.getText().toString().trim();
-                final String nickname = binding.txtNickname.getText().toString().trim();
+              final String email = binding.resisterTxtId.getText().toString().trim();
+              final String pwd = binding.resisterTxtPwd.getText().toString().trim();
+              final String check_pwd = binding.resisterTxtCheckPwd.getText().toString().trim();
+              final String name = binding.resisterTxtName.getText().toString().trim();
+              final String nickname = binding.txtNickname.getText().toString().trim();
 
-                // 사용자 인증
-                firebaseAuth.createUserWithEmailAndPassword(email, pwd)
-                        .addOnCompleteListener(ResisterActivity.this, new OnCompleteListener<AuthResult>() {
-                            @Override
-                            public void onComplete(@NonNull Task<AuthResult> task) {
-                                if (task.isSuccessful()){
-                                    addUserData(email, pwd, name, nickname);
-                                    Toast.makeText(ResisterActivity.this, "회원 가입을 완료했습니다.", Toast.LENGTH_SHORT).show();
-                                    Intent intent = new Intent(ResisterActivity.this, LoginActivity.class);
-                                    startActivity(intent);
-                                    finish();
-                                }
-                                else{
-                                    Toast.makeText(ResisterActivity.this, task.getException().toString(), Toast.LENGTH_LONG).show();
-                                    return;
-                                }
-                            }
-                        });
+
+                // 사용자 정보를 모두 입력했는지 확인
+                RegisterService registerService = new RegisterService();
+                boolean checkBlank = registerService.checkBlank(email, pwd, check_pwd, name, nickname,
+                                                         Register.this);
+
+                if (!checkBlank) {
+                    // 비밀번호와 확인 비밀번호가 일치하는지 확인
+                    boolean checkPwd = registerService.checkCorrectPwd(pwd, check_pwd, Register.this);
+
+                    if (checkPwd){
+                        // 사용자 인증
+                        firebaseAuth.createUserWithEmailAndPassword(email, pwd)
+                                .addOnCompleteListener(Register.this, new OnCompleteListener<AuthResult>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<AuthResult> task) {
+                                        if (task.isSuccessful()){
+                                            addUserData(email, pwd, name, nickname);
+                                            Toast.makeText(Register.this, "회원 가입을 완료했습니다.", Toast.LENGTH_SHORT).show();
+                                            Intent intent = new Intent(Register.this, Login.class);
+                                            startActivity(intent);
+                                            finish();
+                                        }
+                                            else{
+                                                Toast.makeText(Register.this, "중복된 아이디입니다.", Toast.LENGTH_LONG).show();
+                                                Log.e("[Register.java]:회원가입에러", task.getException().toString());
+                                            }
+                                    }
+                                });
+                    }
+                }
+
                 break;
 
-            case R.id.btn_prev:
-                Intent intent = new Intent(ResisterActivity.this, LoginActivity.class);
-                startActivity(intent);
-                finish();
+
+//            case R.id.btn_prev:
+//                Intent intent = new Intent(Register.this, Login.class);
+//                startActivity(intent);
+//                finish();
         }
     }
 }
-

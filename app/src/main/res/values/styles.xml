@@ -119,4 +119,28 @@
         <item name="fontFamily">@font/notosanskr_black</item>
     </style>
 
+    <style name="nextBtn" parent="@style/Widget.MaterialComponents.Button.OutlinedButton">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginLeft">32dp</item>
+        <item name="android:layout_marginRight">32dp</item>
+        <item name="android:textColor">@android:color/black</item>
+        <item name="rippleColor">@color/darkGray</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:fontFamily">@font/notosanskr_black</item>
+        <item name="strokeColor">@color/lightGreen</item>
+        <item name="cornerRadius">16dp</item>
+        <item name="android:paddingTop">12dp</item>
+        <item name="android:paddingBottom">12dp</item>
+    </style>
+
+    <style name="largeTextView" parent="AppTheme">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">32dp</item>
+        <item name="android:fontFamily">@font/notosanskr_bold</item>
+        <item name="android:textColor">@android:color/black</item>
+        <item name="android:textSize">25sp</item>
+        <item name="android:textStyle">normal</item>
+    </style>
 </resources>

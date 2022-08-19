@@ -32,7 +32,7 @@ import org.w3c.dom.Text;
 public class ChoiceAge extends AppCompatActivity {
     private Spinner spinner;
     private String age;
-    private ImageButton btn_next;
+    private Button btn_next;
     private FirebaseFirestore db;
     private String email;
     private TextView text_age;
@@ -77,7 +77,7 @@ public class ChoiceAge extends AppCompatActivity {
         });
 
         // 나이 선택 후 다음 버튼 클릭 시, 해당 유저의 나이 데이터 업데이트
-        btn_next = (ImageButton) findViewById(R.id.btn_next_spinner);
+        btn_next = (Button) findViewById(R.id.btn_next_spinner);
         btn_next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

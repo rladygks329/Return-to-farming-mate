@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.icu.text.Edits;
 import android.os.Bundle;
 import android.text.Spannable;
 import android.text.SpannableString;
@@ -21,6 +22,9 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.android.become_a_farmer.databinding.ActivityChoiceAgeBinding;
+import com.android.become_a_farmer.databinding.ActivityChooseKeywordBinding;
+import com.android.become_a_farmer.databinding.ViewKeywordBtnBinding;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -35,16 +39,18 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.List;
 
 public class ChooseKeyword extends AppCompatActivity {
+    private ActivityChooseKeywordBinding binding;
     private Socket client;
     private String SERVER_IP = BuildConfig.SERVER_IP;
     private int PORT = 9090;
     private String keywords;
     private BufferedReader bufferedReader;
     private boolean condition = true;
-    private LinearLayout ll;
-    private ImageButton btn_next_keyword;
     private FirebaseFirestore db;
     private String str_checkedKeywords = "";
     private ArrayList<String> checkedKeywords;
@@ -54,18 +60,16 @@ public class ChooseKeyword extends AppCompatActivity {
     private int gubun;
     private boolean threadCondition = true;
     private SharedPreferences pref;
-    private TextView title_keyword;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_choose_keyword);
+        binding = ActivityChooseKeywordBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
         checkedKeywords = new ArrayList<>();
 
-        title_keyword = (TextView) findViewById(R.id.title_keyword);
-
         // 텍스트 색 변경
-        String content = title_keyword.getText().toString();
+        String content = binding.titleKeyword.getText().toString();
         SpannableString spannableString = new SpannableString(content);
 
         String word ="관심있는 키워드";
@@ -75,7 +79,7 @@ public class ChooseKeyword extends AppCompatActivity {
         spannableString.setSpan(new ForegroundColorSpan(Color.parseColor("#23cd87")),
                 start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 
-        title_keyword.setText(spannableString);
+        binding.titleKeyword.setText(spannableString);
 
         pref = getSharedPreferences("pref", Activity.MODE_PRIVATE);
         keywords = "농촌,공동체,체험,행복,전통,꽃,미래, 세계";
@@ -85,13 +89,8 @@ public class ChooseKeyword extends AppCompatActivity {
         // ui 업데이트 위한 스레드
         setUI();
 
-        // 키워드 선택 후 다음 버튼 클릭 시, 선택한 데이터 업데이트
-        btn_next_keyword = (ImageButton) findViewById(R.id.btn_next_keyword);
-
-
-
         // 키워드 선택 후 다음 버튼 클릭 시, 선택한 키워드 업데이트
-        btn_next_keyword.setOnClickListener(new View.OnClickListener() {
+        binding.btnNextKeyword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // 키워드 리스트 -> 스트링
@@ -129,46 +128,46 @@ public class ChooseKeyword extends AppCompatActivity {
 
     // 서버에서 받아온 keywords split해서 ui에 키워드 체크박스 추가함
     void setUI(){
-        ll = (LinearLayout) findViewById(R.id.main_ll);
-        if(keywords!= null){
-            storeKeyword(keywords);
-            String[] s = keywords.split(",");
-            for (int i=0; i<s.length; i+=2) {
-                CheckBox ch1 = new CheckBox(this);
-                ch1.setText(s[i]);
-                ch1.setId(i);
-                int idx = i + 1;
-                CheckBox ch2 = new CheckBox(this);
-                ch2.setText(s[idx]);
-                ch2.setId(idx);
-
-
-                LinearLayout addll = new LinearLayout(this);
-                addll.setOrientation(LinearLayout.HORIZONTAL);
-                LinearLayout.LayoutParams mParams = new LinearLayout.LayoutParams(
-                        LinearLayout.LayoutParams.MATCH_PARENT,
-                        LinearLayout.LayoutParams.WRAP_CONTENT);
-                mParams.setMargins(100, 0, 0, 0);
-                addll.setLayoutParams(mParams);
-
-                addll.addView(ch1);
-                addll.addView(ch2);
-                ll.addView(addll);
-
-                ch1.setOnClickListener(getOnClickSomething(ch1));
-                ch2.setOnClickListener(getOnClickSomething(ch2));
-            }
+        if(keywords == null){
+            return;
         }
+        //for문이 두개씩 돌아가므로 마지막에 임시값을 넣어 끝까지 돌아갈 수 있도록 한다.
+        storeKeyword(keywords);
+        String[] s = keywords.split(",");
 
+        List<String> strings = Arrays.asList(s);
+        Iterator<String> it = strings.iterator();
+        while(it.hasNext()){
+            ViewKeywordBtnBinding v = ViewKeywordBtnBinding.inflate(getLayoutInflater());
+            String k = it.next();
+            v.keywordLeft.setTextOn(k);
+            v.keywordLeft.setTextOff(k);
+            v.keywordLeft.setTag(k);
+            v.keywordLeft.setChecked(v.keywordLeft.isChecked()); //새로 고침
+            v.keywordLeft.setOnClickListener(getOnClickSomething(v.keywordLeft));
+            if(it.hasNext()){
+                k = it.next();
+                v.keywordRight.setTextOn(k);
+                v.keywordRight.setTextOff(k);
+                v.keywordRight.setTag(k);
+                v.keywordRight.setChecked(v.keywordRight.isChecked()); //새로 고침
+                v.keywordRight.setOnClickListener(getOnClickSomething(v.keywordRight));
+            }else{
+                //홀수일때는 오른쪽에 그려진 뷰를 가려준다.
+                v.keywordRight.setVisibility(View.INVISIBLE);
+            }
+            binding.keywordLr.addView(v.getRoot());
+        }
     }
-    View.OnClickListener getOnClickSomething(final Button button){
+    View.OnClickListener getOnClickSomething(final View view){
         return new View.OnClickListener(){
             // ※ 체크박스 클릭했다가 클릭 취소하는 경우 처리
             public void onClick(View v){    // 클릭했을 때 리스트에 없는 경우만 리스트에 추가
-                if (!checkedKeywords.contains(button.getText().toString())){
-                    checkedKeywords.add(button.getText().toString());
+                String selectedWord = view.getTag().toString();
+                if (!checkedKeywords.contains(selectedWord)){
+                    checkedKeywords.add(selectedWord);
                 } else { // 체크한 키워드가 이미 리스트에 있는 경우 리스트에서 삭제
-                    checkedKeywords.remove(button.getText().toString());
+                    checkedKeywords.remove(selectedWord);
                 }
             }
         };

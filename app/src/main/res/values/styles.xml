@@ -145,4 +145,14 @@
         <item name="android:textSize">25sp</item>
         <item name="android:textStyle">normal</item>
     </style>
+
+    <style name="KeywordTgBtn">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">70dp</item>
+        <item name="android:layout_margin">10dp</item>
+        <item name="android:background">@drawable/bg_keyword</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="fontFamily">@font/notosanskr_bold</item>
+        <item name="android:textSize">15sp</item>
+    </style>
 </resources>

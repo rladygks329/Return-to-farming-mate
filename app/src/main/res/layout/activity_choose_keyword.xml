@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,42 +7,39 @@
     tools:context=".ChooseKeyword"
     >
 
-   <LinearLayout
-       android:layout_width="match_parent"
-       android:layout_height="match_parent"
-       android:orientation="vertical"
-       android:gravity="center">
+    <TextView
+        style="@style/largeTextView"
+        android:id="@+id/title_keyword"
+        android:text="@string/questionKeyword"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-       <TextView
-           android:id="@+id/title_keyword"
-           android:layout_width="wrap_content"
-           android:layout_height="wrap_content"
-           android:layout_marginTop="82dp"
-           android:text="@string/questionKeyword"
-           android:textColor="#000000"
-           android:textSize="25sp"
-           android:textStyle="normal"
-           android:textAlignment="center"
-           android:gravity="center_horizontal"
-           android:fontFamily="@font/notosanskr_bold"/>
+    <com.google.android.material.button.MaterialButton
+        style="@style/nextBtn"
+        android:id="@+id/btn_next_keyword"
+        android:text="다음"
+        android:layout_marginBottom="25dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
-            <LinearLayout
-                android:id="@+id/main_ll"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:gravity="center">
-            </LinearLayout>
+    <ScrollView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:gravity="center"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@+id/btn_next_keyword"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/title_keyword">
+        <LinearLayout
+            android:id="@+id/keyword_lr"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-       <ImageButton
-           android:id="@+id/btn_next_keyword"
-           android:layout_width="wrap_content"
-           android:layout_height="wrap_content"
-           android:padding="0dp"
-           android:src="@drawable/btn_next_age"
-           android:layout_marginTop="50dp"
-           android:background="@android:color/transparent"
-           />
-   </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
 
-</ScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>

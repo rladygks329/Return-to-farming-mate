@@ -4,25 +4,17 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.icu.text.Edits;
 import android.os.Bundle;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
-import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.ImageButton;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.android.become_a_farmer.databinding.ActivityChoiceAgeBinding;
 import com.android.become_a_farmer.databinding.ActivityChooseKeywordBinding;
 import com.android.become_a_farmer.databinding.ViewKeywordBtnBinding;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -93,34 +85,38 @@ public class ChooseKeyword extends AppCompatActivity {
         binding.btnNextKeyword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(checkedKeywords.size() < 3){
+                    Toast.makeText(ChooseKeyword.this, "3개 이상 선택해주세요.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                String email = getUserEmail();
+                if(email == null){
+                    Toast.makeText(ChooseKeyword.this, "다시 로그인 해주세요.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                // 현재 사용자의 email이 존재할 때
                 // 키워드 리스트 -> 스트링
                 str_checkedKeywords = listToString(checkedKeywords);
-                // 현재 사용자의 email이 존재할 때
-                String email = getUserEmail();
-
-                if (email != null){
-                    db = FirebaseFirestore.getInstance();
-                    DocumentReference userRef = db.collection("users").document(email);
-                    userRef.update("prefferdKeywords", str_checkedKeywords)
-                            .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                @Override
-                                public void onSuccess(Void unused) {
-                                    Intent intent = new Intent(ChooseKeyword.this, MainActivity.class);
-                                    startActivity(intent);
-                                }})
-                            .addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception e) {
-                                    Log.w("error add user age", e);
-                                }
-                            });
-                }else{
-                    Toast.makeText(ChooseKeyword.this, "다시 로그인 해주세요.", Toast.LENGTH_SHORT).show();
-
-                }
+                db = FirebaseFirestore.getInstance();
+                DocumentReference userRef = db.collection("users").document(email);
+                userRef.update("prefferdKeywords", str_checkedKeywords)
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void unused) {
+                                Intent intent = new Intent(ChooseKeyword.this, MainActivity.class);
+                                startActivity(intent);
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Log.w("error add user age", e);
+                            }
+                        });
                 // 사용자가 선택한 키워드를 서버에 전송함
                 connect2();
-
             }
         });
 
@@ -131,7 +127,6 @@ public class ChooseKeyword extends AppCompatActivity {
         if(keywords == null){
             return;
         }
-        //for문이 두개씩 돌아가므로 마지막에 임시값을 넣어 끝까지 돌아갈 수 있도록 한다.
         storeKeyword(keywords);
         String[] s = keywords.split(",");
 

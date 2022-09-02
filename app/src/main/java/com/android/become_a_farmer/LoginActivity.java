@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -24,7 +25,9 @@ import com.google.firebase.auth.FirebaseAuth;
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 
     private ActivityLoginBinding binding;
-    FirebaseAuth firebaseAuth;
+    private FirebaseAuth firebaseAuth;
+    private static final String TAG = "[LoginActivity.java]";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,25 +70,27 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 String email = binding.txtId.getText().toString().trim();
                 String pwd = binding.txtPwd.getText().toString().trim();
                 LoginService loginService = new LoginService();
+
                 // 빈 입력값 확인
                 boolean checkBlank = loginService.checkBlank(email, pwd, LoginActivity.this);
 
-                // 이메일로 로그인
-                if (!checkBlank){
-                    firebaseAuth.signInWithEmailAndPassword(email, pwd)
-                            .addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
-                                @Override
-                                public void onComplete(@NonNull Task<AuthResult> task) {
-                                    if (task.isSuccessful()){ // 로그인 성공
-                                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                                        startActivity(intent);
-                                        finish();
-                                    } else{ // 로그인 실패
-                                        Toast.makeText(LoginActivity.this, "로그인 실패", Toast.LENGTH_LONG).show();
-                                    }
+                if (checkBlank) return;
+
+                firebaseAuth.signInWithEmailAndPassword(email, pwd)
+                        .addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
+                            @Override
+                            public void onComplete(@NonNull Task<AuthResult> task) {
+                                if (task.isSuccessful()){ // 로그인 성공
+                                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                                    startActivity(intent);
+                                    finish();
+                                } else{ // 로그인 실패
+                                    Toast.makeText(LoginActivity.this, "로그인 실패", Toast.LENGTH_LONG).show();
+                                    Log.e(TAG, task.getException().toString());
                                 }
-                            });
-                }
+                            }
+                        });
+
                 break;
 
             case  R.id.btn_resgister:

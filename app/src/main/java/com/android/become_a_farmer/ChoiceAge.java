@@ -27,6 +27,7 @@ public class ChoiceAge extends AppCompatActivity {
     private FirebaseFirestore db;
     private String age;
     private String email;
+    private static final String TAG = "[ChoiceAge.java]";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,7 +86,7 @@ public class ChoiceAge extends AppCompatActivity {
                             .addOnFailureListener(new OnFailureListener() {
                                 @Override
                                 public void onFailure(@NonNull Exception e) {
-                                    Log.w("error add user age", e);
+                                    Log.e(TAG, "error add user age: " + e);
                                 }
                             });
                 }else{

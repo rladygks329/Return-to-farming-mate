@@ -8,8 +8,6 @@ public class UserDTO {
     private String name = "";
     private String nickname = "";
     private int age = 0;
-    private String planningType = "";
-    private String preferredType = "";
     private String keywords = "";
     private String recommendRegions = "";
 
@@ -60,22 +58,6 @@ public class UserDTO {
 
     public void setAge(int age) {
         this.age = age;
-    }
-
-    public String getPlanningType() {
-        return planningType;
-    }
-
-    public void setPlanningType(String planningType) {
-        this.planningType = planningType;
-    }
-
-    public String getPreferredType() {
-        return preferredType;
-    }
-
-    public void setPreferredType(String preferredType) {
-        this.preferredType = preferredType;
     }
 
     public String getKeywords() {

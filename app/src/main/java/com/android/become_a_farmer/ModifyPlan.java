@@ -52,8 +52,6 @@ public class ModifyPlan extends AppCompatActivity {
     private ArrayList<String> checkedKeywords;
     private String str_checkedKeywords = "";
     private String email;
-    private String planningType;
-    private String preferredType;
     private String recommendRegions;
     private Socket client;
     private String SERVER_IP = BuildConfig.SERVER_IP;
@@ -70,10 +68,6 @@ public class ModifyPlan extends AppCompatActivity {
         setContentView(R.layout.activity_modify_plan);
 
         btn_ok = (Button) findViewById(R.id.btn_ok);
-        chbox_quinong = (CheckBox) findViewById(R.id.chbox_quinong);
-        chbox_quichon = (CheckBox) findViewById(R.id.chbox_quichon);
-        chbox_nature = (CheckBox) findViewById(R.id.chbox_nature);
-        chbox_culture = (CheckBox) findViewById(R.id.chbox_culture);
         ll = (LinearLayout) findViewById(R.id.ll3);
 
         checkedKeywords = new ArrayList<>();
@@ -84,40 +78,10 @@ public class ModifyPlan extends AppCompatActivity {
         String keywords = getKeyword();
         setKeywordCheckboxUI(keywords);
 
-        chbox_quinong.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                planningType = "quinong";
-            }
-        });
-
-        chbox_quichon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                planningType = "quichon";
-            }
-        });
-
-        chbox_nature.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                preferredType = "nature";
-            }
-        });
-
-        chbox_culture.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                preferredType = "culture";
-            }
-        });
 
         btn_ok.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // 정보 업데이트
-                updatePlanningType();
-                updatePreferredType();
                 // 키워드 리스트 -> 스트링
                 str_checkedKeywords = listToString(checkedKeywords);
                 updateUserCheckedKeywords();
@@ -194,49 +158,8 @@ public class ModifyPlan extends AppCompatActivity {
             }
         };
     }
-    public void updatePlanningType(){
-        if (email != null){
-            db = FirebaseFirestore.getInstance();
-            DocumentReference userRef = db.collection("users").document(email);
-            userRef.update("planningType", planningType)
-                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void unused) {
 
-                        }})
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Log.w("error add user age", e);
-                        }
-                    });
-        }else{
-            Toast.makeText(ModifyPlan.this, "다시 로그인 해주세요.", Toast.LENGTH_SHORT).show();
 
-        }
-    }
-
-    public void updatePreferredType(){
-        if (email != null){
-            db = FirebaseFirestore.getInstance();
-            DocumentReference userRef = db.collection("users").document(email);
-            userRef.update("preferredType", preferredType)
-                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void unused) {
-                        }})
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Log.w("error add user age", e);
-                        }
-                    });
-        }else{
-            Toast.makeText(ModifyPlan.this, "다시 로그인 해주세요.", Toast.LENGTH_SHORT).show();
-
-        }
-
-    }
 
     public void updateUserCheckedKeywords(){
         if (email != null){

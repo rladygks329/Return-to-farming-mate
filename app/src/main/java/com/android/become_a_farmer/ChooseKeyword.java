@@ -25,11 +25,6 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.io.BufferedReader;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -37,20 +32,11 @@ import java.util.List;
 
 public class ChooseKeyword extends AppCompatActivity {
     private ActivityChooseKeywordBinding binding;
-    private Socket client;
-    private String SERVER_IP = BuildConfig.SERVER_IP;
-    private int PORT = 9090;
     private String keywords;
-    private BufferedReader bufferedReader;
-    private boolean condition = true;
     private FirebaseFirestore db;
     private String str_checkedKeywords = "";
     private ArrayList<String> checkedKeywords;
-    private String recommendRegions;
-    private InputStream is;
-    private DataOutputStream dos;
-    private int gubun;
-    private boolean threadCondition = true;
+    private String recommendRegions;    // 여기에 서버에서 받아온 키워드 기반 추천 지역 데이터 넣어야 함
     private SharedPreferences pref;
 
     @Override
@@ -74,8 +60,7 @@ public class ChooseKeyword extends AppCompatActivity {
         binding.titleKeyword.setText(spannableString);
 
         pref = getSharedPreferences("pref", Activity.MODE_PRIVATE);
-        keywords = "농촌,공동체,체험,행복,전통,꽃,미래, 세계";
-//        connect();  // 농촌,공동체,체험,행복,전통,꽃,미래, 세계
+        keywords = "농촌,공동체,체험,행복,전통,꽃,미래, 세계";  // 수정 되어야 함
 
 
         // ui 업데이트 위한 스레드
@@ -105,6 +90,7 @@ public class ChooseKeyword extends AppCompatActivity {
                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void unused) {
+                                updateUserDataRegions();    // db에 키워드 기반 추천 지역 업데이트
                                 Intent intent = new Intent(ChooseKeyword.this, MainActivity.class);
                                 startActivity(intent);
                             }
@@ -115,8 +101,6 @@ public class ChooseKeyword extends AppCompatActivity {
                                 Log.w("error add user age", e);
                             }
                         });
-                // 사용자가 선택한 키워드를 서버에 전송함
-                connect2();
             }
         });
 
@@ -167,57 +151,6 @@ public class ChooseKeyword extends AppCompatActivity {
             }
         };
     }
-
-    void connect2(){
-        Thread sendKeywords = new Thread(){
-            public void run(){
-                Log.d("ddd", "ChooseKeyword 돌아감!!!");
-                try{    // 서버 접속
-                    client = new Socket(SERVER_IP, PORT);
-                    Log.d("ddd", "success!!");
-//                    gubun = 1;
-//                    dos = new DataOutputStream(client.getOutputStream());
-//                    dos.writeUTF(Integer.toString(gubun));
-//                    dos.flush();
-
-                } catch (IOException e){
-                    e.printStackTrace();
-                    Log.d(getClass().toString(), e.getMessage());
-                }
-
-                try{
-                    dos.writeUTF(str_checkedKeywords);  // 사용자가 선택한 키워드 서버로 보내기
-                    Log.d("ddd", str_checkedKeywords);
-                    dos.flush();
-                } catch (Exception e) {
-                    Log.d(getClass().toString(), e.getMessage());
-                }
-
-                try{
-                    byte[] byteArr = new byte[1024];    // 추천 지역명 서버에서 받아오기
-                    is = client.getInputStream();
-                    int readByteCount = is.read(byteArr);
-                    recommendRegions = new String(byteArr, 0, readByteCount, "UTF-8");
-//                     Log.d("regions", recommendRegions);
-
-                } catch (Exception e){
-                    Log.d(getClass().toString(), e.getMessage());
-                }
-                try{
-                    // 사용자 정보 업데이트(추천 지역명 필드에 추가)
-                    updateUserDataRegions();
-                    dos.close();
-                    is.close();
-                    client.close();
-                } catch (Exception e){
-                    Log.d(getClass().toString(), e.getMessage());
-                }
-
-            }
-        };
-        sendKeywords.start();
-    }
-
 
     // 현재 사용자의 이메일 가져오기
     public String getUserEmail(){

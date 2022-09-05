@@ -54,12 +54,6 @@
         <activity
             android:name=".ChooseKeyword"
             android:exported="true" />
-        <activity
-            android:name=".ChoosePreferredType"
-            android:exported="true" />
-        <activity
-            android:name=".ChoosePlanningType"
-            android:exported="true" />
         <activity android:name=".SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

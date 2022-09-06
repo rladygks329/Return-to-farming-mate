@@ -73,7 +73,7 @@
         <activity android:name=".MainActivity" />
         <activity android:name=".user_main" />
         <activity android:name=".planner_main" />
-        <activity android:name=".home_main" />
+        <activity android:name=".FragmentHomeMain" />
         <activity android:name=".cartMain" />
 
     </application>

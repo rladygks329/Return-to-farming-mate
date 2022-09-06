@@ -36,7 +36,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 import java.util.List;
 
-public class home_main extends Fragment {
+public class FragmentHomeMain extends Fragment {
     private android.view.View view;
     private static FirebaseFirestore db;
     private RecyclerView recyclerView;

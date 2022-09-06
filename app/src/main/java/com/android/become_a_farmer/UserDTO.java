@@ -60,7 +60,6 @@ public class UserDTO {
         this.age = age;
     }
 
-
     public String getKeywords() {
         return keywords;
     }

@@ -28,6 +28,7 @@ public class ResisterActivity extends AppCompatActivity implements View.OnClickL
     private FirebaseAuth firebaseAuth;
     private FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private static final String TAG = "[RegisterActivity.java]";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +40,7 @@ public class ResisterActivity extends AppCompatActivity implements View.OnClickL
         firebaseAuth = FirebaseAuth.getInstance();
         binding.btnRegister.setOnClickListener(this);
         binding.btnPrev.setOnClickListener(this);
+
     }
     // 다른 화면 터치 시 키보드 내림
     @Override
@@ -63,7 +65,7 @@ public class ResisterActivity extends AppCompatActivity implements View.OnClickL
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Log.w("add user data", "Error writing document", e);
+                        Log.e(TAG, "Error writing document", e);
                     }
                 });
     }
@@ -102,7 +104,7 @@ public class ResisterActivity extends AppCompatActivity implements View.OnClickL
                                         }
                                             else{
                                                 Toast.makeText(ResisterActivity.this, "중복된 아이디입니다.", Toast.LENGTH_LONG).show();
-                                                Log.e("[Register.java]:회원가입에러", task.getException().toString());
+                                                Log.e(TAG, "회가입 에러: " + task.getException().toString());
                                             }
                                     }
                                 });

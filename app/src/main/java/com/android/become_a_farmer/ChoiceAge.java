@@ -15,6 +15,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
 import com.android.become_a_farmer.databinding.ActivityChoiceAgeBinding;
+import com.android.become_a_farmer.service.AuthenticationService;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -26,13 +27,16 @@ public class ChoiceAge extends AppCompatActivity {
     private ActivityChoiceAgeBinding binding;
     private FirebaseFirestore db;
     private String age;
-    private String email;
+    private AuthenticationService authenticationService;
+    private static final String TAG = "[ChoiceAge.java]";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityChoiceAgeBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        authenticationService = new AuthenticationService();
 
         // 텍스트 색 바꾸기
         String content = binding.textAge.getText().toString();
@@ -71,7 +75,7 @@ public class ChoiceAge extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // 현재 사용자의 email이 존재할 때
-                email = getUserEmail();
+                String email = authenticationService.getUserEmail();
                 if (email != null){
                     db = FirebaseFirestore.getInstance();
                     DocumentReference userRef = db.collection("users").document(email);
@@ -85,7 +89,7 @@ public class ChoiceAge extends AppCompatActivity {
                             .addOnFailureListener(new OnFailureListener() {
                                 @Override
                                 public void onFailure(@NonNull Exception e) {
-                                    Log.w("error add user age", e);
+                                    Log.e(TAG, "error add user age: " + e);
                                 }
                             });
                 }else{
@@ -97,14 +101,6 @@ public class ChoiceAge extends AppCompatActivity {
         });
 
 
-    }
-    // 현재 사용자의 이메일 가져오기
-    public String getUserEmail(){
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if (user != null){
-            return user.getEmail();
-        }
-        return null;
     }
 
 }

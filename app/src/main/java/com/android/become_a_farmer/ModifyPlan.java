@@ -159,6 +159,8 @@ public class ModifyPlan extends AppCompatActivity {
         };
     }
 
+
+
     public void updateUserCheckedKeywords(){
         if (email != null){
             db = FirebaseFirestore.getInstance();

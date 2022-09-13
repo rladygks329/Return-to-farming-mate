@@ -41,7 +41,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     @Override
     public void onBindViewHolder(@NonNull RecyclerViewAdapter.ViewHolder holder, int position) {
         RecyclerItem item = list.get(position);
-        holder.txt_title.setText(item.getTitle());
+        holder.txt_title_main.setText(item.getTitle().split(" ")[0]);
+        holder.txt_title_sub.setText(item.getTitle().split(" ")[1]);
         holder.txt_sub.setText(item.getSub());
 
         //지역별로 라벨 색을 변경하는 부분
@@ -99,13 +100,15 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
 
     public class ViewHolder extends RecyclerView.ViewHolder{
-        public TextView txt_title;
+        public TextView txt_title_main;
+        public TextView txt_title_sub;
         public TextView txt_sub;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            txt_title = itemView.findViewById(R.id.rcy_item_title);
+            txt_title_main = itemView.findViewById(R.id.rcy_item_title_main);
+            txt_title_sub = itemView.findViewById(R.id.rcy_item_title_sub);
             txt_sub = itemView.findViewById(R.id.rcy_item_sub);
 
             // 아이템 클릭 이벤트(title 클릭)

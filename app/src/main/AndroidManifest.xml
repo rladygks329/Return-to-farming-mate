@@ -54,7 +54,8 @@
         <activity
             android:name=".ChooseKeyword"
             android:exported="true" />
-        <activity android:name=".SplashActivity">
+        <activity android:name=".SplashActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -71,10 +72,6 @@
             android:exported="true" />
 
         <activity android:name=".MainActivity" />
-        <activity android:name=".user_main" />
-        <activity android:name=".planner_main" />
-        <activity android:name=".FragmentHomeMain" />
-        <activity android:name=".cartMain" />
 
     </application>
 

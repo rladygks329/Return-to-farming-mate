@@ -27,6 +27,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.tbuonomo.viewpagerdotsindicator.DotsIndicator;
 
 import org.w3c.dom.Text;
 
@@ -62,6 +63,7 @@ public class RegionInfo extends AppCompatActivity {
 
         RegionInfoViewPagerAdapter adapter = new RegionInfoViewPagerAdapter(item);
         binding.regionInfoViewpager.setAdapter(adapter);
+        binding.dotsIndicator.attachTo(binding.regionInfoViewpager);
 
         regionName = item.getTitle();
         binding.regionInfoRating.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {

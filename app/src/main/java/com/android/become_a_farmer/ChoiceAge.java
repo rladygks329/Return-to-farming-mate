@@ -83,7 +83,7 @@ public class ChoiceAge extends AppCompatActivity {
                             .addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
                                 public void onSuccess(Void unused) {
-                                    Intent intent = new Intent(ChoiceAge.this, ChoosePlanningType.class);
+                                    Intent intent = new Intent(ChoiceAge.this, ChooseKeyword.class);
                                     startActivity(intent);
                                 }})
                             .addOnFailureListener(new OnFailureListener() {

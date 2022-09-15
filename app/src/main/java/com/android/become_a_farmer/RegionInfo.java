@@ -15,15 +15,19 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
+import android.webkit.WebViewClient;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import com.android.become_a_farmer.databinding.ActivityRegionInfoBinding;
+import com.google.android.gms.dynamic.SupportFragmentWrapper;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.tbuonomo.viewpagerdotsindicator.DotsIndicator;
 
 import org.w3c.dom.Text;
 
@@ -31,90 +35,57 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class RegionInfo extends AppCompatActivity {
-    private TextView txt_region_name;
-    private TextView txt_region_info;
-    private TextView txt_crop_info;
-    private TextView title_ex;
-    private TextView txt_ex_info;
-    private RatingBar ratingBar;
+    private ActivityRegionInfoBinding binding;
+    private String URL = "http://map.naver.com/?query=";
     private FirebaseFirestore db;
     private String regionName;
     private float regionRating;
     private boolean changed = false;
-    private TextView title_region;
     private RecyclerItem item;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_region_info);
-
-        txt_region_name = (TextView) findViewById(R.id.txt_region_name);
-        txt_region_info = (TextView) findViewById(R.id.txt_region_info);
-        txt_crop_info = (TextView) findViewById(R.id.txt_crop_info);
-        title_ex = (TextView) findViewById(R.id.title_ex);
-        txt_ex_info = (TextView) findViewById(R.id.txt_ex_info);
-        ratingBar = (RatingBar) findViewById(R.id.ratingbar);
-        title_region = (TextView) findViewById(R.id.title_region);
-
+        binding = ActivityRegionInfoBinding.inflate(getLayoutInflater());
+        View view = binding.getRoot();
+        setContentView(view);
 
         Intent intent = getIntent();
         item = (RecyclerItem) intent.getSerializableExtra("item");
 
-        // 텍스트 색 변경
-        String content = title_region.getText().toString();
-        SpannableString spannableString = new SpannableString(content);
+        binding.regionInfoTitle.setText(item.getTitle());
+        binding.regionInfoWebview.getSettings().setJavaScriptEnabled(true);
+        binding.regionInfoWebview.setWebViewClient(new WebViewClient());
+        binding.regionInfoWebview.clearCache(true);
+        binding.regionInfoWebview.loadUrl(URL + item.getTitle());
+        Log.d("webview",URL + item.getTitle());
+        binding.regionInfoWebview.setClickable(false);
 
-        String word ="지역";
-        int start = 0;
-        int end = start + word.length();
-
-        spannableString.setSpan(new ForegroundColorSpan(Color.parseColor("#23cd87")),
-                start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-
-        title_region.setText(spannableString);
-
+        RegionInfoViewPagerAdapter adapter = new RegionInfoViewPagerAdapter(item);
+        binding.regionInfoViewpager.setAdapter(adapter);
+        binding.dotsIndicator.attachTo(binding.regionInfoViewpager);
 
         regionName = item.getTitle();
-        txt_region_name.setText(regionName);
-        txt_region_info.setText(item.getIntroduction());
-        txt_crop_info.setText(item.getCrop());
-        title_ex.setText(item.getExperienceTitle());
-        txt_ex_info.setText(item.getExperienceContent());
-
-        ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+        binding.regionInfoRating.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
             @Override
             public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
                 regionRating = rating;
                 changed = true;
             }
         });
+        binding.regionInfoBtnPrev.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+        binding.regionInfoBtnBookmark.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
     }
-
-    // 액션바 커스텀
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        ActionBar actionBar = getSupportActionBar();
-
-        actionBar.setDisplayShowCustomEnabled(true);
-        actionBar.setDisplayHomeAsUpEnabled(false);
-        actionBar.setDisplayShowTitleEnabled(true);
-        actionBar.setDisplayShowHomeEnabled(false);
-
-        actionBar.setTitle(item.getTitle());
-        LayoutInflater inflater = (LayoutInflater)getSystemService(LAYOUT_INFLATER_SERVICE);
-        View actionbar = inflater.inflate(R.layout.custom_actionbar, null);
-
-        actionBar.setCustomView(actionbar);
-
-        //액션바 양쪽 공백 없애기
-        Toolbar parent = (Toolbar)actionbar.getParent();
-        parent.setContentInsetsAbsolute(0,0);
-
-        return true;
-    }
-
-
 
     @Override
     protected void onPause() {

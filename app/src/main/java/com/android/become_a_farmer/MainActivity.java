@@ -18,7 +18,7 @@ public class MainActivity extends AppCompatActivity {
     private BottomNavigationView bottomNavigationView;
     private FragmentManager fm;
     private FragmentTransaction ft;
-    private home_main home_main;
+    private FragmentHomeMain FragmentHomeMain;
     private planner_main planner_main;
     private cartMain cartMain;
     private user_main user_main;
@@ -34,13 +34,13 @@ public class MainActivity extends AppCompatActivity {
 
         activity = this;
 
-        home_main = new home_main();
+        FragmentHomeMain = new FragmentHomeMain();
         planner_main = new planner_main();
         cartMain = new cartMain();
         user_main = new user_main();
 
         // 맨 처음 화면 home_main fragment로 설정
-        getSupportFragmentManager().beginTransaction().add(R.id.frameLayout, home_main).commit(); //FrameLayout에 fragment.xml 띄우기
+        getSupportFragmentManager().beginTransaction().add(R.id.frameLayout, FragmentHomeMain).commit(); //FrameLayout에 fragment.xml 띄우기
 
 
         bottomNavigationView.setSelectedItemId(R.id.homeItem);
@@ -76,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
 
         switch (i) {
             case 0:
-                ft.replace(R.id.frameLayout, home_main);
+                ft.replace(R.id.frameLayout, FragmentHomeMain);
                 ft.commit();
                 break;
 

@@ -6,6 +6,9 @@
 
     <color name="darkGray">#3a3a3a</color>
     <color name="lightGreen">#23cd87</color>
+    <color name="lightYellow">#F2E582</color>
+    <color name="red">#ED4B36</color>
+    <color name="blue">#0095FF</color>
     <color name="blankColor">#f5f6f8</color>
 
     <color name="mainMapColor">#CCCCCC</color>

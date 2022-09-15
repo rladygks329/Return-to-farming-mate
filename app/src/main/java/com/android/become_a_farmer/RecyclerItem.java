@@ -14,12 +14,6 @@ public class RecyclerItem implements Serializable {
     public RecyclerItem() {
     }
 
-//    public RecyclerItem(String title, String sub, String introduction) {
-//        this.title = title;
-//        this.sub = sub;
-//        this.introduction = introduction;
-//    }
-
     public RecyclerItem(String title, String sub, String introduction, String crop, String experienceTitle,
                         String experienceContent) {
         this.title = title;

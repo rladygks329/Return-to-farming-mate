@@ -38,6 +38,7 @@ public class ChooseKeyword extends AppCompatActivity {
     private ArrayList<String> checkedKeywords;
     private String recommendRegions;    // 여기에 서버에서 받아온 키워드 기반 추천 지역 데이터 넣어야 함
     private SharedPreferences pref;
+    private static final String TAG = "[ChooseKeyword.java]";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,7 +99,7 @@ public class ChooseKeyword extends AppCompatActivity {
                         .addOnFailureListener(new OnFailureListener() {
                             @Override
                             public void onFailure(@NonNull Exception e) {
-                                Log.w("error add user age", e);
+                                Log.e(TAG, "error add user age: " + e);
                             }
                         });
             }

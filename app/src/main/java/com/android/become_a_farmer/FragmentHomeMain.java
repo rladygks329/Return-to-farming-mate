@@ -23,7 +23,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.become_a_farmer.service.AuthenticationService;
-import com.android.become_a_farmer.service.GetRecommendRegionService;
+import com.android.become_a_farmer.service.RecommendService;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -49,7 +49,7 @@ public class FragmentHomeMain extends Fragment {
     private String email;
     private TextView txt_preference;
     public static Context context_main;
-    private GetRecommendRegionService getRecommendRegionService;
+    private RecommendService recommedService;
     private AuthenticationService authenticationService;
 
     @Nullable
@@ -69,7 +69,7 @@ public class FragmentHomeMain extends Fragment {
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
-        getRecommendRegionService = new GetRecommendRegionService(db, rAdapter);
+        recommedService = new RecommendService(db, rAdapter);
         authenticationService = new AuthenticationService();
 //
 //        if (decoration != null) {
@@ -119,8 +119,7 @@ public class FragmentHomeMain extends Fragment {
             txt_preference.setVisibility(View.VISIBLE);
             setUserName(email, txt_name);   // 이름 화면에 표시
             // 추천 지역 화면에 뿌림
-            getRecommendRegionService.getRecommendRegion(email);
-
+            recommedService.getRecommendRegion(email);
 
 
 //            DocumentReference docRef = db.collection("ratings").document(email);
@@ -155,11 +154,11 @@ public class FragmentHomeMain extends Fragment {
         return view;
     }
 
-    void findUserBasedRecommendRegions(){
-        // 사용자 기반 추천 시스템 돌아감
-        sendRatingsData = new SendRatingsData(db, email);
-        sendRatingsData.getRatingFromDB();
-    }
+//    void findUserBasedRecommendRegions(){
+//        // 사용자 기반 추천 시스템 돌아감
+//        sendRatingsData = new SendRatingsData(db, email);
+//        sendRatingsData.getRatingFromDB();
+//    }
 
 
     // 사용자 이름 ui에 표시

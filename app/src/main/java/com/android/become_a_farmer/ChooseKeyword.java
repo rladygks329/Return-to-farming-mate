@@ -17,6 +17,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.android.become_a_farmer.databinding.ActivityChooseKeywordBinding;
 import com.android.become_a_farmer.databinding.ViewKeywordBtnBinding;
+import com.android.become_a_farmer.retrofit.RetrofitAPI;
+import com.android.become_a_farmer.retrofit.RetrofitClient;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -24,20 +26,33 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.SetOptions;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ChooseKeyword extends AppCompatActivity {
     private ActivityChooseKeywordBinding binding;
-    private String keywords;
+    private String keywords = "";
     private FirebaseFirestore db;
     private String str_checkedKeywords = "";
     private ArrayList<String> checkedKeywords;
-    private String recommendRegions;    // 여기에 서버에서 받아온 키워드 기반 추천 지역 데이터 넣어야 함
+    private String recommendRegions = "";
     private SharedPreferences pref;
+    private Retrofit retrofit;
+    private RetrofitAPI service;
     private static final String TAG = "[ChooseKeyword.java]";
 
     @Override
@@ -46,6 +61,12 @@ public class ChooseKeyword extends AppCompatActivity {
         binding = ActivityChooseKeywordBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         checkedKeywords = new ArrayList<>();
+
+        // retrofit
+        retrofit = RetrofitClient.getInstance();
+        service = retrofit.create(RetrofitAPI.class);
+        keywords = "농촌,공동체,체험,행복,전통,꽃,미래, 세계";
+//        getKeywordsFromServer();
 
         // 텍스트 색 변경
         String content = binding.titleKeyword.getText().toString();
@@ -61,7 +82,6 @@ public class ChooseKeyword extends AppCompatActivity {
         binding.titleKeyword.setText(spannableString);
 
         pref = getSharedPreferences("pref", Activity.MODE_PRIVATE);
-        keywords = "농촌,공동체,체험,행복,전통,꽃,미래, 세계";  // 수정 되어야 함
 
 
         // ui 업데이트 위한 스레드
@@ -86,12 +106,12 @@ public class ChooseKeyword extends AppCompatActivity {
                 // 키워드 리스트 -> 스트링
                 str_checkedKeywords = listToString(checkedKeywords);
                 db = FirebaseFirestore.getInstance();
+                sendSelectedKeyword(str_checkedKeywords);
                 DocumentReference userRef = db.collection("users").document(email);
                 userRef.update("prefferdKeywords", str_checkedKeywords)
                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void unused) {
-                                updateUserDataRegions();    // db에 키워드 기반 추천 지역 업데이트
                                 Intent intent = new Intent(ChooseKeyword.this, MainActivity.class);
                                 startActivity(intent);
                             }
@@ -180,11 +200,8 @@ public class ChooseKeyword extends AppCompatActivity {
         if (email != null){
             DocumentReference userRef = db.collection("users").document(email);
             String[] recommendRegionsArray = recommendRegions.split(",");
-
             if (0 < recommendRegionsArray.length){
-                for (int i=0; i<recommendRegionsArray.length; i++) {
-                    userRef.update("recommendRegions", FieldValue.arrayUnion(recommendRegionsArray[i]));
-                }
+                userRef.update("recommendRegions", Arrays.asList(recommendRegionsArray));
             }
 
         }else{
@@ -193,10 +210,54 @@ public class ChooseKeyword extends AppCompatActivity {
         }
     }
 
+    // 서버에서 키워드 가져오기
+    public void getKeywordsFromServer(){
+        Call<DataClass> call = service.getKeywords();
+        call.enqueue(new Callback<DataClass>() {
+            @Override
+            public void onResponse(Call<DataClass> call, Response<DataClass> response) {
+                if(response.isSuccessful()){
+                     keywords = response.body().toString();
+                     Log.d(TAG, keywords);
+                }
+            }
+
+            // 통신 실패
+            @Override
+            public void onFailure(Call<DataClass> call, Throwable t) {
+                Log.e(TAG, t.getMessage());
+            }
+        });
+    }
+
+    // 선택한 키워드 서버에 보내고, 키워드 기반 추천 지역 받아오기
+    public void sendSelectedKeyword(String selectedKeywords){
+        DataClass data = new DataClass(selectedKeywords);
+        service.getRegions(data).enqueue(new Callback<DataClass>() {
+            @Override
+            public void onResponse(Call<DataClass> call, Response<DataClass> response) {
+                try {
+                    Thread.sleep(3000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                recommendRegions = response.body().toString();
+//                Log.d("추천지역", recommendRegions);
+                if (1 < recommendRegions.length()) {
+                    updateUserDataRegions();    // db에 키워드 기반 추천 지역 업데이트
+                }
+            }
+
+            @Override
+            public void onFailure(Call<DataClass> call, Throwable t) {
+                Log.e(TAG, t.getMessage());
+            }
+        });
+    }
+
     // 서버에서 받은 키워드 SharedPreference에 저장해두기
     public void storeKeyword(String keywords){
         SharedPreferences.Editor editor = pref.edit();
-
         editor.putString("keywords", keywords);
         editor.commit();
     }

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -8,65 +8,67 @@
     tools:context=".FragmentHomeMain">
 
     <EditText
+        android:id="@+id/home_edit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="32dp"
+        android:singleLine="true"
         android:layout_gravity="center"
-        android:background="@drawable/search_box"/>
+        android:background="@drawable/search_box"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:id="@+id/home_linear"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginTop="15dp">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/home_edit">
 
         <TextView
             android:id="@+id/txt_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="익명"
-            android:layout_marginLeft="31dp"
+            android:layout_marginLeft="22dp"
             android:fontFamily="@font/notosanskr_bold"
-            android:textSize="20dp"
-            android:textColor="#23cd87"
             android:lineSpacingExtra="3.6sp"
-
-            >
-        </TextView>
+            android:text="익명"
+            android:textColor="#23cd87"
+            android:textSize="20dp"
+            />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="님의 추천지역"
             android:layout_marginLeft="2dp"
             android:fontFamily="@font/notosanskr_bold"
-            android:textSize="18dp"
-            android:textColor="#3a3a3a"
             android:lineSpacingExtra="3.6sp"
-            >
-        </TextView>
+            android:text="님의 추천지역"
+            android:textColor="#3a3a3a"
+            android:textSize="18dp"/>
 
         <TextView
             android:id="@+id/txt_preference"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="취향 분석하기"
             android:layout_marginLeft="40dp"
             android:fontFamily="@font/notosanskr_regular"
+            android:text="취향 분석하기"
             android:textSize="14dp"
-            android:visibility="invisible"
-            />
+            android:visibility="invisible" />
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_lst"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scrollbars="vertical"
+        android:layout_height="0dp"
         android:scrollbarFadeDuration="0"
-        >
-    </androidx.recyclerview.widget.RecyclerView>
+        android:scrollbars="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/home_linear"
+        app:layout_constraintVertical_bias="0.0"
+        tools:layout_editor_absoluteX="-43dp" />
 
-
-
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

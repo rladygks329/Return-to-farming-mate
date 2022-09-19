@@ -16,4 +16,7 @@ public interface RetrofitAPI {
 
     @POST("/get-regions-from-keyword")
     Call<DataClass> getRegions(@Body DataClass selectedKeywords);
+
+    @POST("/test")
+    Call<DataClass> test(@Body DataClass selectedKeywords);
 }

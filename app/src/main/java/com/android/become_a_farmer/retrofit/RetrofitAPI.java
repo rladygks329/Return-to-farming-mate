@@ -1,11 +1,7 @@
 package com.android.become_a_farmer.retrofit;
 
-import com.android.become_a_farmer.DataClass;
-
 import retrofit2.Call;
 import retrofit2.http.Body;
-import retrofit2.http.Field;
-import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 
@@ -17,6 +13,6 @@ public interface RetrofitAPI {
     @POST("/get-regions-from-keyword")
     Call<DataClass> getRegions(@Body DataClass selectedKeywords);
 
-    @POST("/test")
-    Call<DataClass> test(@Body DataClass selectedKeywords);
+    @POST("/get-regions-from-user")
+    Call<RatingDataClass> sendRating(@Body RatingDataClass ratingDataClass);
 }

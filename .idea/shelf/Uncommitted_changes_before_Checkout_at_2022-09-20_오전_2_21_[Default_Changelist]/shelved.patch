@@ -1,0 +1,210 @@
+Index: app/src/main/java/com/android/become_a_farmer/retrofit/RetrofitAPI.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.android.become_a_farmer.retrofit;\r\n\r\nimport com.android.become_a_farmer.DataClass;\r\n\r\nimport retrofit2.Call;\r\nimport retrofit2.http.Body;\r\nimport retrofit2.http.Field;\r\nimport retrofit2.http.FormUrlEncoded;\r\nimport retrofit2.http.GET;\r\nimport retrofit2.http.POST;\r\n\r\npublic interface RetrofitAPI {\r\n\r\n    @GET(\"/get-keywords\")\r\n    Call<DataClass> getKeywords();\r\n\r\n    @POST(\"/get-regions-from-keyword\")\r\n    Call<DataClass> getRegions(@Body DataClass selectedKeywords);\r\n}\r\n
+===================================================================
+diff --git a/app/src/main/java/com/android/become_a_farmer/retrofit/RetrofitAPI.java b/app/src/main/java/com/android/become_a_farmer/retrofit/RetrofitAPI.java
+--- a/app/src/main/java/com/android/become_a_farmer/retrofit/RetrofitAPI.java	
++++ b/app/src/main/java/com/android/become_a_farmer/retrofit/RetrofitAPI.java	
+@@ -1,6 +1,7 @@
+ package com.android.become_a_farmer.retrofit;
+ 
+ import com.android.become_a_farmer.DataClass;
++import com.android.become_a_farmer.RatingDataClass;
+ 
+ import retrofit2.Call;
+ import retrofit2.http.Body;
+@@ -16,4 +17,7 @@
+ 
+     @POST("/get-regions-from-keyword")
+     Call<DataClass> getRegions(@Body DataClass selectedKeywords);
++
++    @POST("/get-regions-from-user")
++    Call<DataClass> getRegionsFromUser(@Body RatingDataClass ratings);
+ }
+Index: app/src/main/java/com/android/become_a_farmer/FragmentHomeMain.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.android.become_a_farmer;\r\n\r\nimport android.annotation.SuppressLint;\r\nimport android.app.Activity;\r\nimport android.app.AlertDialog;\r\nimport android.content.Context;\r\nimport android.content.DialogInterface;\r\nimport android.content.Intent;\r\nimport android.content.SharedPreferences;\r\nimport android.os.Bundle;\r\nimport android.util.Log;\r\nimport android.view.LayoutInflater;\r\nimport android.view.View;\r\nimport android.view.ViewGroup;\r\nimport android.widget.Button;\r\nimport android.widget.TextView;\r\n\r\nimport androidx.annotation.NonNull;\r\nimport androidx.annotation.Nullable;\r\nimport androidx.fragment.app.Fragment;\r\nimport androidx.recyclerview.widget.DividerItemDecoration;\r\nimport androidx.recyclerview.widget.GridLayoutManager;\r\nimport androidx.recyclerview.widget.RecyclerView;\r\n\r\nimport com.android.become_a_farmer.service.AuthenticationService;\r\nimport com.android.become_a_farmer.service.RecommendService;\r\nimport com.google.android.gms.tasks.OnCompleteListener;\r\nimport com.google.android.gms.tasks.Task;\r\nimport com.google.firebase.auth.FirebaseAuth;\r\nimport com.google.firebase.auth.FirebaseUser;\r\nimport com.google.firebase.firestore.CollectionReference;\r\nimport com.google.firebase.firestore.DocumentReference;\r\nimport com.google.firebase.firestore.DocumentSnapshot;\r\nimport com.google.firebase.firestore.FirebaseFirestore;\r\nimport com.google.firebase.firestore.QueryDocumentSnapshot;\r\nimport com.google.firebase.firestore.QuerySnapshot;\r\n\r\nimport java.util.ArrayList;\r\nimport java.util.List;\r\n\r\npublic class FragmentHomeMain extends Fragment {\r\n    private android.view.View view;\r\n    private static FirebaseFirestore db;\r\n    private RecyclerView recyclerView;\r\n    private RecyclerViewAdapter rAdapter;\r\n    private TextView txt_name;\r\n    private UserDTO userDTO;\r\n    private SendRatingsData sendRatingsData;\r\n    private String email;\r\n    private TextView txt_preference;\r\n    public static Context context_main;\r\n    private RecommendService recommedService;\r\n    private AuthenticationService authenticationService;\r\n\r\n    @Nullable\r\n    @Override\r\n    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {\r\n        view = inflater.inflate(R.layout.activity_home_main, container, false);\r\n        context_main = getContext();\r\n        db = FirebaseFirestore.getInstance();\r\n\r\n        recyclerView = (RecyclerView) view.findViewById(R.id.rv_lst);\r\n        rAdapter = new RecyclerViewAdapter(getContext());\r\n        recyclerView.setAdapter(rAdapter);\r\n        recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));\r\n\r\n        txt_name = (TextView) view.findViewById(R.id.txt_name);\r\n        txt_preference = (TextView) view.findViewById(R.id.txt_preference);\r\n\r\n        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();\r\n\r\n        recommedService = new RecommendService(db, rAdapter);\r\n        authenticationService = new AuthenticationService();\r\n//\r\n//        if (decoration != null) {\r\n//            recyclerView.removeItemDecoration(decoration);\r\n//        }\r\n\r\n        // 최초 실행 여부를 판단\r\n        // isFirst : true => 최초 실행\r\n        // isFirst : false => 최초 실행 아님\r\n        email = authenticationService.getUserEmail();\r\n        SharedPreferences pref = this.getActivity().getSharedPreferences(\"pref\", Activity.MODE_PRIVATE);\r\n        boolean first = pref.getBoolean(\"isFirst\", true);\r\n\r\n        // 로그인 -> 취향 분석 ok 클릭 -> 취향 분석 화면으로 넘어감\r\n//        Log.d(\"checkFirstRun\", String.valueOf(first));\r\n\r\n\r\n        if ((first) && (email != null)){ // 최초 실행 && 로그인 한 경우\r\n            // 취향 분석 화면으로 넘어가기 위해 사용자에게 다이얼로그 띄움\r\n            // 확인 -> 취향 분석 화면으로 넘어감\r\n            // 다음에 -> 그대로\r\n            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());\r\n            builder.setMessage(\"취향 분석을 위한 화면으로 이동하시겠습니까?\");\r\n\r\n            builder.setPositiveButton(\"확인\", new DialogInterface.OnClickListener() {\r\n                @Override\r\n                public void onClick(DialogInterface dialog, int which) {\r\n                    SharedPreferences.Editor editor = pref.edit();\r\n                    editor.putBoolean(\"isFirst\", false);\r\n                    editor.commit();\r\n\r\n                    Intent intent = new Intent(getActivity().getApplicationContext(), ChoiceAge.class);\r\n                    startActivity(intent);\r\n                }\r\n            });\r\n\r\n            builder.setNegativeButton(\"다음에 할게요\", new DialogInterface.OnClickListener() {\r\n                @Override\r\n                public void onClick(DialogInterface dialog, int which) {\r\n\r\n                }\r\n            });\r\n        }\r\n\r\n        // 사용자의 추천 지역 화면에 뿌림\r\n        if (email != null){\r\n            txt_preference.setVisibility(View.VISIBLE);\r\n            setUserName(email, txt_name);   // 이름 화면에 표시\r\n            // 추천 지역 화면에 뿌림\r\n            recommedService.getRecommendRegion(email);\r\n\r\n\r\n//            DocumentReference docRef = db.collection(\"ratings\").document(email);\r\n//            docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {\r\n//                @Override\r\n//                public void onComplete(@NonNull Task<DocumentSnapshot> task) {\r\n//                    if (task.isSuccessful()) {\r\n//                        DocumentSnapshot document = task.getResult();\r\n//                        if (document.exists()) {    // -> 만약 사용자가 리뷰를 등록하지 않았다면, 사용자 기반 추천 시스템 실행할 수 없음\r\n//                            findUserBasedRecommendRegions();\r\n//                        }\r\n//                    } else {\r\n//                        // 서버에서 값을 가져오지 못할 경우 처리\r\n//\r\n//                    }\r\n//                }\r\n//            });\r\n\r\n        }\r\n\r\n        // 취향 분석 화면으로 넘어가기\r\n        txt_preference.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View v) {\r\n                if (txt_preference.getVisibility() == View.VISIBLE){\r\n                    Intent intent = new Intent(getActivity(), ChoiceAge.class);\r\n                    startActivity(intent);\r\n                }\r\n            }\r\n        });\r\n\r\n        return view;\r\n    }\r\n\r\n//    void findUserBasedRecommendRegions(){\r\n//        // 사용자 기반 추천 시스템 돌아감\r\n//        sendRatingsData = new SendRatingsData(db, email);\r\n//        sendRatingsData.getRatingFromDB();\r\n//    }\r\n\r\n\r\n    // 사용자 이름 ui에 표시\r\n    private void setUserName(String email, TextView txt_name){\r\n        DocumentReference docRef = db.collection(\"users\").document(email);\r\n        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {\r\n            @Override\r\n            public void onComplete(@NonNull Task<DocumentSnapshot> task) {\r\n                if (task.isSuccessful()) {\r\n                    DocumentSnapshot document = task.getResult();\r\n                    String name;\r\n                    try{\r\n                        name = document.getData().get(\"name\").toString();\r\n                        txt_name.setText(name);\r\n\r\n                    } catch (Exception e) {\r\n\r\n                    }\r\n                }\r\n            }\r\n        });\r\n    }\r\n\r\n}
+===================================================================
+diff --git a/app/src/main/java/com/android/become_a_farmer/FragmentHomeMain.java b/app/src/main/java/com/android/become_a_farmer/FragmentHomeMain.java
+--- a/app/src/main/java/com/android/become_a_farmer/FragmentHomeMain.java	
++++ b/app/src/main/java/com/android/become_a_farmer/FragmentHomeMain.java	
+@@ -23,6 +23,7 @@
+ import androidx.recyclerview.widget.RecyclerView;
+ 
+ import com.android.become_a_farmer.service.AuthenticationService;
++import com.android.become_a_farmer.service.RecommendBasedUserService;
+ import com.android.become_a_farmer.service.RecommendService;
+ import com.google.android.gms.tasks.OnCompleteListener;
+ import com.google.android.gms.tasks.Task;
+@@ -51,6 +52,7 @@
+     public static Context context_main;
+     private RecommendService recommedService;
+     private AuthenticationService authenticationService;
++    private RecommendBasedUserService recommendBasedUserService;
+ 
+     @Nullable
+     @Override
+@@ -71,7 +73,9 @@
+ 
+         recommedService = new RecommendService(db, rAdapter);
+         authenticationService = new AuthenticationService();
+-//
++        recommendBasedUserService = RecommendBasedUserService.getInstance();
++        recommendBasedUserService.setDb(db);
++
+ //        if (decoration != null) {
+ //            recyclerView.removeItemDecoration(decoration);
+ //        }
+@@ -122,21 +126,19 @@
+             recommedService.getRecommendRegion(email);
+ 
+ 
+-//            DocumentReference docRef = db.collection("ratings").document(email);
+-//            docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+-//                @Override
+-//                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+-//                    if (task.isSuccessful()) {
+-//                        DocumentSnapshot document = task.getResult();
+-//                        if (document.exists()) {    // -> 만약 사용자가 리뷰를 등록하지 않았다면, 사용자 기반 추천 시스템 실행할 수 없음
+-//                            findUserBasedRecommendRegions();
+-//                        }
+-//                    } else {
+-//                        // 서버에서 값을 가져오지 못할 경우 처리
+-//
+-//                    }
+-//                }
+-//            });
++            // 사용자 기반 추천 시스템 실행 --> 최초 실행 위치로 옮겨야 함
++            DocumentReference docRef = db.collection("ratings").document(email);
++            docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
++                @Override
++                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
++                    if (task.isSuccessful()) {
++                        DocumentSnapshot document = task.getResult();
++                        if (document.exists()) {    // -> 만약 사용자가 리뷰를 등록하지 않았다면, 사용자 기반 추천 시스템 실행할 수 없음
++                            recommendBasedUserService.getRatingFromDB();
++                        }
++                    }
++                }
++            });
+ 
+         }
+ 
+Index: app/src/main/java/com/android/become_a_farmer/service/RecommendService.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.android.become_a_farmer.service;\r\n\r\nimport android.annotation.SuppressLint;\r\nimport android.util.Log;\r\n\r\nimport androidx.annotation.NonNull;\r\n\r\nimport com.android.become_a_farmer.RecyclerViewAdapter;\r\nimport com.google.android.gms.tasks.OnCompleteListener;\r\nimport com.google.android.gms.tasks.Task;\r\nimport com.google.firebase.firestore.CollectionReference;\r\nimport com.google.firebase.firestore.DocumentReference;\r\nimport com.google.firebase.firestore.DocumentSnapshot;\r\nimport com.google.firebase.firestore.FieldPath;\r\nimport com.google.firebase.firestore.FieldValue;\r\nimport com.google.firebase.firestore.FirebaseFirestore;\r\nimport com.google.firebase.firestore.QueryDocumentSnapshot;\r\nimport com.google.firebase.firestore.QuerySnapshot;\r\n\r\nimport org.json.JSONArray;\r\nimport org.json.JSONException;\r\nimport org.json.JSONObject;\r\n\r\nimport java.util.HashMap;\r\nimport java.util.List;\r\nimport java.util.Map;\r\nimport java.util.Random;\r\n\r\n\r\n\r\npublic class RecommendService {\r\n    private final FirebaseFirestore db;\r\n    private RecyclerViewAdapter rAdapter;\r\n\r\n    public RecommendService(FirebaseFirestore db, RecyclerViewAdapter rAdapter) {\r\n        this.db = db;\r\n        this.rAdapter = rAdapter;\r\n    }\r\n\r\n    // 추천 지역명 db에서 가져옴\r\n    public void getRecommendRegion(String email) {\r\n        DocumentReference docRef = db.collection(\"users\").document(email);\r\n        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {\r\n            @Override\r\n            public void onComplete(@NonNull Task<DocumentSnapshot> task) {\r\n                if (task.isSuccessful()) {\r\n                    DocumentSnapshot document = task.getResult();\r\n\r\n                    List<String> recommendRegionsBasedKeyword;\r\n                    // 1. 키워드 바탕으로 추천\r\n                    try{\r\n                        recommendRegionsBasedKeyword = (List<String>) document.getData()\r\n                                                        .get(\"recommendRegions\");\r\n                    } catch (Exception e) {\r\n                        recommendRegionsBasedKeyword = null;\r\n                    }\r\n\r\n                    // 2. 사용자 기반 추천\r\n                    List<String> recommendRegionsBasedUser;\r\n                    try{\r\n                        recommendRegionsBasedUser = (List<String>) document.getData()\r\n                                                    .get(\"recommendRegionsBasedUser\");\r\n                    } catch (Exception e){\r\n                        recommendRegionsBasedUser = null;\r\n                    }\r\n\r\n                    // 키워드 기반 추천 지역이 있는 경우\r\n                    if (recommendRegionsBasedKeyword != null) {\r\n                        // 해당 지역 데이터 db에서 가져와서 화면에 뿌려줌\r\n                        for (int i = 0; i < recommendRegionsBasedKeyword.size(); i++) {\r\n                            getRegionDataFromKeyword(db, recommendRegionsBasedKeyword.get(i));\r\n                        }\r\n                    }\r\n\r\n                    if (recommendRegionsBasedUser != null) {\r\n                        // 추천 지역 데이터 db에서 가져와서 화면에 뿌려줌\r\n                        for (int i = 0; i < recommendRegionsBasedUser.size(); i++) {\r\n                            getRegionDataFromUser(db, recommendRegionsBasedUser.get(i));\r\n                        }\r\n                    }\r\n\r\n                    // 추천 지역명이 없는 경우 N개 랜덤으로 뿌려줌\r\n                    if ((recommendRegionsBasedKeyword == null) && (recommendRegionsBasedUser == null)) {\r\n                        //getAllRegion();\r\n                    }\r\n\r\n\r\n                }\r\n            }\r\n        });\r\n    }\r\n\r\n\r\n    /** 키워드 기반 추천 지역명의 데이터 가져오는 쿼리\r\n        - 해당 추천 지역의 정보 리스트에 저장\r\n        - 추천 '도' 에 해당하는 지역 2개씩 랜덤으로 뽑음 --> 랜덤으로 접근 불가..\r\n    */\r\n    public void getRegionDataFromKeyword(FirebaseFirestore db, String regionName){\r\n        db.collection(\"regions\")\r\n                .whereEqualTo(\"do\", regionName)\r\n                .get()\r\n                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {\r\n                    @Override\r\n                    public void onComplete(@NonNull Task<QuerySnapshot> task) {\r\n                        if (task.isSuccessful()) {\r\n                            for (QueryDocumentSnapshot doc : task.getResult()){\r\n                                String title = doc.getId();\r\n                                String content = doc.get(\"introduction\").toString();\r\n                                String crop = doc.get(\"crop\").toString();\r\n                                String experienceContent = doc.get(\"experienceContent\").toString();\r\n                                String experienceTitle = doc.get(\"experienceTitle\").toString();\r\n\r\n                                rAdapter.addItem(title, \" \", content, crop, experienceTitle,\r\n                                        experienceContent);\r\n                                rAdapter.notifyDataSetChanged();\r\n                            }\r\n                        }\r\n                    }\r\n                });\r\n    }\r\n\r\n\r\n\r\n    /** 사용자 기반 추천 지역명의 데이터 가져오는 쿼리\r\n     * - db에 저장된 user의 recommendRegionsByUser 필드 값과 regions의 문서 id값이 같아야 한다.\r\n     * - 해당 추천 지역의 정보 리스트에 저장\r\n     */\r\n    public void getRegionDataFromUser(FirebaseFirestore db, String regionName){\r\n        db.collection(\"regions\")\r\n                .whereEqualTo(String.valueOf(FieldPath.documentId()), regionName)\r\n                .get()\r\n                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {\r\n                    @Override\r\n                    public void onComplete(@NonNull Task<QuerySnapshot> task) {\r\n                        if (task.isSuccessful()) {\r\n                            for (QueryDocumentSnapshot doc : task.getResult()){\r\n                                // 리사이클뷰에 지역명 추가 -> 지역 리스트에 저장하고, 화면에 뿌림\r\n                                String title = doc.getId();\r\n                                String content = doc.get(\"introduction\").toString();\r\n                                String crop = doc.get(\"crop\").toString();\r\n                                String experienceContent = doc.get(\"experienceContent\").toString();\r\n                                String experienceTitle = doc.get(\"experienceTitle\").toString();\r\n\r\n                                rAdapter.addItem(title, \" \", content, crop, experienceTitle,\r\n                                        experienceContent);\r\n                                rAdapter.notifyDataSetChanged();\r\n                            }\r\n                        }\r\n                    }\r\n                });\r\n    }\r\n\r\n    // 모든 지역 데이터 뿌림\r\n    public void getAllRegion(){\r\n        CollectionReference ref = db.collection(\"regions\");\r\n        ref.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {\r\n            @SuppressLint(\"NotifyDataSetChanged\")\r\n            @Override\r\n            public void onComplete(@NonNull Task<QuerySnapshot> task) {\r\n                if (task.isSuccessful()){\r\n                    for(QueryDocumentSnapshot doc : task.getResult()){\r\n                        String title = doc.getId().toString();\r\n                        String content;\r\n                        // 지역 리스트에 저장하고, 화면에 뿌림\r\n                        if (doc.get(\"introduction\").toString() == null){\r\n                            content = \"\";\r\n                        }else{\r\n                            content = doc.get(\"introduction\").toString();\r\n                        }\r\n                        String crop = doc.get(\"crop\").toString();\r\n                        String experienceContent = doc.get(\"experienceContent\").toString();\r\n                        String experienceTitle = doc.get(\"experienceTitle\").toString();\r\n\r\n                        rAdapter.addItem(title, \" \", content, crop, experienceTitle,\r\n                                experienceContent);\r\n                        rAdapter.notifyDataSetChanged();\r\n                    }\r\n\r\n                }\r\n            }\r\n        });\r\n    }\r\n\r\n    // 추천 지역이 없는 경우 랜덤으로 N개 뽑아서 노출\r\n    void getRandomNRegion(int n){\r\n        // then just get the document that falls under that random index\r\n\r\n        CollectionReference ref = db.collection(\"regions\");\r\n        Random random = new Random();\r\n        int randomNum = random.nextInt(n);\r\n\r\n\r\n        for (int i=0; i < randomNum; i++) {\r\n            ref.document();\r\n        }\r\n        ref.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {\r\n            @SuppressLint(\"NotifyDataSetChanged\")\r\n            @Override\r\n            public void onComplete(@NonNull Task<QuerySnapshot> task) {\r\n                if (task.isSuccessful()){\r\n                    for(QueryDocumentSnapshot doc : task.getResult()){\r\n                        String title = doc.getId().toString();\r\n                        String content;\r\n                        // 지역 리스트에 저장하고, 화면에 뿌림\r\n                        if (doc.get(\"introduction\").toString() == null){\r\n                            content = \"\";\r\n                        }else{\r\n                            content = doc.get(\"introduction\").toString();\r\n                        }\r\n                        String crop = doc.get(\"crop\").toString();\r\n                        String experienceContent = doc.get(\"experienceContent\").toString();\r\n                        String experienceTitle = doc.get(\"experienceTitle\").toString();\r\n\r\n                        rAdapter.addItem(title, \" \", content, crop, experienceTitle,\r\n                                experienceContent);\r\n                        rAdapter.notifyDataSetChanged();\r\n                    }\r\n                }\r\n            }\r\n        });\r\n\r\n    }\r\n\r\n    // == 사용자 기반 추천 시스템 ==\r\n\r\n    // firestore에 저장된 rating JSON 형식으로 가져오고 가져온 ratings 서버에 보내기\r\n//    public void getRatingFromDB(){\r\n//        try{\r\n//            // firestore에서 rating을 json 형식으로 바꾸기\r\n//            db.collection(\"ratings\")\r\n//                    .get()\r\n//                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {\r\n//                        @Override\r\n//                        public void onComplete(@NonNull Task<QuerySnapshot> task) {\r\n//                            if (task.isSuccessful()) {\r\n//                                Map<String, JSONObject> hashMap = new HashMap();\r\n//                                for (QueryDocumentSnapshot document : task.getResult()) {\r\n//                                    try {\r\n//                                        JSONObject jsonObject = mapToJSON(document.getData());\r\n//                                        hashMap.put(document.getId(), jsonObject);\r\n//                                    } catch (JSONException e) {\r\n//                                        e.printStackTrace();\r\n//                                    }\r\n////                                    Log.d(\"ratingData\", document.getData().toString());\r\n//                                }\r\n//\r\n////                                Log.d(\"json\", new JSONObject(hashMap).toString());\r\n//                                String ratingsJson = new JSONObject(hashMap).toString();\r\n//\r\n//                                // 파이썬 서버로 rating 데이터 전송\r\n//                                getRecommendRegionFromUser(ratingsJson);\r\n//\r\n//                            }\r\n//                        }\r\n//\r\n//                    });\r\n//\r\n//        } catch (Exception e){\r\n//            Log.e(getClass().toString(), e.getMessage());\r\n//        }\r\n//    }\r\n\r\n    private JSONObject mapToJSON(Map<String, Object> map) throws JSONException {\r\n        JSONObject obj = new JSONObject();\r\n        for (Map.Entry<String, Object> entry : map.entrySet()) {\r\n            String key = entry.getKey();\r\n            Object value = entry.getValue();\r\n            if (value instanceof Map) {\r\n                Map<String, Object> subMap = (Map<String, Object>) value;\r\n                obj.put(key, mapToJSON(subMap));\r\n            } else if (value instanceof List) {\r\n                obj.put(key, listToJSONArray((List) value));\r\n            }\r\n            else {\r\n                obj.put(key, value);\r\n            }\r\n        }\r\n        return obj;\r\n    }\r\n\r\n    private JSONArray listToJSONArray(List<Object> list) throws JSONException {\r\n        JSONArray arr = new JSONArray();\r\n        for(Object obj: list) {\r\n            if (obj instanceof Map) {\r\n                arr.put(mapToJSON((Map) obj));\r\n            }\r\n            if(obj instanceof List) {\r\n                arr.put(listToJSONArray((List) obj));\r\n            }\r\n            else {\r\n                arr.put(obj);\r\n            }\r\n        }\r\n        return arr;\r\n    }\r\n\r\n    // 가져온 ratings와 이메일을 서버로 보내서 사용자기반 추천 지역 받아오기\r\n//    public void getRecommendRegionFromUser(String ratings){\r\n//        // ratings, email 보내기\r\n//\r\n//        // 사용자 기반 추천 지역 받아오기\r\n//        recommendRegionsUserUser = new String(byteArr, 0, readByteCount, \"UTF-8\");\r\n////                    Log.d(\"regions\", recommendRegionsUserUser);\r\n////\r\n////        // 사용자 정보 업데이트(추천 지역명 필드에 추가)\r\n////        if (recommendRegionsUserUser.length() > 0) {\r\n////            updateUserDataRegions(email, recommendRegionsUserUser);\r\n////        }\r\n//\r\n//    }\r\n\r\n\r\n    // user-user collaborate로 추천받은 지역을 user의 recommendRegions 필드 값에 추가시킨다.\r\n    private void updateUserDataRegions(String email, String regions){\r\n        // recommendRegions 필드 배열에 값 추가\r\n        DocumentReference docRef = db.collection(\"users\").document(email);\r\n        String[] regionsList = regions.split(\",\");\r\n        if (0 < regionsList.length){\r\n            for (int i=0; i<regionsList.length; i++) {\r\n                docRef.update(\"recommendRegionsBasedUser\", FieldValue.arrayUnion(regionsList[i]));\r\n            }\r\n        }\r\n\r\n    }\r\n\r\n\r\n}\r\n
+===================================================================
+diff --git a/app/src/main/java/com/android/become_a_farmer/service/RecommendService.java b/app/src/main/java/com/android/become_a_farmer/service/RecommendService.java
+--- a/app/src/main/java/com/android/become_a_farmer/service/RecommendService.java	
++++ b/app/src/main/java/com/android/become_a_farmer/service/RecommendService.java	
+@@ -221,107 +221,4 @@
+ 
+     }
+ 
+-    // == 사용자 기반 추천 시스템 ==
+-
+-    // firestore에 저장된 rating JSON 형식으로 가져오고 가져온 ratings 서버에 보내기
+-//    public void getRatingFromDB(){
+-//        try{
+-//            // firestore에서 rating을 json 형식으로 바꾸기
+-//            db.collection("ratings")
+-//                    .get()
+-//                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+-//                        @Override
+-//                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+-//                            if (task.isSuccessful()) {
+-//                                Map<String, JSONObject> hashMap = new HashMap();
+-//                                for (QueryDocumentSnapshot document : task.getResult()) {
+-//                                    try {
+-//                                        JSONObject jsonObject = mapToJSON(document.getData());
+-//                                        hashMap.put(document.getId(), jsonObject);
+-//                                    } catch (JSONException e) {
+-//                                        e.printStackTrace();
+-//                                    }
+-////                                    Log.d("ratingData", document.getData().toString());
+-//                                }
+-//
+-////                                Log.d("json", new JSONObject(hashMap).toString());
+-//                                String ratingsJson = new JSONObject(hashMap).toString();
+-//
+-//                                // 파이썬 서버로 rating 데이터 전송
+-//                                getRecommendRegionFromUser(ratingsJson);
+-//
+-//                            }
+-//                        }
+-//
+-//                    });
+-//
+-//        } catch (Exception e){
+-//            Log.e(getClass().toString(), e.getMessage());
+-//        }
+-//    }
+-
+-    private JSONObject mapToJSON(Map<String, Object> map) throws JSONException {
+-        JSONObject obj = new JSONObject();
+-        for (Map.Entry<String, Object> entry : map.entrySet()) {
+-            String key = entry.getKey();
+-            Object value = entry.getValue();
+-            if (value instanceof Map) {
+-                Map<String, Object> subMap = (Map<String, Object>) value;
+-                obj.put(key, mapToJSON(subMap));
+-            } else if (value instanceof List) {
+-                obj.put(key, listToJSONArray((List) value));
+-            }
+-            else {
+-                obj.put(key, value);
+-            }
+-        }
+-        return obj;
+-    }
+-
+-    private JSONArray listToJSONArray(List<Object> list) throws JSONException {
+-        JSONArray arr = new JSONArray();
+-        for(Object obj: list) {
+-            if (obj instanceof Map) {
+-                arr.put(mapToJSON((Map) obj));
+-            }
+-            if(obj instanceof List) {
+-                arr.put(listToJSONArray((List) obj));
+-            }
+-            else {
+-                arr.put(obj);
+-            }
+-        }
+-        return arr;
+-    }
+-
+-    // 가져온 ratings와 이메일을 서버로 보내서 사용자기반 추천 지역 받아오기
+-//    public void getRecommendRegionFromUser(String ratings){
+-//        // ratings, email 보내기
+-//
+-//        // 사용자 기반 추천 지역 받아오기
+-//        recommendRegionsUserUser = new String(byteArr, 0, readByteCount, "UTF-8");
+-////                    Log.d("regions", recommendRegionsUserUser);
+-////
+-////        // 사용자 정보 업데이트(추천 지역명 필드에 추가)
+-////        if (recommendRegionsUserUser.length() > 0) {
+-////            updateUserDataRegions(email, recommendRegionsUserUser);
+-////        }
+-//
+-//    }
+-
+-
+-    // user-user collaborate로 추천받은 지역을 user의 recommendRegions 필드 값에 추가시킨다.
+-    private void updateUserDataRegions(String email, String regions){
+-        // recommendRegions 필드 배열에 값 추가
+-        DocumentReference docRef = db.collection("users").document(email);
+-        String[] regionsList = regions.split(",");
+-        if (0 < regionsList.length){
+-            for (int i=0; i<regionsList.length; i++) {
+-                docRef.update("recommendRegionsBasedUser", FieldValue.arrayUnion(regionsList[i]));
+-            }
+-        }
+-
+-    }
+-
+-
+ }

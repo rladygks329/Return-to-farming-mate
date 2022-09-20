@@ -17,6 +17,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.android.become_a_farmer.databinding.ActivityChooseKeywordBinding;
 import com.android.become_a_farmer.databinding.ViewKeywordBtnBinding;
+import com.android.become_a_farmer.retrofit.DataClass;
 import com.android.become_a_farmer.retrofit.RetrofitAPI;
 import com.android.become_a_farmer.retrofit.RetrofitClient;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -24,24 +25,17 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.SetOptions;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ChooseKeyword extends AppCompatActivity {
     private ActivityChooseKeywordBinding binding;

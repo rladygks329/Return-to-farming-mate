@@ -1,4 +1,4 @@
-package com.android.become_a_farmer;
+package com.android.become_a_farmer.retrofit;
 
 import com.google.gson.annotations.SerializedName;
 

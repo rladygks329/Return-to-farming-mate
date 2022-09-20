@@ -4,9 +4,7 @@ import android.annotation.SuppressLint;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
 
-import com.android.become_a_farmer.RecyclerItem;
 import com.android.become_a_farmer.RecyclerViewAdapter;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -14,21 +12,27 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldPath;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import java.util.ArrayList;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 
 
-public class GetRecommendRegionService {
+public class RecommendService {
     private final FirebaseFirestore db;
     private RecyclerViewAdapter rAdapter;
 
-    public GetRecommendRegionService(FirebaseFirestore db, RecyclerViewAdapter rAdapter) {
+    public RecommendService(FirebaseFirestore db, RecyclerViewAdapter rAdapter) {
         this.db = db;
         this.rAdapter = rAdapter;
     }

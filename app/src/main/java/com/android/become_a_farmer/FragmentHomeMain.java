@@ -26,7 +26,8 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.become_a_farmer.service.AuthenticationService;
-import com.android.become_a_farmer.service.GetRecommendRegionService;
+import com.android.become_a_farmer.service.RecommendBasedUserService;
+import com.android.become_a_farmer.service.RecommendService;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -48,13 +49,14 @@ public class FragmentHomeMain extends Fragment {
     private RecyclerViewAdapter rAdapter;
     private TextView txt_name;
     private UserDTO userDTO;
-    private SendRatingsData sendRatingsData;
     private String email;
     private TextView txt_preference;
     private ImageView loadingIGV;
     public static Context context_main;
-    private GetRecommendRegionService getRecommendRegionService;
+    private RecommendService recommedService;
+    private RecommendBasedUserService recommendBasedUserService;
     private AuthenticationService authenticationService;
+
 
     @Nullable
     @Override
@@ -71,11 +73,14 @@ public class FragmentHomeMain extends Fragment {
         txt_name = (TextView) view.findViewById(R.id.txt_name);
         txt_preference = (TextView) view.findViewById(R.id.txt_preference);
         loadingIGV = (ImageView) view.findViewById(R.id.home_main_loading);
-        setLoadingAnimation();
+        //setLoadingAnimation();
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
-        getRecommendRegionService = new GetRecommendRegionService(db, rAdapter);
+        recommedService = new RecommendService(db, rAdapter);
         authenticationService = new AuthenticationService();
+        recommendBasedUserService = RecommendBasedUserService.getInstance();
+        recommendBasedUserService.setDb(db);
+
 //
 //        if (decoration != null) {
 //            recyclerView.removeItemDecoration(decoration);
@@ -124,25 +129,22 @@ public class FragmentHomeMain extends Fragment {
             txt_preference.setVisibility(View.VISIBLE);
             setUserName(email, txt_name);   // 이름 화면에 표시
             // 추천 지역 화면에 뿌림
-            getRecommendRegionService.getRecommendRegion(email);
+            recommedService.getRecommendRegion(email);
 
 
+            DocumentReference docRef = db.collection("ratings").document(email);
+            docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    if (task.isSuccessful()) {
+                        DocumentSnapshot document = task.getResult();
+                        if (document.exists()) {    // -> 만약 사용자가 리뷰를 등록하지 않았다면, 사용자 기반 추천 시스템 실행할 수 없음
 
-//            DocumentReference docRef = db.collection("ratings").document(email);
-//            docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-//                @Override
-//                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-//                    if (task.isSuccessful()) {
-//                        DocumentSnapshot document = task.getResult();
-//                        if (document.exists()) {    // -> 만약 사용자가 리뷰를 등록하지 않았다면, 사용자 기반 추천 시스템 실행할 수 없음
-//                            findUserBasedRecommendRegions();
-//                        }
-//                    } else {
-//                        // 서버에서 값을 가져오지 못할 경우 처리
-//                        // removeLoadingAnimation();
-//                    }
-//                }
-//            });
+                            recommendBasedUserService.getRatingFromDB();
+                        }
+                    }
+                }
+            });
 
         }
 
@@ -158,12 +160,6 @@ public class FragmentHomeMain extends Fragment {
         });
 
         return view;
-    }
-
-    void findUserBasedRecommendRegions(){
-        // 사용자 기반 추천 시스템 돌아감
-        sendRatingsData = new SendRatingsData(db, email);
-        sendRatingsData.getRatingFromDB();
     }
 
 

@@ -60,6 +60,17 @@
             android:visibility="invisible" />
     </LinearLayout>
 
+    <ImageView
+        android:id="@+id/home_main_loading"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:src="@drawable/bg_loading"
+        android:adjustViewBounds="true"
+        android:scaleY="0.5"
+        android:scaleX="0.5"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/home_linear" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_lst"
         android:layout_width="match_parent"

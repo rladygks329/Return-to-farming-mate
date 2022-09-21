@@ -12,7 +12,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -48,6 +51,7 @@ public class FragmentHomeMain extends Fragment {
     private UserDTO userDTO;
     private String email;
     private TextView txt_preference;
+    private ImageView loadingIGV;
     public static Context context_main;
     private RecommendService recommedService;
     private RecommendBasedUserService recommendBasedUserService;
@@ -68,7 +72,8 @@ public class FragmentHomeMain extends Fragment {
 
         txt_name = (TextView) view.findViewById(R.id.txt_name);
         txt_preference = (TextView) view.findViewById(R.id.txt_preference);
-
+        loadingIGV = (ImageView) view.findViewById(R.id.home_main_loading);
+        //setLoadingAnimation();
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
         recommedService = new RecommendService(db, rAdapter);
@@ -179,4 +184,15 @@ public class FragmentHomeMain extends Fragment {
         });
     }
 
+    private void setLoadingAnimation(){
+        loadingIGV.setVisibility(View.VISIBLE);
+
+        Animation animation = AnimationUtils.loadAnimation(context_main, R.anim.loading);
+        animation.setDuration(3000);
+        loadingIGV.startAnimation(animation);
+    }
+    private void removeLoadingAnimation(){
+        loadingIGV.setVisibility(View.INVISIBLE);
+        loadingIGV.clearAnimation();
+    }
 }

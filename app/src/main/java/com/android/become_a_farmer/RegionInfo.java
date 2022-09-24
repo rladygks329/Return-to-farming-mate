@@ -1,42 +1,28 @@
 package com.android.become_a_farmer;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.text.Spannable;
-import android.text.SpannableString;
-import android.text.style.ForegroundColorSpan;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.View;
+import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.RatingBar;
-import android.widget.TextView;
 
 import com.android.become_a_farmer.databinding.ActivityRegionInfoBinding;
-import com.google.android.gms.dynamic.SupportFragmentWrapper;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.tbuonomo.viewpagerdotsindicator.DotsIndicator;
-
-import org.w3c.dom.Text;
-
 import java.util.HashMap;
 import java.util.Map;
 
 public class RegionInfo extends AppCompatActivity {
     private ActivityRegionInfoBinding binding;
-    private String URL = "http://map.naver.com/?query=";
+    private String URL = "https://farming-mate.web.app";
     private FirebaseFirestore db;
     private String regionName;
     private float regionRating;
@@ -55,10 +41,17 @@ public class RegionInfo extends AppCompatActivity {
 
         binding.regionInfoTitle.setText(item.getTitle());
         binding.regionInfoWebview.getSettings().setJavaScriptEnabled(true);
-        binding.regionInfoWebview.setWebViewClient(new WebViewClient());
+        binding.regionInfoWebview.setWebViewClient(new WebViewClient() {
+            public void onPageFinished(WebView view, String url) {
+                binding.regionInfoWebview.loadUrl("javascript:display(\""
+                        + item.getTitle().split(" ")[1] + "\")");
+            }
+        });
         binding.regionInfoWebview.clearCache(true);
-        binding.regionInfoWebview.loadUrl(URL + item.getTitle());
-        Log.d("webview",URL + item.getTitle());
+        binding.regionInfoWebview.loadUrl(URL);
+
+        //binding.regionInfoWebview.loadUrl("javascript:display(\"" +
+         //       item.getTitle().split(" ")[1] + "\")");
         binding.regionInfoWebview.setClickable(false);
 
         RegionInfoViewPagerAdapter adapter = new RegionInfoViewPagerAdapter(item);

@@ -139,7 +139,6 @@ public class FragmentHomeMain extends Fragment {
                     if (task.isSuccessful()) {
                         DocumentSnapshot document = task.getResult();
                         if (document.exists()) {    // -> 만약 사용자가 리뷰를 등록하지 않았다면, 사용자 기반 추천 시스템 실행할 수 없음
-
                             recommendBasedUserService.getRatingFromDB();
                         }
                     }

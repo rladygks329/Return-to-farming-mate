@@ -56,6 +56,7 @@ public class FragmentHomeMain extends Fragment {
     private RecommendService recommedService;
     private RecommendBasedUserService recommendBasedUserService;
     private AuthenticationService authenticationService;
+    private int count = 0;
 
 
     @Nullable

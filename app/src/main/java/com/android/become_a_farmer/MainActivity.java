@@ -13,6 +13,8 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import java.util.Objects;
+
 public class MainActivity extends AppCompatActivity {
 
     private BottomNavigationView bottomNavigationView;
@@ -23,7 +25,6 @@ public class MainActivity extends AppCompatActivity {
     private cartMain cartMain;
     private user_main user_main;
     private static Activity activity;
-    private String email;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,8 +40,9 @@ public class MainActivity extends AppCompatActivity {
         cartMain = new cartMain();
         user_main = new user_main();
 
-        // 맨 처음 화면 home_main fragment로 설정
-        getSupportFragmentManager().beginTransaction().add(R.id.frameLayout, FragmentHomeMain).commit(); //FrameLayout에 fragment.xml 띄우기
+        // 제일 처음 띄워주는 home_main fragment로 설정
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.frameLayout, FragmentHomeMain, "home").commitAllowingStateLoss();
 
 
         bottomNavigationView.setSelectedItemId(R.id.homeItem);
@@ -76,13 +78,42 @@ public class MainActivity extends AppCompatActivity {
 
         switch (i) {
             case 0:
-                ft.replace(R.id.frameLayout, FragmentHomeMain);
-                ft.commit();
+                if (fm.findFragmentByTag("home") != null){
+                    fm.beginTransaction().show(fm.findFragmentByTag("home")).commit();
+
+                } else {
+                    fm.beginTransaction().add(R.id.frameLayout, new FragmentHomeMain(), "home").commit();
+                }
+
+                if (fm.findFragmentByTag("planner") != null){
+                    fm.beginTransaction().hide(fm.findFragmentByTag("planner")).commit();
+
+                }
+
+                if (fm.findFragmentByTag("user") != null){
+                    fm.beginTransaction().hide(fm.findFragmentByTag("user")).commit();
+
+                }
+
                 break;
 
             case 1:
-                ft.replace(R.id.frameLayout, planner_main);
-                ft.commit();
+                if (fm.findFragmentByTag("planner") != null){
+                    fm.beginTransaction().show(fm.findFragmentByTag("planner")).commit();
+
+                } else {
+                    fm.beginTransaction().add(R.id.frameLayout, new planner_main(), "planner").commit();
+                }
+
+                if (fm.findFragmentByTag("home") != null){
+                    fm.beginTransaction().hide(fm.findFragmentByTag("home")).commit();
+
+                }
+
+                if (fm.findFragmentByTag("user") != null){
+                    fm.beginTransaction().hide(fm.findFragmentByTag("user")).commit();
+
+                }
                 break;
 
 //            case 2:
@@ -91,20 +122,24 @@ public class MainActivity extends AppCompatActivity {
 //                break;
 
             case 3:
-                ft.replace(R.id.frameLayout, user_main);
-                ft.commit();
+                if (fm.findFragmentByTag("user") != null){
+                    fm.beginTransaction().show(fm.findFragmentByTag("user")).commit();
+
+                } else {
+                    fm.beginTransaction().add(R.id.frameLayout, new user_main(), "user").commit();
+                }
+
+                if (fm.findFragmentByTag("home") != null){
+                    fm.beginTransaction().hide(fm.findFragmentByTag("home")).commit();
+
+                }
+
+                if (fm.findFragmentByTag("planner") != null){
+                    fm.beginTransaction().hide(fm.findFragmentByTag("planner")).commit();
+
+                }
                 break;
         }
-    }
-
-
-    // 현재 사용자의 이메일 가져오기
-    public String getUserEmail(){
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if (user != null){
-            return user.getEmail();
-        }
-        return null;
     }
 
 

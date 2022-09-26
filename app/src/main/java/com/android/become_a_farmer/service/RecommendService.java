@@ -85,8 +85,12 @@ public class RecommendService {
                     }
 
 
+                } else {
+                    // 서버에서 제대로 값을 못 받아올 경우
                 }
             }
+
+
         });
     }
 

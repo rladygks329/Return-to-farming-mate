@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/planner_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="32dp"
+        app:contentInsetStart="0dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageButton
+            android:id="@+id/planner_prev"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/ic_arrow_back" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:fontFamily="@font/notosanskr_bold"
+            android:lineSpacingExtra="8sp"
+            android:text="귀농플래너"
+            android:textColor="@android:color/black"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+    </androidx.appcompat.widget.Toolbar>
+
+    <com.google.android.material.button.MaterialButtonToggleGroup
+        android:id="@+id/planner_toggle_button_group"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:layout_marginHorizontal="32dp"
+        app:selectionRequired="true"
+        android:weightSum="6"
+        app:singleSelection="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/planner_toolbar">
+
+        <com.google.android.material.button.MaterialButton
+            android:theme="@style/PlannerTogggleBtn"
+            style="@style/PlannerTogggleBtn"
+            android:text="1" />
+        <com.google.android.material.button.MaterialButton
+            android:theme="@style/PlannerTogggleBtn"
+            style="@style/PlannerTogggleBtn"
+            android:text="2" />
+        <com.google.android.material.button.MaterialButton
+            android:theme="@style/PlannerTogggleBtn"
+            style="@style/PlannerTogggleBtn"
+            android:text="3" />
+        <com.google.android.material.button.MaterialButton
+            android:theme="@style/PlannerTogggleBtn"
+            style="@style/PlannerTogggleBtn"
+            android:text="4" />
+        <com.google.android.material.button.MaterialButton
+            android:theme="@style/PlannerTogggleBtn"
+            style="@style/PlannerTogggleBtn"
+            android:text="5" />
+        <com.google.android.material.button.MaterialButton
+            android:theme="@style/PlannerTogggleBtn"
+            style="@style/PlannerTogggleBtn"
+            android:text="6" />
+    </com.google.android.material.button.MaterialButtonToggleGroup>
+
+    <FrameLayout
+        android:id="@+id/planner_frame"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/planner_next_btn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/planner_toggle_button_group"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/planner_next_btn"
+        style="@style/materialBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="32dp"
+        android:layout_marginBottom="32dp"
+        android:text="다음으로"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

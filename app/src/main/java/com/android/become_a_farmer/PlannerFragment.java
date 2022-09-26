@@ -10,14 +10,15 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
-import com.android.become_a_farmer.databinding.ActivityPlannerBinding;
+import com.android.become_a_farmer.databinding.FragmentPlannerBinding;
+
 public class PlannerFragment extends Fragment {
-    private ActivityPlannerBinding binding;
+    private FragmentPlannerBinding binding;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        binding = ActivityPlannerBinding.inflate(inflater,container,false);
+        binding = FragmentPlannerBinding.inflate(inflater,container,false);
         return binding.getRoot();
     }
 

@@ -74,6 +74,9 @@
         <activity android:name=".MainActivity"
             android:windowSoftInputMode="adjustNothing"/>
 
+        <activity android:name=".PlannerActivity"
+            android:exported="true"/>
+
     </application>
 
 </manifest>

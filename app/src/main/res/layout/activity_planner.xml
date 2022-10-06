@@ -42,32 +42,39 @@
         app:selectionRequired="true"
         android:weightSum="6"
         app:singleSelection="true"
+        app:checkedButton="@+id/planner_first_btn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/planner_toolbar">
 
         <com.google.android.material.button.MaterialButton
             android:theme="@style/PlannerTogggleBtn"
+            android:id="@+id/planner_first_btn"
             style="@style/PlannerTogggleBtn"
             android:text="1" />
         <com.google.android.material.button.MaterialButton
             android:theme="@style/PlannerTogggleBtn"
+            android:id="@+id/planner_second_btn"
             style="@style/PlannerTogggleBtn"
             android:text="2" />
         <com.google.android.material.button.MaterialButton
             android:theme="@style/PlannerTogggleBtn"
+            android:id="@+id/planner_third_btn"
             style="@style/PlannerTogggleBtn"
             android:text="3" />
         <com.google.android.material.button.MaterialButton
             android:theme="@style/PlannerTogggleBtn"
+            android:id="@+id/planner_fourth_btn"
             style="@style/PlannerTogggleBtn"
             android:text="4" />
         <com.google.android.material.button.MaterialButton
             android:theme="@style/PlannerTogggleBtn"
+            android:id="@+id/planner_fifth_btn"
             style="@style/PlannerTogggleBtn"
             android:text="5" />
         <com.google.android.material.button.MaterialButton
             android:theme="@style/PlannerTogggleBtn"
+            android:id="@+id/planner_sixth_btn"
             style="@style/PlannerTogggleBtn"
             android:text="6" />
     </com.google.android.material.button.MaterialButtonToggleGroup>
@@ -76,23 +83,12 @@
         android:id="@+id/planner_frame"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/planner_next_btn"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/planner_toggle_button_group"
         app:layout_constraintVertical_bias="0.0" />
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/planner_next_btn"
-        style="@style/materialBtn"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="32dp"
-        android:layout_marginBottom="32dp"
-        android:text="다음으로"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

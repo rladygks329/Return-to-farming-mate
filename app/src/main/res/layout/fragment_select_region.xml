@@ -7,7 +7,6 @@
 
     <TextView
         style="@style/PlannerTitleTv"
-        android:layout_marginTop="12dp"
         android:id="@+id/select_region_title"
         android:text="지역 선정"
         app:layout_constraintStart_toStartOf="parent"

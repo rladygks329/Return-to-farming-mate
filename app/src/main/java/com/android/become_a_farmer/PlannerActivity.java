@@ -15,6 +15,7 @@ public class PlannerActivity extends AppCompatActivity {
     private ActivityPlannerBinding binding;
     private int current = R.id.planner_first_btn;
     private SelectRegionFragment frag1;
+    private SelectCropFragment frag2;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -23,6 +24,7 @@ public class PlannerActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         frag1 = new SelectRegionFragment();
+        frag2 = new SelectCropFragment();
         binding.plannerToggleButtonGroup.addOnButtonCheckedListener((group, checkedId, isChecked) -> {
             if(!isChecked){
                 return;
@@ -32,6 +34,8 @@ public class PlannerActivity extends AppCompatActivity {
                 case R.id.planner_first_btn:
                     changeFragment(frag1);
                     break;
+                case R.id.planner_second_btn:
+                    changeFragment(frag2);
             }
             Toast.makeText(PlannerActivity.this, Integer.toString(checkedId), Toast.LENGTH_SHORT).show();
         });

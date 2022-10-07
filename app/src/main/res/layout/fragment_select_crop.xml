@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        style="@style/PlannerTitleTv"
+        android:id="@+id/select_crop_title"
+        android:text="작물 선정"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        style="@style/PlannerInfoTv"
+        android:id="@+id/select_crop_info"
+        android:text="원하시는 작물을 골라주세요"
+        app:layout_constraintStart_toStartOf="@+id/select_crop_title"
+        app:layout_constraintTop_toBottomOf="@+id/select_crop_title" />
+
+    <GridLayout
+        android:id="@+id/select_crop_grid"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="32dp"
+        android:alignmentMode="alignBounds"
+        android:columnCount="2"
+        android:orientation="horizontal"
+        android:useDefaultMargins="true"
+        app:layout_constraintTop_toBottomOf="@+id/select_crop_info">
+        <Button style="@style/PlannerSelectBtn"/>
+        <Button style="@style/PlannerSelectBtn"/>
+        <Button style="@style/PlannerSelectBtn"/>
+        <Button style="@style/PlannerSelectBtn"/>
+    </GridLayout>
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/select_crop_next_btn"
+        style="@style/materialBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="32dp"
+        android:layout_marginBottom="32dp"
+        android:text="다음으로"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>

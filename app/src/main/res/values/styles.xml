@@ -170,6 +170,7 @@
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_marginLeft">32dp</item>
+        <item name="android:layout_marginTop">12dp</item>
         <item name="android:textSize">24sp</item>
         <item name="android:textStyle">bold</item>
         <item name="android:textColor">@android:color/black</item>
@@ -191,6 +192,7 @@
 
     <style name="PlannerSelectBtn" parent="Widget.MaterialComponents.Button">
         <item name="android:background">@drawable/bg_planner_btn</item>
+        <item name="android:layout_margin">12dp</item>
         <item name="android:layout_columnWeight" tools:targetApi="lollipop">1</item>
         <item name="backgroundTint">@null</item>
         <item name="fontFamily">@font/notosanskr_black</item>

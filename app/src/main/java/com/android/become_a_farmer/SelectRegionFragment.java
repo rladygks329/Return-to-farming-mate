@@ -5,6 +5,9 @@ import androidx.fragment.app.Fragment;
 import android.app.Activity;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +28,18 @@ public class SelectRegionFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentSelectRegionBinding.inflate(inflater, container, false);
         View view = binding.getRoot();
+
+        //글자 색 변경
+        String content = binding.selectRegionTitle.getText().toString();
+        SpannableString spannableString = new SpannableString(content);
+        String word = "지역";
+
+        int start = content.indexOf(word);
+        int end = start + word.length();
+
+        spannableString.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.lightGreen)), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        binding.selectRegionTitle.setText(spannableString);
+
         String[] regions = {
                 "강원도 강릉시", "강원도 고성군", "강원도 삼척시", "강원도 속초시", "강원도 영월군", "강원도 홍천군",
                 "강원도 횡성군", "경기도 남양주시", "경기도 화성시", "경상북도 김천시", "경상북도 상주시", "경상북도 의성군",

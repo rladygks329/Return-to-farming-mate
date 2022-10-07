@@ -17,6 +17,7 @@ public class PlannerActivity extends AppCompatActivity {
     private SelectRegionFragment frag1;
     private SelectCropFragment frag2;
     private SelectLandFragment frag3;
+    private SelectHouseFragment frag4;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -27,6 +28,7 @@ public class PlannerActivity extends AppCompatActivity {
         frag1 = new SelectRegionFragment();
         frag2 = new SelectCropFragment();
         frag3 = new SelectLandFragment();
+        frag4 = new SelectHouseFragment();
         binding.plannerToggleButtonGroup.addOnButtonCheckedListener((group, checkedId, isChecked) -> {
             if(!isChecked){
                 return;
@@ -41,6 +43,9 @@ public class PlannerActivity extends AppCompatActivity {
                     break;
                 case R.id.planner_third_btn:
                     changeFragment(frag3);
+                    break;
+                case R.id.planner_fourth_btn:
+                    changeFragment(frag4);
                     break;
             }
             Toast.makeText(PlannerActivity.this, Integer.toString(checkedId), Toast.LENGTH_SHORT).show();
@@ -62,6 +67,9 @@ public class PlannerActivity extends AppCompatActivity {
                 break;
             case R.id.planner_second_btn:
                 binding.plannerToggleButtonGroup.check(R.id.planner_third_btn);
+                break;
+            case R.id.planner_third_btn:
+                binding.plannerToggleButtonGroup.check(R.id.planner_fourth_btn);
                 break;
         }
     }

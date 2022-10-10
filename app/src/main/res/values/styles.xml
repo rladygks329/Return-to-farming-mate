@@ -191,6 +191,7 @@
 
 
     <style name="PlannerSelectBtn" parent="Widget.MaterialComponents.Button">
+        <item name="android:textSize">12sp</item>
         <item name="android:background">@drawable/bg_planner_btn</item>
         <item name="android:layout_margin">12dp</item>
         <item name="android:layout_columnWeight" tools:targetApi="lollipop">1</item>

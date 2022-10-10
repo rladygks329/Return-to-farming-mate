@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -28,6 +29,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.android.become_a_farmer.service.AuthenticationService;
 import com.android.become_a_farmer.service.RecommendBasedUserService;
 import com.android.become_a_farmer.service.RecommendService;
+import com.android.become_a_farmer.service.SearchService;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -38,6 +40,8 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,6 +61,10 @@ public class FragmentHomeMain extends Fragment {
     private RecommendBasedUserService recommendBasedUserService;
     private AuthenticationService authenticationService;
     private int count = 0;
+    private SearchService searchService;
+    private EditText editText;
+    private Button btn_search;
+
 
 
     @Nullable
@@ -73,6 +81,7 @@ public class FragmentHomeMain extends Fragment {
 
         txt_name = (TextView) view.findViewById(R.id.txt_name);
         txt_preference = (TextView) view.findViewById(R.id.txt_preference);
+        TextView txt_info = (TextView) view.findViewById(R.id.txt_info);
         loadingIGV = (ImageView) view.findViewById(R.id.home_main_loading);
         //setLoadingAnimation();
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
@@ -81,6 +90,9 @@ public class FragmentHomeMain extends Fragment {
         authenticationService = new AuthenticationService();
         recommendBasedUserService = RecommendBasedUserService.getInstance();
         recommendBasedUserService.setDb(db);
+        editText = (EditText) view.findViewById(R.id.home_edit) ;
+        btn_search = (Button) view.findViewById(R.id.btn_search);
+
 
 //
 //        if (decoration != null) {
@@ -159,8 +171,24 @@ public class FragmentHomeMain extends Fragment {
             }
         });
 
+        // 검색
+        btn_search.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                txt_info.setVisibility(View.INVISIBLE);
+                txt_name.setVisibility(View.INVISIBLE);
+                txt_preference.setVisibility(View.INVISIBLE);
+                String text = editText.getText().toString();
+                SearchService searchService = new SearchService(text, rAdapter);
+                searchService.search();
+            }
+        });
+
         return view;
     }
+
+
+
 
 
     // 사용자 이름 ui에 표시
@@ -195,4 +223,6 @@ public class FragmentHomeMain extends Fragment {
         loadingIGV.setVisibility(View.INVISIBLE);
         loadingIGV.clearAnimation();
     }
+
+
 }

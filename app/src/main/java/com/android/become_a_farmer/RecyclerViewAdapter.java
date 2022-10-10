@@ -96,6 +96,10 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         list.add(item);
     }
 
+    public void initItem(){
+        list.clear();
+    }
+
 
 
 

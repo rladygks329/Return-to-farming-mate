@@ -33,6 +33,17 @@
             android:textStyle="bold" />
     </androidx.appcompat.widget.Toolbar>
 
+    <TextView
+        android:id="@+id/planner_info"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:gravity="center"
+        android:includeFontPadding="false"
+        android:textSize="12sp"
+        android:fontFamily="@font/notosanskr_black"
+        app:layout_constraintBottom_toTopOf="@+id/planner_toggle_button_group"
+        app:layout_constraintStart_toStartOf="@+id/planner_toggle_button_group"
+        app:layout_constraintTop_toBottomOf="@+id/planner_toolbar" />
     <com.google.android.material.button.MaterialButtonToggleGroup
         android:id="@+id/planner_toggle_button_group"
         android:layout_width="match_parent"

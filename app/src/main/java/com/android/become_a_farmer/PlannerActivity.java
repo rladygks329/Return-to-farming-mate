@@ -1,5 +1,7 @@
 package com.android.become_a_farmer;
 
+import android.app.Activity;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
@@ -13,6 +15,7 @@ import com.google.android.material.button.MaterialButtonToggleGroup;
 
 public class PlannerActivity extends AppCompatActivity {
     private ActivityPlannerBinding binding;
+    private SharedPreferences pref;
     private int current = R.id.planner_first_btn;
     private SelectRegionFragment frag1;
     private SelectCropFragment frag2;
@@ -57,7 +60,6 @@ public class PlannerActivity extends AppCompatActivity {
                 case R.id.planner_sixth_btn:
                     changeFragment(frag6);
             }
-            Toast.makeText(PlannerActivity.this, Integer.toString(checkedId), Toast.LENGTH_SHORT).show();
         });
         binding.plannerPrev.setOnClickListener(view -> finish());
         changeFragment(frag1);
@@ -70,6 +72,7 @@ public class PlannerActivity extends AppCompatActivity {
                 .commit();
     }
     public void moveNextStep(){
+        updateInfo();
         switch (current){
             case R.id.planner_first_btn:
                 binding.plannerToggleButtonGroup.check(R.id.planner_second_btn);
@@ -88,6 +91,16 @@ public class PlannerActivity extends AppCompatActivity {
             case R.id.planner_sixth_btn:
                 finish();
         }
+    }
+    private void updateInfo(){
+        pref = getSharedPreferences("pref", Activity.MODE_PRIVATE);
+        String region = pref.getString("selectedRegion", "");
+        String crop = pref.getString("selectedCrop", "");
+        String land = pref.getString("selectedLand", "");
+        String house = pref.getString("selectedHouse", "");
+
+        binding.plannerInfo.setText(region + "/" +  crop + "/" + land + "/"+ house);
+
     }
 
 }

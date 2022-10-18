@@ -93,8 +93,6 @@ public class FragmentHomeMain extends Fragment {
         authenticationService = new AuthenticationService();
         recommendBasedUserService = RecommendBasedUserService.getInstance();
         recommendBasedUserService.setDb(db);
-        editText = (EditText) view.findViewById(R.id.home_edit) ;
-        btn_search = (Button) view.findViewById(R.id.btn_search);
 
 
 //
@@ -176,25 +174,18 @@ public class FragmentHomeMain extends Fragment {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String s) {
+                txt_info.setVisibility(View.INVISIBLE);
+                txt_name.setVisibility(View.INVISIBLE);
+                txt_preference.setVisibility(View.INVISIBLE);
+                String text = searchView.getQuery().toString();
+                SearchService searchService = new SearchService(text, rAdapter);
+                searchService.search();
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(String s) {
                 return false;
-            }
-        });
-
-        // 검색
-        btn_search.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                txt_info.setVisibility(View.INVISIBLE);
-                txt_name.setVisibility(View.INVISIBLE);
-                txt_preference.setVisibility(View.INVISIBLE);
-                String text = editText.getText().toString();
-                SearchService searchService = new SearchService(text, rAdapter);
-                searchService.search();
             }
         });
 

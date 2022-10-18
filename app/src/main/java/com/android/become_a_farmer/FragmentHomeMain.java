@@ -17,6 +17,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.SearchView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -56,6 +57,7 @@ public class FragmentHomeMain extends Fragment {
     private String email;
     private TextView txt_preference;
     private ImageView loadingIGV;
+    private SearchView searchView;
     public static Context context_main;
     private RecommendService recommedService;
     private RecommendBasedUserService recommendBasedUserService;
@@ -83,6 +85,7 @@ public class FragmentHomeMain extends Fragment {
         txt_preference = (TextView) view.findViewById(R.id.txt_preference);
         TextView txt_info = (TextView) view.findViewById(R.id.txt_info);
         loadingIGV = (ImageView) view.findViewById(R.id.home_main_loading);
+        searchView = (SearchView) view.findViewById(R.id.home_search);
         //setLoadingAnimation();
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
@@ -90,8 +93,6 @@ public class FragmentHomeMain extends Fragment {
         authenticationService = new AuthenticationService();
         recommendBasedUserService = RecommendBasedUserService.getInstance();
         recommendBasedUserService.setDb(db);
-        editText = (EditText) view.findViewById(R.id.home_edit) ;
-        btn_search = (Button) view.findViewById(R.id.btn_search);
 
 
 //
@@ -170,17 +171,21 @@ public class FragmentHomeMain extends Fragment {
                 }
             }
         });
-
-        // 검색
-        btn_search.setOnClickListener(new View.OnClickListener() {
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
-            public void onClick(View view) {
+            public boolean onQueryTextSubmit(String s) {
                 txt_info.setVisibility(View.INVISIBLE);
                 txt_name.setVisibility(View.INVISIBLE);
                 txt_preference.setVisibility(View.INVISIBLE);
-                String text = editText.getText().toString();
+                String text = searchView.getQuery().toString();
                 SearchService searchService = new SearchService(text, rAdapter);
                 searchService.search();
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                return false;
             }
         });
 

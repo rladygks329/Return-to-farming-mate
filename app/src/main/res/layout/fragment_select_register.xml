@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        style="@style/PlannerTitleTv"
+        android:id="@+id/select_register_title"
+        android:text="농업 경영체 선정"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        style="@style/PlannerInfoTv"
+        android:id="@+id/select_register_info"
+        app:layout_constraintStart_toStartOf="@+id/select_register_title"
+        app:layout_constraintTop_toBottomOf="@+id/select_register_title" />
+
+    <TextView
+        android:id="@+id/select_register_info2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:fontFamily="@font/notosanskr_bold"
+        android:includeFontPadding="false"
+        android:text="혜택"
+        android:textColor="@android:color/black"
+        android:textSize="14sp"
+        app:layout_constraintStart_toStartOf="@+id/select_register_info"
+        app:layout_constraintTop_toBottomOf="@+id/select_register_info" />
+
+    <GridLayout
+        android:id="@+id/select_register_grid"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="32dp"
+        android:alignmentMode="alignBounds"
+        android:columnCount="2"
+        android:orientation="horizontal"
+        android:useDefaultMargins="true"
+        app:layout_constraintStart_toStartOf="@+id/select_register_info2"
+        app:layout_constraintTop_toBottomOf="@+id/select_register_info2">
+        <Button
+            android:id="@+id/select_register_btn1"
+            style="@style/PlannerSelectBtn"
+            android:text="각종 제세 혜택 및 지원"/>
+    </GridLayout>
+
+    <TextView
+        android:id="@+id/select_register_info3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/notosanskr_bold"
+        android:includeFontPadding="false"
+        android:text="인터넷 신청"
+        android:textColor="@android:color/black"
+        android:textSize="14sp"
+        app:layout_constraintStart_toStartOf="@+id/select_register_title"
+        app:layout_constraintTop_toBottomOf="@+id/select_register_grid" />
+
+    <GridLayout
+        android:id="@+id/select_register_grid2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="32dp"
+        android:alignmentMode="alignBounds"
+        android:columnCount="2"
+        android:orientation="horizontal"
+        android:useDefaultMargins="true"
+        app:layout_constraintStart_toStartOf="@+id/select_register_info3"
+        app:layout_constraintTop_toBottomOf="@+id/select_register_info3">
+        <Button
+            android:id="@+id/select_register_btn2"
+            style="@style/PlannerSelectBtn"
+            android:text="농업경영체등록 홈페이지"/>
+    </GridLayout>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/select_register_next_btn"
+        style="@style/materialBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="32dp"
+        android:layout_marginBottom="32dp"
+        android:text="다음으로"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

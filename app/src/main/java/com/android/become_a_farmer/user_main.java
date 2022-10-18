@@ -72,7 +72,7 @@ public class user_main extends Fragment {
             @Override
             public void onClick(View v) {
                 // user_main 프래그먼트 -> plan 수정하는 액티비티
-                Intent intent = new Intent(getActivity(), ModifyPlan.class);
+                Intent intent = new Intent(getActivity(), ChoiceAge.class);
                 startActivity(intent);
             }
         });

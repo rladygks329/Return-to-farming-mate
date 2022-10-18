@@ -5,13 +5,10 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 
 import com.android.become_a_farmer.retrofit.DataClass;
-import com.android.become_a_farmer.retrofit.RatingDataClass;
 import com.android.become_a_farmer.retrofit.RetrofitAPI;
 import com.android.become_a_farmer.retrofit.RetrofitClient;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -84,14 +81,14 @@ public class RecommendBasedUserService {
 
     // 가져온 ratings와 이메일을 서버로 보내기
     public void sendRatingData(String ratings){
-        RatingDataClass data = new RatingDataClass(email, ratings);
-        service.sendRating(data).enqueue(new Callback<RatingDataClass>() {
+        DataClass data = new DataClass(email, ratings);
+        service.sendRating(data).enqueue(new Callback<DataClass>() {
             @Override
-            public void onResponse(Call<RatingDataClass> call, Response<RatingDataClass> response) {
+            public void onResponse(Call<DataClass> call, Response<DataClass> response) {
             }
 
             @Override
-            public void onFailure(Call<RatingDataClass> call, Throwable t) {
+            public void onFailure(Call<DataClass> call, Throwable t) {
                 Log.e(getClass().toString(), t.getMessage());
             }
         });

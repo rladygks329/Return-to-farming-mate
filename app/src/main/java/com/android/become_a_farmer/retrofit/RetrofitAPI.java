@@ -14,5 +14,5 @@ public interface RetrofitAPI {
     Call<DataClass> getRegions(@Body DataClass selectedKeywords);
 
     @POST("/get-regions-from-user")
-    Call<RatingDataClass> sendRating(@Body RatingDataClass ratingDataClass);
+    Call<DataClass> sendRating(@Body DataClass ratingDataClass);
 }

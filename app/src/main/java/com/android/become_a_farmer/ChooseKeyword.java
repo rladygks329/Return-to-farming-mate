@@ -187,22 +187,6 @@ public class ChooseKeyword extends AppCompatActivity {
         return res;
     }
 
-    // db users 필드(추천 지역) 추가
-    public void updateUserDataRegions(){
-        // 현재 사용자의 email이 존재할 때
-        String email = getUserEmail();
-        if (email != null){
-            DocumentReference userRef = db.collection("users").document(email);
-            String[] recommendRegionsArray = recommendRegions.split(",");
-            if (0 < recommendRegionsArray.length){
-                userRef.update("recommendRegions", Arrays.asList(recommendRegionsArray));
-            }
-
-        }else{
-            Toast.makeText(ChooseKeyword.this, "다시 로그인 해주세요.", Toast.LENGTH_SHORT).show();
-
-        }
-    }
 
     // 서버에서 키워드 가져오기
     public void getKeywordsFromServer(){
@@ -224,22 +208,12 @@ public class ChooseKeyword extends AppCompatActivity {
         });
     }
 
-    // 선택한 키워드 서버에 보내고, 키워드 기반 추천 지역 받아오기
+    // 선택한 키워드 서버에 보내기
     public void sendSelectedKeyword(String selectedKeywords){
-        DataClass data = new DataClass(selectedKeywords);
+        DataClass data = new DataClass(getUserEmail(), selectedKeywords);
         service.getRegions(data).enqueue(new Callback<DataClass>() {
             @Override
             public void onResponse(Call<DataClass> call, Response<DataClass> response) {
-                try {
-                    Thread.sleep(3000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                recommendRegions = response.body().toString();
-//                Log.d("추천지역", recommendRegions);
-                if (1 < recommendRegions.length()) {
-                    updateUserDataRegions();    // db에 키워드 기반 추천 지역 업데이트
-                }
             }
 
             @Override

@@ -16,6 +16,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.SearchView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -52,6 +53,7 @@ public class FragmentHomeMain extends Fragment {
     private String email;
     private TextView txt_preference;
     private ImageView loadingIGV;
+    private SearchView searchView;
     public static Context context_main;
     private RecommendService recommedService;
     private RecommendBasedUserService recommendBasedUserService;
@@ -73,6 +75,7 @@ public class FragmentHomeMain extends Fragment {
         txt_name = (TextView) view.findViewById(R.id.txt_name);
         txt_preference = (TextView) view.findViewById(R.id.txt_preference);
         loadingIGV = (ImageView) view.findViewById(R.id.home_main_loading);
+        searchView = (SearchView) view.findViewById(R.id.home_search);
         //setLoadingAnimation();
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
@@ -156,6 +159,17 @@ public class FragmentHomeMain extends Fragment {
                     Intent intent = new Intent(getActivity(), ChoiceAge.class);
                     startActivity(intent);
                 }
+            }
+        });
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                return false;
             }
         });
 

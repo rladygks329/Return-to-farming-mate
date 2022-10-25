@@ -1,5 +1,6 @@
 package com.android.become_a_farmer;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import android.app.Activity;
@@ -11,13 +12,21 @@ import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
 import com.android.become_a_farmer.databinding.FragmentSelectRegionBinding;
-import com.google.android.material.button.MaterialButton;
+import com.android.become_a_farmer.databinding.ViewPlannerBtnBinding;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 public class SelectRegionFragment extends Fragment {
 
@@ -40,24 +49,7 @@ public class SelectRegionFragment extends Fragment {
         spannableString.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.lightGreen)), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         binding.selectRegionTitle.setText(spannableString);
 
-        String[] regions = {
-                "강원도 강릉시", "강원도 고성군", "강원도 삼척시", "강원도 속초시", "강원도 영월군", "강원도 홍천군",
-                "강원도 횡성군", "경기도 남양주시", "경기도 화성시", "경상북도 김천시", "경상북도 상주시", "경상북도 의성군",
-                "전라남도 고흥군", "전라남도 곡성군", "전라남도 구례군", "전라남도 나주시", "전라북도 고창군", "전라북도 군산시",
-                "전라북도 순창군", "전라북도 익산시", "전라북도 정읍시", "충청남도 공주시", "충청남도 아산시", "충청남도 흥성군",
-                "충청북도 음성군"
-        };
-        for (int i = 0; i < regions.length; i++) {
-            MaterialButton btn = (MaterialButton) binding.selectRegionGrid.getChildAt(i);
-            btn.setText(regions[i]);
-            btn.setTag(regions[i]);
-            btn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    selectView(view);
-                }
-            });
-        }
+        getRegionsFromDB();
         binding.selectRegionNextBtn.setOnClickListener(view1 -> {
             if(selectedView == null){
                 Toast.makeText(getActivity(), "지역을 선택해주세요.", Toast.LENGTH_SHORT).show();
@@ -83,7 +75,60 @@ public class SelectRegionFragment extends Fragment {
         selectedView = view;
     }
 
+    private void getRegionsFromDB(){
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("regions")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (!task.isSuccessful()) {
+                            return;
+                        }
+                        List<String> list = new ArrayList<>();
+                        for (QueryDocumentSnapshot doc : task.getResult()){
+                            String title = doc.getId();
+                            String content = doc.get("introduction").toString();
+                            String crop = doc.get("crop").toString();
+                            String experienceContent = doc.get("experienceContent").toString();
+                            String experienceTitle = doc.get("experienceTitle").toString();
+                            list.add(title);
+                        }
+                        initButtons(list);
+                    }
+                });
+    }
 
+    private void initButtons(List<String> regions){
+        Iterator<String> it = regions.iterator();
+        while(it.hasNext()){
+            ViewPlannerBtnBinding v = ViewPlannerBtnBinding.inflate(getLayoutInflater());
+            String region = it.next();
+            v.viewPlannerBtnLeft.setText(region);
+            v.viewPlannerBtnLeft.setTag(region);
+            v.viewPlannerBtnLeft.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    selectView(view);
+                }
+            });
+            if(it.hasNext()){
+                region = it.next();
+                v.viewPlannerBtnRight.setText(region);
+                v.viewPlannerBtnRight.setTag(region);
+                v.viewPlannerBtnRight.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        selectView(view);
+                    }
+                });
+            }else{
+                v.viewPlannerBtnRight.setVisibility(View.INVISIBLE);
+            }
+            binding.selectRegionLr.addView(v.getRoot());
+            v = null;
+        }
+    }
     @Override
     public void onDestroyView() {
         super.onDestroyView();

@@ -19,21 +19,19 @@
         app:layout_constraintStart_toStartOf="@+id/select_crop_title"
         app:layout_constraintTop_toBottomOf="@+id/select_crop_title" />
 
-    <GridLayout
-        android:id="@+id/select_crop_grid"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+    <LinearLayout
+        android:id="@+id/select_crop_lr"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:layout_marginHorizontal="32dp"
-        android:alignmentMode="alignBounds"
-        android:columnCount="2"
-        android:orientation="horizontal"
-        android:useDefaultMargins="true"
+        android:layout_marginBottom="12dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@+id/select_crop_next_btn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/select_crop_info">
-        <Button style="@style/PlannerSelectBtn"/>
-        <Button style="@style/PlannerSelectBtn"/>
-        <Button style="@style/PlannerSelectBtn"/>
-        <Button style="@style/PlannerSelectBtn"/>
-    </GridLayout>
+    </LinearLayout>
+
     <com.google.android.material.button.MaterialButton
         android:id="@+id/select_crop_next_btn"
         style="@style/materialBtn"

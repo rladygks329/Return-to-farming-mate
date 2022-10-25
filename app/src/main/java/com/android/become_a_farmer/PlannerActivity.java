@@ -57,8 +57,10 @@ public class PlannerActivity extends AppCompatActivity {
                     break;
                 case R.id.planner_fifth_btn:
                     changeFragment(frag5);
+                    break;
                 case R.id.planner_sixth_btn:
                     changeFragment(frag6);
+                    break;
             }
         });
         binding.plannerPrev.setOnClickListener(view -> finish());
@@ -88,8 +90,10 @@ public class PlannerActivity extends AppCompatActivity {
                 break;
             case R.id.planner_fifth_btn:
                 binding.plannerToggleButtonGroup.check(R.id.planner_sixth_btn);
+                break;
             case R.id.planner_sixth_btn:
                 finish();
+                break;
         }
     }
     private void updateInfo(){

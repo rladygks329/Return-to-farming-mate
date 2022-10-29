@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".FragmentHomeMain">
+    tools:context=".FragmentHomeMain"
+    android:id="@+id/parent_l">
 
     <SearchView
         android:id="@+id/home_search"
@@ -16,7 +17,9 @@
         android:layout_gravity="center"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:queryHint="원하는 지역명을 입력하세요"
+        />
     <LinearLayout
         android:id="@+id/home_linear"
         android:layout_width="match_parent"

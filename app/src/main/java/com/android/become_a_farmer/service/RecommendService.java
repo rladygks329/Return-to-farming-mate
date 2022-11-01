@@ -81,7 +81,7 @@ public class RecommendService {
 
                     // 추천 지역명이 없는 경우 N개 랜덤으로 뿌려줌
                     if ((recommendRegionsBasedKeyword == null) && (recommendRegionsBasedUser == null)) {
-                        //getAllRegion();
+                        getAllRegion();
                     }
 
 

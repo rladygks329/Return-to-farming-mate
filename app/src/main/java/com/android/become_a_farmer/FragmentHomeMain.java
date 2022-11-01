@@ -10,10 +10,12 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -22,6 +24,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -57,17 +60,15 @@ public class FragmentHomeMain extends Fragment {
     private String email;
     private TextView txt_preference;
     private ImageView loadingIGV;
-    private SearchView searchView;
     public static Context context_main;
     private RecommendService recommedService;
     private RecommendBasedUserService recommendBasedUserService;
     private AuthenticationService authenticationService;
     private int count = 0;
-    private SearchService searchService;
+    private SearchView searchView;
     private EditText editText;
     private Button btn_search;
-
-
+    private ConstraintLayout parent_l;
 
     @Nullable
     @Override
@@ -86,6 +87,7 @@ public class FragmentHomeMain extends Fragment {
         TextView txt_info = (TextView) view.findViewById(R.id.txt_info);
         loadingIGV = (ImageView) view.findViewById(R.id.home_main_loading);
         searchView = (SearchView) view.findViewById(R.id.home_search);
+        parent_l = (ConstraintLayout)  view.findViewById(R.id.parent_l);
         //setLoadingAnimation();
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
@@ -138,6 +140,17 @@ public class FragmentHomeMain extends Fragment {
             });
         }
 
+        // 키보드 내리기
+        parent_l.setOnTouchListener(new View.OnTouchListener()
+        {
+            @Override
+            public boolean onTouch(View v, MotionEvent event)
+            {
+                hideKeyboard();
+                return false;
+            }
+        });
+
         // 사용자의 추천 지역 화면에 뿌림
         if (email != null){
             txt_preference.setVisibility(View.VISIBLE);
@@ -171,15 +184,15 @@ public class FragmentHomeMain extends Fragment {
                 }
             }
         });
+
+        // search
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String s) {
-                txt_info.setVisibility(View.INVISIBLE);
-                txt_name.setVisibility(View.INVISIBLE);
-                txt_preference.setVisibility(View.INVISIBLE);
                 String text = searchView.getQuery().toString();
-                SearchService searchService = new SearchService(text, rAdapter);
-                searchService.search();
+                Intent intent = new Intent(getActivity(), SearchActivity.class);
+                intent.putExtra("text", text);
+                startActivity(intent);
                 return false;
             }
 
@@ -191,10 +204,6 @@ public class FragmentHomeMain extends Fragment {
 
         return view;
     }
-
-
-
-
 
     // 사용자 이름 ui에 표시
     private void setUserName(String email, TextView txt_name){
@@ -227,6 +236,16 @@ public class FragmentHomeMain extends Fragment {
     private void removeLoadingAnimation(){
         loadingIGV.setVisibility(View.INVISIBLE);
         loadingIGV.clearAnimation();
+    }
+
+    // 키보드 내리는 메서드
+    private void hideKeyboard()
+    {
+        if (getActivity() != null && getActivity().getCurrentFocus() != null)
+        {
+            InputMethodManager inputManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+            inputManager.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+        }
     }
 
 

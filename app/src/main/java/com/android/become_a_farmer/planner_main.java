@@ -26,7 +26,7 @@ public class planner_main extends Fragment {
         btn_start_planner.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), FirstPlanner.class);
+                Intent intent = new Intent(getActivity(), PlannerActivity.class);
                 startActivity(intent);
 
             }

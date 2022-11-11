@@ -1,138 +1,99 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".RegionInfo"
-    android:orientation="vertical"
-    android:gravity="center"
-    >
+    android:layout_height="match_parent">
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-            <TextView
-                android:id="@+id/txt_region_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/notosanskr_bold"
-                android:textStyle="bold"
-                android:textSize="26dp"
-                android:textColor="#23cd87"
-                android:layout_marginTop="25dp"
-                android:layout_marginLeft="26dp"
-                android:lineSpacingExtra="4.9sp">
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/region_info_toolbar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-            </TextView>
+        <ImageButton
+            android:id="@+id/region_info_btn_prev"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/ic_arrow_back"
+            android:backgroundTint="@android:color/black" />
 
-<!--            <FrameLayout-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content">-->
+        <TextView
+            android:id="@+id/region_info_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:fontFamily="@font/notosanskr_bold"
+            android:text=""
+            android:textColor="@android:color/black"
+            android:textSize="24sp" />
+        <ImageButton
+            android:id="@+id/region_info_btn_bookmark"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="16dp"
+            android:layout_gravity="right"
+            android:background="@drawable/ic_bookmark"
+            android:backgroundTint="@android:color/darker_gray"/>
+    </androidx.appcompat.widget.Toolbar>
 
-<!--                <ImageView-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:src="@drawable/star_box"/>-->
+    <WebView
+        android:id="@+id/region_info_webview"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/region_info_rating_bg"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/region_info_toolbar" />
 
-                <RatingBar
-                    android:id="@+id/ratingbar"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:numStars="5"
-                    android:progressTint="#FFCC01"
-                    android:stepSize="1" />
-<!--            </FrameLayout>-->
+    <LinearLayout
+        android:id="@+id/region_info_rating_bg"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/gradiant_lightgreen"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/region_info_toolbar">
 
-            <TextView
-                android:id="@+id/title_region"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/notosanskr_bold"
-                android:textStyle="bold"
-                android:textSize="23dp"
-                android:textColor="#000000"
-                android:lineSpacingExtra="-4.6sp"
-                android:layout_gravity="center"
-                android:text="지역 소개"/>
+        <RatingBar
+            android:id="@+id/region_info_rating"
+            style="@style/Widget.AppCompat.RatingBar.Indicator"
+            android:isIndicator="false"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:progressTint="@android:color/white"
+            android:numStars="5" />
+    </LinearLayout>
 
-            <TextView
-                android:id="@+id/txt_region_info"
-                android:layout_width="253dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:fontFamily="@font/notosanskr_medium"
-                android:lineSpacingExtra="7dp"
-                android:singleLine="false"
-                android:textColor="#3a3a3a"
-                android:textSize="16dp"
-                android:textStyle="normal" />
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/region_info_viewpager"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="12dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/region_info_rating_bg">
+    </androidx.viewpager2.widget.ViewPager2>
 
-            <TextView
-                android:id="@+id/title_crop"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/notosanskr_bold"
-                android:textStyle="bold"
-                android:textSize="23dp"
-                android:textColor="#23cd87"
-                android:lineSpacingExtra="-4.6sp"
-                android:layout_gravity="center"
-                android:text="특산물"
-                android:layout_marginTop="10dp"/>
-
-            <TextView
-                android:id="@+id/txt_crop_info"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/notosanskr_medium"
-                android:textStyle="normal"
-                android:textSize="16dp"
-                android:textColor="#3a3a3a"
-                android:layout_gravity="center"
-                android:lineSpacingExtra="7dp"
-                android:singleLine="false"
-                />
-
-            <TextView
-                android:id="@+id/title_ex"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:fontFamily="@font/notosanskr_bold"
-                android:lineSpacingExtra="-4.6sp"
-                android:textColor="#23cd87"
-                android:textSize="23dp"
-                android:textStyle="bold"
-                android:layout_marginTop="10dp"/>
-
-            <TextView
-                android:id="@+id/txt_ex_info"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/notosanskr_medium"
-                android:textStyle="normal"
-                android:textSize="16dp"
-                android:textColor="#3a3a3a"
-                android:layout_gravity="center"
-                android:lineSpacingExtra="7dp"
-                android:singleLine="false"
-                />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="16dp"
-                android:text="\n\n\n\n"
-                android:layout_gravity="center"
-                android:singleLine="false"
-                />
-        </LinearLayout>
-    </ScrollView>
-
-</LinearLayout>
+    <com.tbuonomo.viewpagerdotsindicator.DotsIndicator
+        android:id="@+id/dots_indicator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="12dp"
+        app:dotsColor="@android:color/darker_gray"
+        app:dotsCornerRadius="8dp"
+        app:dotsSize="12dp"
+        app:dotsSpacing="3dp"
+        app:dotsWidthFactor="2.5"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:progressMode="false"
+        app:selectedDotColor="@color/lightGreen" />
+</androidx.constraintlayout.widget.ConstraintLayout>

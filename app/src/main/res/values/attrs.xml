@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="koreaMapColor">
+        <attr name="colorSeoul" format="color"/>
+        <attr name="colorBusan" format="color"/>
+        <attr name="colorDaegu" format="color"/>
+        <attr name="colorIncheon" format="color"/>
+        <attr name="colorGwangju" format="color"/>
+        <attr name="colorDaejeon" format="color"/>
+        <attr name="colorUlsan" format="color"/>
+        <attr name="colorGyeonggi" format="color"/>
+        <attr name="colorGangwon" format="color"/>
+        <attr name="colorNorthChungcheong" format="color"/>
+        <attr name="colorSouthChungcheong" format="color"/>
+        <attr name="colorNorthJeolla" format="color"/>
+        <attr name="colorSouthJeolla" format="color"/>
+        <attr name="colorNorthGyeongsang" format="color"/>
+        <attr name="colorSouthGyeongsang" format="color"/>
+        <attr name="colorJeju" format="color"/>
+        <attr name="colorSejong" format="color"/>
+    </declare-styleable>
+</resources>

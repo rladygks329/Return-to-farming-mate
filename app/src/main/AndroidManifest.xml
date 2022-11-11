@@ -54,13 +54,9 @@
         <activity
             android:name=".ChooseKeyword"
             android:exported="true" />
-        <activity
-            android:name=".ChoosePreferredType"
-            android:exported="true" />
-        <activity
-            android:name=".ChoosePlanningType"
-            android:exported="true" />
-        <activity android:name=".SplashActivity">
+        <activity android:name=".SplashActivity"
+            android:exported="true">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -70,17 +66,21 @@
             android:name=".ChoiceAge"
             android:exported="true" />
         <activity
-            android:name=".Register"
-            android:exported="true" />
-        <activity
-            android:name=".Login"
+            android:name=".SearchActivity"
             android:exported="true" />
 
-        <activity android:name=".MainActivity" />
-        <activity android:name=".user_main" />
-        <activity android:name=".planner_main" />
-        <activity android:name=".home_main" />
-        <activity android:name=".cartMain" />
+        <activity
+            android:name=".ResisterActivity"
+            android:exported="true" />
+        <activity
+            android:name=".LoginActivity"
+            android:exported="true" />
+
+        <activity android:name=".MainActivity"
+            android:windowSoftInputMode="adjustNothing"/>
+
+        <activity android:name=".PlannerActivity"
+            android:exported="true"/>
 
     </application>
 
